@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="HalfEdge.Tests\**" />
+    <EmbeddedResource Remove="HalfEdge.Tests\**" />
+    <None Remove="HalfEdge.Tests\**" />
+  </ItemGroup>
+
 </Project>
