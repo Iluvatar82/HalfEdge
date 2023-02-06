@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HalfEdge.Models
+﻿namespace HalfEdge.Models
 {
-    internal class Polygon
+    public record class Polygon<T>
     {
+
     }
 }

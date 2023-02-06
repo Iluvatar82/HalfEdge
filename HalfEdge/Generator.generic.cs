@@ -6,14 +6,16 @@ namespace HalfEdge
     {
         public List<Vertex<T>> Vertices { get; set; }
         public List<List<int>> Indices { get; set; }
-        public List<HalfEdge<T>> Mesh { get; set; }
+        public Mesh<T> Mesh { get; set; }
+        public List<Polygon<T>> Polygons { get; set; }
         public int PolygonCount => Indices.Count;
 
         public Generator(IEnumerable<Vertex<T>> positions, IEnumerable<List<int>> indices)
         {
             Vertices = positions.ToList();
             Indices = indices.ToList();
-            Mesh = new List<HalfEdge<T>>();
+            Mesh = new Mesh<T>();
+            Polygons = new List<Polygon<T>>();
             foreach (var polygonIndices in Indices)
                 AddPolygon(polygonIndices);
         }
@@ -24,14 +26,15 @@ namespace HalfEdge
             var pointCount = polygonIndices.Count;
             for(var i = 0; i < pointCount; i++)
             {
-                var existingOpposite = Mesh.SingleOrDefault(o => o.End == Vertices[polygonIndices[i]] && o.Start == Vertices[polygonIndices[(i + 1) % pointCount]]);
+                var existingOpposite = Mesh.HalfEdges.SingleOrDefault(o => o.End == Vertices[polygonIndices[i]] && o.Start == Vertices[polygonIndices[(i + 1) % pointCount]]);
                 if (existingOpposite != default)
                     halfEdges.Add(existingOpposite.CreateOpposite());
                 else
                     halfEdges.Add(new HalfEdge<T>(Vertices[polygonIndices[i]], Vertices[polygonIndices[(i + 1) % pointCount]]));
             }
 
-            Mesh.AddRange(halfEdges);
+            Mesh.HalfEdges.AddRange(halfEdges);
+
         }
     }
 }

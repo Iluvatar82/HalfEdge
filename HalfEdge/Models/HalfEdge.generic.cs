@@ -23,6 +23,7 @@ namespace HalfEdge.Models
             init { _end = value; }
         }
         public HalfEdge<T>? Opposite { get; set; }
+        public bool IsBorder => Opposite is null;
 
 
         public HalfEdge(Vertex<T> start, Vertex<T> end, HalfEdge<T>? opposite = null)

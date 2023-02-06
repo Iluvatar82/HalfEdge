@@ -27,6 +27,7 @@ namespace HalfEdge.Tests.Models
                 Assert.That(halfEdge.Start.OutHalfEdges, Has.Count.EqualTo(1));
                 Assert.That(halfEdge.Start.OutHalfEdges[0], Is.EqualTo(halfEdge));
                 Assert.That(halfEdge.End.OutHalfEdges, Is.Empty);
+                Assert.That(halfEdge.IsBorder, Is.True);
             });
         }
 
@@ -50,6 +51,8 @@ namespace HalfEdge.Tests.Models
                 Assert.That(halfEdgeOpposite.End.OutHalfEdges, Has.Count.EqualTo(1));
                 Assert.That(halfEdgeOpposite.End.OutHalfEdges[0], Is.EqualTo(halfEdge));
                 Assert.That(halfEdgeOpposite.Opposite?.Opposite, Is.EqualTo(halfEdgeOpposite));
+                Assert.That(halfEdge.IsBorder, Is.False);
+                Assert.That(halfEdgeOpposite.IsBorder, Is.False);
             });
         }
     }
