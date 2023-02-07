@@ -7,15 +7,13 @@ namespace HalfEdge
         public List<Vertex<T>> Vertices { get; set; }
         public List<List<int>> Indices { get; set; }
         public Mesh<T> Mesh { get; set; }
-        public List<Polygon<T>> Polygons { get; set; }
-        public int PolygonCount => Indices.Count;
+        public int PolygonCount => Mesh.Polygons.Count;
 
         public Generator(IEnumerable<Vertex<T>> positions, IEnumerable<List<int>> indices)
         {
             Vertices = positions.ToList();
             Indices = indices.ToList();
             Mesh = new Mesh<T>();
-            Polygons = new List<Polygon<T>>();
             foreach (var polygonIndices in Indices)
                 AddPolygon(polygonIndices);
         }
@@ -34,7 +32,7 @@ namespace HalfEdge
             }
 
             Mesh.HalfEdges.AddRange(halfEdges);
-
+            Mesh.Polygons.Add(new Polygon<T>(halfEdges));
         }
     }
 }
