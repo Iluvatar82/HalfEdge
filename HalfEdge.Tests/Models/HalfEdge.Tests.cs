@@ -1,7 +1,9 @@
 ﻿using HalfEdge.Models;
+using Validation;
 
 namespace HalfEdge.Tests.Models
 {
+    [TestFixture]
     public class HalfEdge
     {
         [SetUp]
@@ -17,7 +19,6 @@ namespace HalfEdge.Tests.Models
             var vertexEnd = new Vertex<double>(1, 1, 1);
 
             var halfEdge = new HalfEdge<double>(vertexStart, vertexEnd);
-            
             
             Assert.Multiple(() =>
             {
@@ -42,7 +43,6 @@ namespace HalfEdge.Tests.Models
 
             var halfEdge = new HalfEdge<double>(vertexStart, vertexEnd);
             var halfEdgeOpposite = halfEdge.CreateOpposite();
-            
             
             Assert.Multiple(() =>
             {

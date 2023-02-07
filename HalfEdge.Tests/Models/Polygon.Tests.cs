@@ -2,6 +2,7 @@
 
 namespace HalfEdge.Tests.Models
 {
+    [TestFixture]
     public class Polygon
     {
         [SetUp]

@@ -1,4 +1,7 @@
-﻿namespace HalfEdge.Models
+﻿using System.Diagnostics.CodeAnalysis;
+using Validation;
+
+namespace HalfEdge.Models
 {
     public record class Polygon<T>
     {
@@ -34,8 +37,10 @@
         public bool IsBorder => _halfEdges.Any(h => h.IsBorder);
 
 
-        public Polygon(IEnumerable<HalfEdge<T>> halfEdges)
+        public Polygon([NotNull] IEnumerable<HalfEdge<T>> halfEdges)
         {
+            halfEdges.NotNullOrEmpty();
+
             HalfEdges = new List<HalfEdge<T>>(halfEdges);
         }
 

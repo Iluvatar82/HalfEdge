@@ -1,4 +1,7 @@
-﻿namespace HalfEdge.Models
+﻿using System.Diagnostics.CodeAnalysis;
+using Validation;
+
+namespace HalfEdge.Models
 {
     public record class Vertex<T>
     {
@@ -14,13 +17,18 @@
         public List<HalfEdge<T>> OutHalfEdges { get => _halfEdges; set => _halfEdges = value; }
 
 
-        public Vertex(T x, T y, T z)
+        public Vertex([NotNull] T x, [NotNull] T y, [NotNull] T z)
         {
+            x.NotNull();
+            y.NotNull();
+            z.NotNull();
+
             _x = x;
             _y = y;
             _z = z;
 
             _halfEdges = new List<HalfEdge<T>>();
+            _halfEdges.NotNull();
         }
 
 

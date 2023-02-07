@@ -1,4 +1,6 @@
 ﻿using HalfEdge.Models;
+using System.Diagnostics.CodeAnalysis;
+using Validation;
 
 namespace HalfEdge
 {
@@ -9,8 +11,11 @@ namespace HalfEdge
         public Mesh<T> Mesh { get; set; }
         public int PolygonCount => Mesh.Polygons.Count;
 
-        public Generator(IEnumerable<Vertex<T>> positions, IEnumerable<List<int>> indices)
+        public Generator([NotNull] IEnumerable<Vertex<T>> positions, [NotNull] IEnumerable<List<int>> indices)
         {
+            positions.NotNull();
+            indices.NotNull();
+
             Vertices = positions.ToList();
             Indices = indices.ToList();
             Mesh = new Mesh<T>();

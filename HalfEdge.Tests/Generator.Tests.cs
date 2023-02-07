@@ -2,6 +2,7 @@
 
 namespace HalfEdge.Tests
 {
+    [TestFixture]
     public class Generator
     {
         [SetUp]
@@ -20,6 +21,12 @@ namespace HalfEdge.Tests
                 Assert.That(generator.Indices, Is.Empty);
                 Assert.That(generator.Mesh.HalfEdges, Is.Empty);
             });
+        }
+
+        [Test]
+        public void CreateGeneratorIndicesNull_Test()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Generator<double>(new List<Vertex<double>>(), null));
         }
 
         [Test]

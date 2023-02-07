@@ -2,7 +2,8 @@ using HalfEdge.Models;
 
 namespace HalfEdge.Tests.Models
 {
-    public class Tests
+    [TestFixture]
+    public class Vertex
     {
         [SetUp]
         public void Setup()

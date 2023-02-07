@@ -1,4 +1,7 @@
-﻿namespace HalfEdge.Models
+﻿using System.Diagnostics.CodeAnalysis;
+using Validation;
+
+namespace HalfEdge.Models
 {
     public record class HalfEdge<T>
     {
@@ -57,8 +60,11 @@
         public bool IsBorder => Opposite is null;
 
 
-        public HalfEdge(Vertex<T> start, Vertex<T> end, HalfEdge<T>? opposite = null)
+        public HalfEdge([NotNull] Vertex<T> start, [NotNull] Vertex<T> end, HalfEdge<T>? opposite = null)
         {
+            start.NotNull();
+            end.NotNull();
+
             Start = start;
             End = end;
             Opposite = opposite;
