@@ -1,9 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Validation;
+﻿using Validation;
 
 namespace HalfEdge.Models
 {
-    public record class HalfEdge<T>
+    public record class HalfEdge<T> where T : struct
     {
         private Vertex<T> _start;
         private Vertex<T> _end;
@@ -17,7 +16,7 @@ namespace HalfEdge.Models
             get => _start; init
             {
                 _start = value;
-                _start.OutHalfEdges.Add(this);
+                _start.HalfEdges.Add(this);
             }
         }
         public Vertex<T> End
@@ -60,7 +59,13 @@ namespace HalfEdge.Models
         public bool IsBorder => Opposite is null;
 
 
-        public HalfEdge([NotNull] Vertex<T> start, [NotNull] Vertex<T> end, HalfEdge<T>? opposite = null)
+        public HalfEdge()
+        {
+            _start = new Vertex<T>();
+            _end = new Vertex<T>();
+        }
+
+        public HalfEdge(Vertex<T> start, Vertex<T> end, HalfEdge<T>? opposite = default) : this()
         {
             start.NotNull();
             end.NotNull();
@@ -68,6 +73,12 @@ namespace HalfEdge.Models
             Start = start;
             End = end;
             Opposite = opposite;
+        }
+
+        public void Deconstruct(out Vertex<T> start, out Vertex<T> end)
+        {
+            start = Start;
+            end = End;
         }
 
 
@@ -78,6 +89,9 @@ namespace HalfEdge.Models
             return oppositeHalfEdge;
         }
 
+
+        public static implicit operator (Vertex<T> Start, Vertex<T> End)(HalfEdge<T> halfEdge) => halfEdge;
+        public static implicit operator HalfEdge<T>((Vertex<T> Start, Vertex<T> End) vertices) => new(vertices.Start, vertices.End);
 
         public override string ToString() => $"Start: [{_start}], End: [{_end}], Opposite: {_opposite is not null}, Previous: {_previous is not null}, Next: {_next is not null}";
     }

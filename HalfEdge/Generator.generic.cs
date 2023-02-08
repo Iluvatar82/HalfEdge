@@ -1,23 +1,22 @@
 ﻿using HalfEdge.Models;
-using System.Diagnostics.CodeAnalysis;
 using Validation;
 
 namespace HalfEdge
 {
-    public class Generator<T>
+    public class Generator<T> where T : struct
     {
         public List<Vertex<T>> Vertices { get; set; }
         public List<List<int>> Indices { get; set; }
         public Mesh<T> Mesh { get; set; }
         public int PolygonCount => Mesh.Polygons.Count;
 
-        public Generator([NotNull] IEnumerable<Vertex<T>> positions, [NotNull] IEnumerable<List<int>> indices)
+        public Generator(IEnumerable<Vertex<T>> positions, IEnumerable<List<int>>? indices)
         {
             positions.NotNull();
             indices.NotNull();
 
             Vertices = positions.ToList();
-            Indices = indices.ToList();
+            Indices = (indices ?? Enumerable.Empty<List<int>>()).ToList();
             Mesh = new Mesh<T>();
             foreach (var polygonIndices in Indices)
                 AddPolygon(polygonIndices);

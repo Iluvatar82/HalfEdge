@@ -1,6 +1,6 @@
 ﻿namespace HalfEdge.Models
 {
-    public class Mesh<T>
+    public class Mesh<T> where T : struct
     {
         private List<HalfEdge<T>> _halfEdges;
         private List<Polygon<T>> _polygons;
@@ -23,7 +23,7 @@
                     while (true)
                     {
                         borderLoop.Add(currentHalfEdge);
-                        currentHalfEdge = currentHalfEdge.End.OutHalfEdges.Single(h => h != currentHalfEdge && h.Opposite is null);
+                        currentHalfEdge = currentHalfEdge.End.HalfEdges.Single(h => h != currentHalfEdge && h.Opposite is null);
                         allBorderHalfEdges.Remove(currentHalfEdge);
                         if (borderLoop[0] == currentHalfEdge)
                             break;
@@ -38,8 +38,8 @@
 
         public Mesh()
         {
-            HalfEdges = new List<HalfEdge<T>>();
-            Polygons = new List<Polygon<T>>();
+            _halfEdges = new List<HalfEdge<T>>();
+            _polygons = new List<Polygon<T>>();
         }
     }
 }

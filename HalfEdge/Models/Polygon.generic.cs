@@ -1,9 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Validation;
+﻿using Validation;
 
 namespace HalfEdge.Models
 {
-    public record class Polygon<T>
+    public record class Polygon<T> where T : struct
     {
         private List<HalfEdge<T>> _halfEdges;
 
@@ -27,23 +26,68 @@ namespace HalfEdge.Models
         {
             get
             {
-                foreach (var halfEdge in _halfEdges)
+                foreach (var h in _halfEdges)
                 {
-                    if (halfEdge.Opposite?.Polygon is not null)
-                        yield return halfEdge.Opposite.Polygon;
+                    if (h.Opposite?.Polygon is not null)
+                        yield return h.Opposite.Polygon;
                 }
+
+                yield break;
             }
         }
+
         public bool IsBorder => _halfEdges.Any(h => h.IsBorder);
 
 
-        public Polygon([NotNull] IEnumerable<HalfEdge<T>> halfEdges)
+        public Polygon()
+        {
+            _halfEdges = new List<HalfEdge<T>>();
+        }
+
+        public Polygon(List<Vertex<T>> vertices) : this()
+        {
+            vertices.HasElementCount(e => e > 2);
+
+            var halfEdges = new List<HalfEdge<T>>();
+            Vertex<T>? first = null;
+            foreach(var vertex in vertices)
+            {
+                first ??= vertex;
+                if (vertex != first)
+                {
+                    halfEdges.Add((first, vertex));
+                    first = vertex;
+                }
+            }
+
+            HalfEdges = halfEdges;
+        }
+
+        public Polygon(IEnumerable<HalfEdge<T>> halfEdges) : this()
         {
             halfEdges.NotNullOrEmpty();
+            halfEdges.Select(h => (h.Start, h.End)).FormLoop();
 
             HalfEdges = new List<HalfEdge<T>>(halfEdges);
         }
 
+        public void Deconstruct(out IEnumerable<Vertex<T>> vertices) => vertices = Vertices;
+        public void Deconstruct(out IEnumerable<Vertex<T>> vertices, out IEnumerable<HalfEdge<T>> halfEdges)
+        { 
+            vertices = Vertices; 
+            halfEdges = HalfEdges;
+        }
+
+
+        public static implicit operator Vertex<T>[](Polygon<T> polygon) => polygon.Vertices.ToArray();
+        public static implicit operator HalfEdge<T>[](Polygon<T> polygon) => polygon._halfEdges.ToArray();
+        public static implicit operator Polygon<T>(List<Vertex<T>> vertices)
+        {
+            vertices.NotNullOrEmpty();
+            vertices.HasElementCount(e => e > 2);
+
+            return new(vertices);
+        }
 
         public override string ToString() => $"{_halfEdges.Count} Vertices, On Border: {_halfEdges.Any(h => h.Opposite is null)}";
     }

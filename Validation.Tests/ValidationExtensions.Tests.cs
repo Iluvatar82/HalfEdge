@@ -22,7 +22,7 @@ namespace Validation.Tests
         [Test]
         public void Validate_Null()
         {
-            Vertex<int> myVertex = null;
+            Vertex<int>? myVertex = null;
             Assert.Throws<ArgumentNullException>(() => myVertex.NotNull());
         }
 
@@ -54,8 +54,8 @@ namespace Validation.Tests
         [Test]
         public void Validate_Enumerable_Not_Null_Or_Empty_Null()
         {
-            int[] myEnumerable = null;
-            Assert.Throws<ArgumentNullException>(() => myEnumerable.NotNullOrEmpty());
+            int[]? myEnumerable = null;
+            Assert.Throws<ArgumentNullException>(() => myEnumerable?.NotNullOrEmpty());
         }
 
         [Test]

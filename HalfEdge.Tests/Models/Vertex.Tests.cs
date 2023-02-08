@@ -15,10 +15,15 @@ namespace HalfEdge.Tests.Models
         public void CreateVertex_Test()
         {
             var vertex = new Vertex<double>(1, 1, 1);
-            Assert.That(vertex.X, Is.EqualTo(1));
-            Assert.That(vertex.Y, Is.EqualTo(1));
-            Assert.That(vertex.Z, Is.EqualTo(1));
-            Assert.That(vertex.OutHalfEdges.Count, Is.EqualTo(0));
+            Assert.Multiple(() =>
+            {
+                Assert.That(vertex.X, Is.EqualTo(1));
+                Assert.That(vertex.Y, Is.EqualTo(1));
+                Assert.That(vertex.Z, Is.EqualTo(1));
+                Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.IsBorder, Is.True);
+            });
         }
     }
 }

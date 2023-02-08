@@ -122,6 +122,7 @@ namespace HalfEdge.Tests
                 Assert.That(generator.Mesh.HalfEdges.Count(h => h.IsBorder), Is.EqualTo(0));
                 Assert.That(generator.Mesh.IsOpenMesh, Is.False);
                 Assert.That(generator.Mesh.Borders.ToList(), Has.Count.EqualTo(0));
+                Assert.That(generator.Vertices.Select(v => v.Polygons.ToList().Count), Has.All.EqualTo(3));
             });
         }
     }

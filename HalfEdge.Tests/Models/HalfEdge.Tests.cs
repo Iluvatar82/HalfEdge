@@ -28,9 +28,9 @@ namespace HalfEdge.Tests.Models
                 Assert.That(halfEdge.Previous, Is.Null);
                 Assert.That(halfEdge.Next, Is.Null);
                 Assert.That(halfEdge.Polygon, Is.Null);
-                Assert.That(halfEdge.Start.OutHalfEdges, Has.Count.EqualTo(1));
-                Assert.That(halfEdge.Start.OutHalfEdges[0], Is.EqualTo(halfEdge));
-                Assert.That(halfEdge.End.OutHalfEdges, Is.Empty);
+                Assert.That(halfEdge.Start.HalfEdges, Has.Count.EqualTo(1));
+                Assert.That(halfEdge.Start.HalfEdges[0], Is.EqualTo(halfEdge));
+                Assert.That(halfEdge.End.HalfEdges, Is.Empty);
                 Assert.That(halfEdge.IsBorder, Is.True);
             });
         }
@@ -53,10 +53,10 @@ namespace HalfEdge.Tests.Models
                 Assert.That(halfEdge.Next, Is.Null);
                 Assert.That(halfEdge.Polygon, Is.Null);
                 Assert.That(halfEdgeOpposite.Polygon, Is.Null);
-                Assert.That(halfEdgeOpposite.Start.OutHalfEdges, Has.Count.EqualTo(1));
-                Assert.That(halfEdgeOpposite.Start.OutHalfEdges[0], Is.EqualTo(halfEdgeOpposite));
-                Assert.That(halfEdgeOpposite.End.OutHalfEdges, Has.Count.EqualTo(1));
-                Assert.That(halfEdgeOpposite.End.OutHalfEdges[0], Is.EqualTo(halfEdge));
+                Assert.That(halfEdgeOpposite.Start.HalfEdges, Has.Count.EqualTo(1));
+                Assert.That(halfEdgeOpposite.Start.HalfEdges[0], Is.EqualTo(halfEdgeOpposite));
+                Assert.That(halfEdgeOpposite.End.HalfEdges, Has.Count.EqualTo(1));
+                Assert.That(halfEdgeOpposite.End.HalfEdges[0], Is.EqualTo(halfEdge));
                 Assert.That(halfEdgeOpposite.Opposite?.Opposite, Is.EqualTo(halfEdgeOpposite));
                 Assert.That(halfEdge.IsBorder, Is.False);
                 Assert.That(halfEdgeOpposite.IsBorder, Is.False);
