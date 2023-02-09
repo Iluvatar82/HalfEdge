@@ -1,4 +1,5 @@
 ﻿using HalfEdge.Models;
+using HalfEdge.Models.Base;
 using Validation;
 
 namespace HalfEdge
@@ -8,7 +9,7 @@ namespace HalfEdge
         public List<Vertex<T>> Vertices { get; set; }
         public List<List<int>> Indices { get; set; }
         public Mesh<T> Mesh { get; set; }
-        public int PolygonCount => Mesh.Polygons.Count;
+        public int PolygonCount => Mesh.Polygons.Count();
 
         public Generator(IEnumerable<Vertex<T>> positions, IEnumerable<List<int>>? indices)
         {
@@ -35,8 +36,10 @@ namespace HalfEdge
                     halfEdges.Add(new HalfEdge<T>(Vertices[polygonIndices[i]], Vertices[polygonIndices[(i + 1) % pointCount]]));
             }
 
-            Mesh.HalfEdges.AddRange(halfEdges);
-            Mesh.Polygons.Add(new Polygon<T>(halfEdges));
+            halfEdges.HasElementCount(c => c > 2);
+
+            Mesh.AddHalfEdges(halfEdges);
+            Mesh.AddPolygon(new Polygon<T>(halfEdges));
         }
     }
 }

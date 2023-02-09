@@ -1,12 +1,15 @@
-﻿namespace HalfEdge.Models
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace HalfEdge.Models.Base
 {
     public class Mesh<T> where T : struct
     {
-        private List<HalfEdge<T>> _halfEdges;
-        private List<Polygon<T>> _polygons;
+        protected List<HalfEdge<T>> _halfEdges;
+        protected List<Polygon<T>> _polygons;
 
-        public List<HalfEdge<T>> HalfEdges { get => _halfEdges; init => _halfEdges = value; }
-        public List<Polygon<T>> Polygons { get => _polygons; init => _polygons = value; }
+        public ReadOnlyCollection<HalfEdge<T>> HalfEdges { get => _halfEdges.AsReadOnly<HalfEdge<T>>(); }
+        public ReadOnlyCollection<Polygon<T>> Polygons { get => _polygons.AsReadOnly<Polygon<T>>(); }
         public IEnumerable<List<HalfEdge<T>>> Borders
         {
             get
@@ -41,5 +44,12 @@
             _halfEdges = new List<HalfEdge<T>>();
             _polygons = new List<Polygon<T>>();
         }
+
+
+        public void AddHalfEdges(IEnumerable<HalfEdge<T>> halfEdges) => _halfEdges.AddRange(halfEdges);
+
+        public virtual void AddPolygon(Polygon<T> polygon) => _polygons.Add(polygon);
+
+        public virtual void AddPolygons(IEnumerable<Polygon<T>> polygons) => _polygons.AddRange(polygons);
     }
 }
