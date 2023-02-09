@@ -23,7 +23,7 @@ namespace Validation
             enumerable.NotEmpty(enumerableExpression);
         }
 
-        public static void HasElementCount<T>(this IEnumerable<T> enumerable, int elementCount, [CallerArgumentExpression("enumerable")] string? enumerableExpression = null)
+        public static void HasElementCountEqualTo<T>(this IEnumerable<T> enumerable, int elementCount, [CallerArgumentExpression("enumerable")] string? enumerableExpression = null)
         {
             var actualCount = enumerable.Count();
             if (actualCount != elementCount)
@@ -37,7 +37,7 @@ namespace Validation
                 ThrowElementCount(enumerableExpression, countCheck, actualCount);
         }
 
-        public static void FormLoop<T>(this IEnumerable<(T Start, T End)> enumerable, [CallerArgumentExpression("enumerable")] string? enumerableExpression = null)
+        public static void FormsLoop<T>(this IEnumerable<(T Start, T End)> enumerable, [CallerArgumentExpression("enumerable")] string? enumerableExpression = null)
         {
             enumerable.NotNullOrEmpty();
 

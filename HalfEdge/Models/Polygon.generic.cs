@@ -66,7 +66,7 @@ namespace HalfEdge.Models
         public Polygon(IEnumerable<HalfEdge<T>> halfEdges) : this()
         {
             halfEdges.NotNullOrEmpty();
-            halfEdges.Select(h => (h.Start, h.End)).FormLoop();
+            halfEdges.Select(h => (h.Start, h.End)).FormsLoop();
 
             HalfEdges = new List<HalfEdge<T>>(halfEdges);
         }

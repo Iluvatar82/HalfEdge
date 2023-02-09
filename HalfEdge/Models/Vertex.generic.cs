@@ -61,7 +61,7 @@ namespace HalfEdge.Models
         public static implicit operator Vertex<T>(T[] vertexData)
         {
             vertexData.NotNullOrEmpty();
-            vertexData.HasElementCount(3);
+            vertexData.HasElementCountEqualTo(3);
 
             return new(vertexData[0], vertexData[1], vertexData[2]);
         }
