@@ -36,7 +36,7 @@ namespace HalfEdge.Models
             }
         }
 
-        public bool IsBorder => _halfEdges.Any(h => h.IsBorder);
+        public bool IsBorder => !_halfEdges.Any() || _halfEdges.Any(h => h.IsBorder);
 
 
         public Polygon()
@@ -46,6 +46,7 @@ namespace HalfEdge.Models
 
         public Polygon(List<Vertex<T>> vertices) : this()
         {
+            vertices.NotNullOrEmpty();
             vertices.HasElementCount(e => e > 2);
 
             var halfEdges = new List<HalfEdge<T>>();
@@ -60,6 +61,7 @@ namespace HalfEdge.Models
                 }
             }
 
+            halfEdges.Add((halfEdges.Last().End, halfEdges.First().Start));
             HalfEdges = halfEdges;
         }
 
@@ -71,7 +73,6 @@ namespace HalfEdge.Models
             HalfEdges = new List<HalfEdge<T>>(halfEdges);
         }
 
-        public void Deconstruct(out IEnumerable<Vertex<T>> vertices) => vertices = Vertices;
         public void Deconstruct(out IEnumerable<Vertex<T>> vertices, out IEnumerable<HalfEdge<T>> halfEdges)
         { 
             vertices = Vertices; 
@@ -81,12 +82,12 @@ namespace HalfEdge.Models
 
         public static implicit operator Vertex<T>[](Polygon<T> polygon) => polygon.Vertices.ToArray();
         public static implicit operator HalfEdge<T>[](Polygon<T> polygon) => polygon._halfEdges.ToArray();
-        public static implicit operator Polygon<T>(List<Vertex<T>> vertices)
+        public static implicit operator Polygon<T>(Vertex<T>[] vertices)
         {
             vertices.NotNullOrEmpty();
             vertices.HasElementCount(e => e > 2);
 
-            return new(vertices);
+            return new(vertices.ToList());
         }
 
         public override string ToString() => $"{_halfEdges.Count} Vertices, On Border: {_halfEdges.Any(h => h.Opposite is null)}";
