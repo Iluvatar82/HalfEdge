@@ -12,7 +12,7 @@ namespace HalfEdge.Tests.Models
 
 
         [Test]
-        public void Create_Vertex_Test()
+        public void Create_Vertex()
         {
             var vertex = new Vertex<double>(1, 1, 1);
             Assert.Multiple(() =>
@@ -27,7 +27,7 @@ namespace HalfEdge.Tests.Models
         }
 
         [Test]
-        public void Create_Empty_Vertex_Test()
+        public void Create_Empty_Vertex()
         {
             var vertex = new Vertex<double>();
             Assert.Multiple(() =>
@@ -42,7 +42,7 @@ namespace HalfEdge.Tests.Models
         }
 
         [Test]
-        public void Deconstruct_Vertex_Test_Split()
+        public void Deconstruct_Vertex_Split()
         {
             var vertex = new Vertex<double>(2, 4, 8);
             var (x, y, z) = vertex;

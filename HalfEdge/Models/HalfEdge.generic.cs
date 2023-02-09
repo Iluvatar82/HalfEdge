@@ -90,8 +90,8 @@ namespace HalfEdge.Models
         }
 
 
-        public static implicit operator (Vertex<T> Start, Vertex<T> End)(HalfEdge<T> halfEdge) => halfEdge;
         public static implicit operator HalfEdge<T>((Vertex<T> Start, Vertex<T> End) vertices) => new(vertices.Start, vertices.End);
+
 
         public override string ToString() => $"Start: [{_start}], End: [{_end}], Opposite: {_opposite is not null}, Previous: {_previous is not null}, Next: {_next is not null}";
     }
