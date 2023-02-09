@@ -54,10 +54,8 @@ namespace HalfEdge.Models
             z = _z;
         }
 
-        public void Deconstruct(out T[] positionData) => positionData = new[] { _x, _y, _z };
 
-
-        public static implicit operator T[](Vertex<T> vertex) => vertex;
+        public static implicit operator T[](Vertex<T> vertex) => new[] { vertex._x, vertex._y, vertex._z };
         public static implicit operator Vertex<T>(T[] vertexData)
         {
             vertexData.NotNullOrEmpty();
