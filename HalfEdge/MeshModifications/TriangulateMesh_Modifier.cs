@@ -3,7 +3,7 @@ using HalfEdge.Models;
 
 namespace HalfEdge.MeshModifications
 {
-    public class TriangulateMesh<T> : MeshModifyBase<T> where T : struct
+    public class TriangulateMesh_Modifier<T> : MeshModifyBase<T> where T : struct
     {
         protected override void CreateOutputMesh()
         {
