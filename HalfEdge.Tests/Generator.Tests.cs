@@ -17,8 +17,8 @@ namespace HalfEdge.Tests
             var generator = new Generator<double>(new List<Vertex<double>>(), new List<List<int>>());
             Assert.Multiple(() =>
             {
-                Assert.That(generator.Vertices, Is.Empty);
-                Assert.That(generator.Indices, Is.Empty);
+                Assert.That(generator.Mesh.Vertices, Is.Empty);
+                Assert.That(generator.Mesh.Indices, Is.Empty);
                 Assert.That(generator.Mesh.HalfEdges, Is.Empty);
             });
         }
@@ -36,9 +36,9 @@ namespace HalfEdge.Tests
             var generator = new Generator<double>(vertices, new List<List<int>>());
             Assert.Multiple(() =>
             {
-                Assert.That(generator.Vertices, Is.Not.Empty);
-                Assert.That(generator.Vertices, Has.Count.EqualTo(3));
-                Assert.That(generator.Indices, Is.Empty);
+                Assert.That(generator.Mesh.Vertices, Is.Not.Empty);
+                Assert.That(generator.Mesh.Vertices, Has.Count.EqualTo(3));
+                Assert.That(generator.Mesh.Indices, Is.Empty);
                 Assert.That(generator.Mesh.HalfEdges, Is.Empty);
             });
         }
@@ -51,10 +51,10 @@ namespace HalfEdge.Tests
             var generator = new Generator<double>(vertices, indices);
             Assert.Multiple(() =>
             {
-                Assert.That(generator.Vertices, Is.Not.Empty);
-                Assert.That(generator.Vertices, Has.Count.EqualTo(3));
-                Assert.That(generator.Indices, Is.Not.Empty);
-                Assert.That(generator.Indices, Has.Count.EqualTo(1));
+                Assert.That(generator.Mesh.Vertices, Is.Not.Empty);
+                Assert.That(generator.Mesh.Vertices, Has.Count.EqualTo(3));
+                Assert.That(generator.Mesh.Indices, Is.Not.Empty);
+                Assert.That(generator.Mesh.Indices, Has.Count.EqualTo(1));
                 Assert.That(generator.Mesh.HalfEdges, Is.Not.Empty);
                 Assert.That(generator.Mesh.HalfEdges, Has.Count.EqualTo(3));
                 Assert.That(generator.Mesh.HalfEdges.All(h => h.IsBorder), Is.True);
@@ -76,10 +76,10 @@ namespace HalfEdge.Tests
             var generator = new Generator<double>(vertices, indices);
             Assert.Multiple(() =>
             {
-                Assert.That(generator.Vertices, Is.Not.Empty);
-                Assert.That(generator.Vertices, Has.Count.EqualTo(4));
-                Assert.That(generator.Indices, Is.Not.Empty);
-                Assert.That(generator.Indices, Has.Count.EqualTo(2));
+                Assert.That(generator.Mesh.Vertices, Is.Not.Empty);
+                Assert.That(generator.Mesh.Vertices, Has.Count.EqualTo(4));
+                Assert.That(generator.Mesh.Indices, Is.Not.Empty);
+                Assert.That(generator.Mesh.Indices, Has.Count.EqualTo(2));
                 Assert.That(generator.Mesh.HalfEdges, Is.Not.Empty);
                 Assert.That(generator.Mesh.HalfEdges, Has.Count.EqualTo(6));
                 Assert.That(generator.Mesh.Polygons, Is.Not.Empty);
@@ -104,10 +104,10 @@ namespace HalfEdge.Tests
             var generator = new Generator<double>(vertices, indices);
             Assert.Multiple(() =>
             {
-                Assert.That(generator.Vertices, Is.Not.Empty);
-                Assert.That(generator.Vertices, Has.Count.EqualTo(4));
-                Assert.That(generator.Indices, Is.Not.Empty);
-                Assert.That(generator.Indices, Has.Count.EqualTo(4));
+                Assert.That(generator.Mesh.Vertices, Is.Not.Empty);
+                Assert.That(generator.Mesh.Vertices, Has.Count.EqualTo(4));
+                Assert.That(generator.Mesh.Indices, Is.Not.Empty);
+                Assert.That(generator.Mesh.Indices, Has.Count.EqualTo(4));
                 Assert.That(generator.Mesh.HalfEdges, Is.Not.Empty);
                 Assert.That(generator.Mesh.HalfEdges, Has.Count.EqualTo(12));
                 Assert.That(generator.Mesh.Polygons, Is.Not.Empty);
@@ -122,7 +122,7 @@ namespace HalfEdge.Tests
                 Assert.That(generator.Mesh.HalfEdges.Count(h => h.IsBorder), Is.EqualTo(0));
                 Assert.That(generator.Mesh.IsOpenMesh, Is.False);
                 Assert.That(generator.Mesh.Borders.ToList(), Has.Count.EqualTo(0));
-                Assert.That(generator.Vertices.Select(v => v.Polygons.ToList().Count), Has.All.EqualTo(3));
+                Assert.That(generator.Mesh.Vertices.Select(v => v.Polygons.ToList().Count), Has.All.EqualTo(3));
             });
         }
     }
