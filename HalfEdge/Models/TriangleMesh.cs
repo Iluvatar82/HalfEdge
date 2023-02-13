@@ -6,6 +6,13 @@ namespace HalfEdge.Models
 {
     public class TriangleMesh<T> : Mesh<T> where T : struct
     {
+
+        public TriangleMesh(List<Vertex<T>> vertices)
+            :base()
+        {
+            _vertices = vertices;
+        }
+
         public override void AddPolygon(Polygon<T> polygon)
         {
             polygon.HalfEdges.HasElementCountEqualTo(3);

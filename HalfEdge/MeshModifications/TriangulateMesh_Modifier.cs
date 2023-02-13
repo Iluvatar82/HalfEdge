@@ -9,7 +9,7 @@ namespace HalfEdge.MeshModifications
         {
             if (_inputMesh.Polygons.All(p => p.HalfEdges.Count == 3))
             {
-                _outputMesh = new TriangleMesh<T>();
+                _outputMesh = new TriangleMesh<T>(_inputMesh.Vertices.ToList());
                 _outputMesh.AddHalfEdges(_inputMesh.HalfEdges);
                 _outputMesh.AddPolygons(_inputMesh.Polygons);
             }
