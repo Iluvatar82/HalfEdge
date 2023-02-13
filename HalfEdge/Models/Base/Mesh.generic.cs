@@ -41,6 +41,7 @@ namespace HalfEdge.Models.Base
             }
         }
         public bool IsOpenMesh => Borders.Any();
+        public int PolygonCount => _polygons.Count;
 
 
         public Mesh()
