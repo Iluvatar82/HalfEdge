@@ -1,5 +1,4 @@
-﻿using Framework;
-using Models.Base;
+﻿using Models.Base;
 using Validation;
 
 namespace Models
@@ -8,6 +7,7 @@ namespace Models
     {
         public Vertex Min { get; set; }
         public Vertex Max { get; init; }
+
 
         public AxisAlignedBoundingBox(IEnumerable<Vertex> vertices)
         {
@@ -19,7 +19,8 @@ namespace Models
 
             foreach (var vertex in vertices.Skip(1))
             {
-                var minX = Math.Min(Min.X, vertex.X);
+                Min = Vertex.Minimum(Min, vertex);
+                Max = Vertex.Maximum(Max, vertex);
             }
         }
     }

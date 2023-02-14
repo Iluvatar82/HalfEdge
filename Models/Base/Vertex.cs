@@ -37,7 +37,6 @@ namespace Models.Base
             _z = default;
 
             _halfEdges = new List<HalfEdge>();
-            _halfEdges.NotNull();
         }
 
         public Vertex(double x, double y, double z) : this()
@@ -45,6 +44,20 @@ namespace Models.Base
             _x = x;
             _y = y;
             _z = z;
+        }
+
+        public Vertex(Vertex first, Vertex second, Func<double, double, double> valueFunction) : this()
+        {
+            _x = valueFunction(first.X, second.X);
+            _y = valueFunction(first.Y, second.Y);
+            _z = valueFunction(first.Z, second.Z);
+        }
+
+        public Vertex(Func<IEnumerable<double>, double> aggregateFunction, params Vertex[] vertices) : this()
+        {
+            _x = aggregateFunction(vertices.Select(v => v.X));
+            _y = aggregateFunction(vertices.Select(v => v.Y));
+            _z = aggregateFunction(vertices.Select(v => v.Z));
         }
 
         public void Deconstruct(out double x, out double y, out double z)
@@ -55,6 +68,13 @@ namespace Models.Base
         }
 
 
+        public static Vertex Minimum(Vertex first, Vertex second) => new(first, second, Math.Min);
+        public static Vertex Maximum(Vertex first, Vertex second) => new(first, second, Math.Max);
+        public static Vertex Average(Vertex first, Vertex second) => new(first, second, (f, s) => (f + s) * .5);
+        public static Vertex Average(params Vertex[] vertices) => new((v) => v.Sum() / v.Count(), vertices);
+
+
+        public static implicit operator Vertex(Vertex2D vertex) => new(vertex.X, vertex.Y, 0);
         public static implicit operator double[](Vertex vertex) => new[] { vertex._x, vertex._y, vertex._z };
         public static implicit operator Vertex(double[] vertexData)
         {

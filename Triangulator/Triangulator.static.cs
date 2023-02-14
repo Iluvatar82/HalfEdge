@@ -6,10 +6,9 @@ namespace Triangulator
     {
         public static List<Polygon> Triangulate(Polygon polygon)
         {
-            //Assumption: all Points are on one Plane!
-            //Test this?
+            //Project to "best" Axis Aligned Plane, i.e. the two most "used" dimensions
+            var boundingBox = new AxisAlignedBoundingBox(polygon.Vertices);
 
-            //Project to "best" Axis Aligned Plane
 
             //Triangulate
 
