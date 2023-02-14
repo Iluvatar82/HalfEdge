@@ -36,7 +36,6 @@ namespace Models
                 yield break;
             }
         }
-
         public bool IsBorder => !_halfEdges.Any() || _halfEdges.Any(h => h.IsBorder);
 
 

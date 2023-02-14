@@ -149,9 +149,9 @@ namespace Models.Tests
         public void Polygon_Conversion_Implicit_VertexArray_to_Polygon_Null()
         {
             Vertex[]? vertexArray = null;
-#pragma warning disable CS8604 // Mögliches Nullverweisargument.
+#pragma warning disable CS8604
             Assert.Throws<ArgumentNullException>(() => { Polygon polygon = vertexArray; });
-#pragma warning restore CS8604 // Mögliches Nullverweisargument.
+#pragma warning restore CS8604
         }
 
         [Test]

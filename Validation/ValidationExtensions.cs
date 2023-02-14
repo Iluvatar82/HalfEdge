@@ -5,13 +5,13 @@ namespace Validation
 {
     public static class ValidationExtensions
     {
-        public static void NotNull<T>(this T value, [CallerArgumentExpression("value")] string? valueExpression = null)
+        public static void NotNull<T>([NotNull] this T value, [CallerArgumentExpression("value")] string? valueExpression = null)
         {
             if (value is null)
                 ThrowNull(valueExpression);
         }
 
-        public static void NotEmpty<T>(this IEnumerable<T> enumerable, [CallerArgumentExpression("enumerable")] string? enumerableExpression = null)
+        public static void NotEmpty<T>( this IEnumerable<T> enumerable, [CallerArgumentExpression("enumerable")] string? enumerableExpression = null)
         {
             if (!enumerable.Any())
                 ThrowEmpty(enumerableExpression);

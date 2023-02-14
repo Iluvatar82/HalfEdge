@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Framework.Extensions;
+using System.Collections.ObjectModel;
 
 namespace Models.Base
 {
@@ -60,10 +61,16 @@ namespace Models.Base
         }
 
 
-        public void AddHalfEdges(IEnumerable<HalfEdge> halfEdges) => _halfEdges.AddRange(halfEdges);
+        public virtual void AddIndices(List<int> indices) => _indices.Add(indices);
 
+        public virtual void RemoveIndices(List<int> indices) => _indices.Remove(indices);
+
+        public void AddHalfEdges(IEnumerable<HalfEdge> halfEdges) => _halfEdges.AddRange(halfEdges);
+        
         public virtual void AddPolygon(Polygon polygon) => _polygons.Add(polygon);
 
+        public virtual void RemovePolygon(Polygon polygon) => _polygons.Remove(polygon);
+        
         public virtual void AddPolygons(IEnumerable<Polygon> polygons) => _polygons.AddRange(polygons);
     }
 }

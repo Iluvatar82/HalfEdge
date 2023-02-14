@@ -13,7 +13,8 @@ namespace Models.Base
 
         public Vertex Start
         {
-            get => _start; init
+            get => _start;
+            init
             {
                 _start = value;
                 _start.HalfEdges.Add(this);

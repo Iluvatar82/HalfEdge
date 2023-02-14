@@ -24,8 +24,15 @@ namespace Models.Base
             _y = y;
         }
 
+        public Vertex2D(Vertex2D first, Vertex2D second, Func<double, double, double> valueFunction) : this()
+        {
+            _x = valueFunction(first.X, second.X);
+            _y = valueFunction(first.Y, second.Y);
+        }
+
 
         public static implicit operator Vertex2D(Vertex vertex) => new(vertex.X, vertex.Y);
+        public static implicit operator Vertex2D(Vector2D vector) => new(vector.X, vector.Y);
         public static implicit operator double[](Vertex2D vertex) => new[] { vertex._x, vertex._y };
         public static implicit operator Vertex2D(double[] vertexData)
         {
@@ -34,5 +41,8 @@ namespace Models.Base
 
             return new(vertexData[0], vertexData[1]);
         }
+
+        public static Vertex2D operator -(Vertex vertex, Vertex2D other) => new(vertex, other, (f, s) => f - s);
+        public static Vertex2D operator +(Vertex vertex, Vertex2D other) => new(vertex, other, (f, s) => f + s);
     }
 }

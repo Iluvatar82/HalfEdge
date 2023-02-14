@@ -11,14 +11,14 @@ namespace HalfEdge
             positions.NotNull();
             indices.NotNull();
 
-            var mesh = new Mesh(positions.ToList(), (indices ?? Enumerable.Empty<List<int>>()).ToList());
+            var mesh = new Mesh(positions.ToList(), indices.ToList());
             foreach (var polygonIndices in mesh.Indices)
                 AddPolygon(mesh, polygonIndices);
 
             return mesh;
         }
 
-        private static void AddPolygon(Mesh mesh, List<int> polygonIndices)
+        public static void AddPolygon(Mesh mesh, List<int> polygonIndices)
         {
             var halfEdges = new List<Models.Base.HalfEdge>();
             var pointCount = polygonIndices.Count;
@@ -35,6 +35,22 @@ namespace HalfEdge
 
             mesh.AddHalfEdges(halfEdges);
             mesh.AddPolygon(new Polygon(halfEdges));
+        }
+
+        public static void RemovePolygon(Mesh mesh, Polygon polygon)
+        {
+            var vertexIndices = new List<int>();
+            foreach (var halfEdge in polygon.HalfEdges)
+            {
+                if (halfEdge.Opposite != null)
+                    halfEdge.Opposite.Opposite = null;
+
+                halfEdge.Start.HalfEdges.Remove(halfEdge);
+                vertexIndices.Add(mesh.Vertices.IndexOf(halfEdge.Start));
+            }
+
+            mesh.RemoveIndices(mesh.Indices.First(indexList => indexList.All(index => vertexIndices.Contains(index))));
+            mesh.RemovePolygon(polygon);
         }
     }
 }

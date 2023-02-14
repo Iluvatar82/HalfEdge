@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\Triangulator\Triangulator.csproj" />
     <ProjectReference Include="..\Validation\Validation.csproj" />
   </ItemGroup>
 

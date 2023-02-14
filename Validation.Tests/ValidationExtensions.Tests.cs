@@ -61,7 +61,7 @@ namespace Validation.Tests
 #pragma warning restore CS8604 // Mögliches Nullverweisargument.
         }
 
-        [Test]
+            [Test]
         public void Validate_Enumerable_Not_Null_Or_Empty_Empty()
         {
             var myEnumerable = Array.Empty<int>();

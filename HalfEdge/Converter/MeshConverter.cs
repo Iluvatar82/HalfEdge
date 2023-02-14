@@ -18,8 +18,15 @@ namespace HalfEdge.Converter
                         break;
 
                     case > 3:
-                        //TODO: add additional HalfEdges!
-                        result.AddPolygons(PolygonConverter.ConvertToTriangles(polygon));
+                        var polygonVertices = polygon.Vertices.ToList();
+
+                        var triangulationIndices = Triangulator.Triangulator.Triangulate(polygon);
+                        var meshTriangleIndices = triangulationIndices.Select(triangleIndices => triangleIndices.Select(index => mesh.Vertices.IndexOf(polygonVertices[index])).ToList()).ToList();
+
+                        MeshFactory.RemovePolygon(mesh, polygon);
+                        foreach (var triangleIndices in meshTriangleIndices)
+                            MeshFactory.AddPolygon(mesh, triangleIndices);
+
                         break;
                 }
             }
