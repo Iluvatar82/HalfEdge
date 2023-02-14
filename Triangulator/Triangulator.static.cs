@@ -7,6 +7,7 @@ namespace Triangulator
         public static List<Polygon<T>> Triangulate(Polygon<T> polygon)
         {
             //Assumption: all Points are on one Plane!
+            //Test this?
 
             //Project to "best" Axis Aligned Plane
 
