@@ -1,6 +1,6 @@
 using HalfEdge.Models;
 
-namespace HalfEdge.Tests.Models
+namespace Models.Tests
 {
     [TestFixture]
     public class Vertex

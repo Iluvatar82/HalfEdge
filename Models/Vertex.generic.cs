@@ -2,7 +2,7 @@
 
 namespace HalfEdge.Models
 {
-    public record class Vertex<T> where T : struct
+    public partial record class Vertex<T> where T : struct
     {
         private T _x;
         private T _y;
