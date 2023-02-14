@@ -1,6 +1,7 @@
-﻿using Validation;
+﻿using Models.Base;
+using Validation;
 
-namespace HalfEdge.Models
+namespace Models
 {
     public record class Polygon<T> where T : struct
     {

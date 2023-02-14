@@ -1,4 +1,4 @@
-﻿using HalfEdge.Models;
+﻿using Models;
 
 namespace Triangulator
 {

@@ -1,5 +1,5 @@
 ﻿using HalfEdge.MeshModifications.Base;
-using HalfEdge.Models;
+using Models;
 
 namespace HalfEdge.MeshModifications
 {

@@ -1,8 +1,8 @@
-﻿using HalfEdge.Extensions;
-using HalfEdge.Models.Base;
+﻿using Framework.Extensions;
+using Models.Base;
 using Validation;
 
-namespace HalfEdge.Models
+namespace Models
 {
     public class TriangleMesh<T> : Mesh<T> where T : struct
     {

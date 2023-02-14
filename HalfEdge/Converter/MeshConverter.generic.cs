@@ -1,5 +1,5 @@
-﻿using HalfEdge.Models;
-using HalfEdge.Models.Base;
+﻿using Models;
+using Models.Base;
 
 namespace HalfEdge.Converter
 {

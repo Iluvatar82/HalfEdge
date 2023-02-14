@@ -1,6 +1,6 @@
 ﻿using Validation;
 
-namespace HalfEdge.Models
+namespace Models.Base
 {
     public partial record class Vertex<T> where T : struct
     {
@@ -40,7 +40,7 @@ namespace HalfEdge.Models
             _halfEdges.NotNull();
         }
 
-        public Vertex(T x, T y, T z) :this()
+        public Vertex(T x, T y, T z) : this()
         {
             _x = x;
             _y = y;

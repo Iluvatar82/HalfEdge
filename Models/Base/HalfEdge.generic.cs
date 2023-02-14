@@ -1,6 +1,6 @@
 ﻿using Validation;
 
-namespace HalfEdge.Models
+namespace Models.Base
 {
     public record class HalfEdge<T> where T : struct
     {
@@ -84,7 +84,7 @@ namespace HalfEdge.Models
 
         public HalfEdge<T> CreateOpposite()
         {
-            var oppositeHalfEdge = this with { Start = this.End, End = this.Start, Opposite = this, Previous = null, Next = null };
+            var oppositeHalfEdge = this with { Start = End, End = Start, Opposite = this, Previous = null, Next = null };
             Opposite = oppositeHalfEdge;
             return oppositeHalfEdge;
         }

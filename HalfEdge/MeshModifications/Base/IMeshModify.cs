@@ -1,4 +1,4 @@
-﻿using HalfEdge.Models.Base;
+﻿using Models.Base;
 
 namespace HalfEdge.MeshModifications.Base
 {

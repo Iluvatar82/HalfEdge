@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace HalfEdge.Models.Base
+namespace Models.Base
 {
     public class Mesh<T> where T : struct
     {

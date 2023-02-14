@@ -1,4 +1,4 @@
-﻿namespace HalfEdge.Extensions
+﻿namespace Framework.Extensions
 {
     public static class CollectionExtensions
     {

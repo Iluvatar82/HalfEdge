@@ -1,4 +1,5 @@
-﻿using HalfEdge.Models;
+﻿using Models;
+using Models.Base;
 
 namespace Models.Tests
 {
