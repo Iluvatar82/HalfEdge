@@ -1,4 +1,5 @@
-﻿using HalfEdge.MeshModifications.Base;
+﻿using HalfEdge.Converter;
+using HalfEdge.MeshModifications.Base;
 using Models;
 
 namespace HalfEdge.MeshModifications
@@ -14,9 +15,7 @@ namespace HalfEdge.MeshModifications
                 _outputMesh.AddPolygons(_inputMesh.Polygons);
             }
             else
-            {
-                //TODO Triangulate the Polygons
-            }
+                _outputMesh = MeshConverter.ConvertToTriangleMesh(_inputMesh);
         }
     }
 }
