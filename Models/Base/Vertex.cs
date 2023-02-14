@@ -2,19 +2,19 @@
 
 namespace Models.Base
 {
-    public partial record class Vertex<T> where T : struct
+    public partial record class Vertex
     {
-        private T _x;
-        private T _y;
-        private T _z;
-        private List<HalfEdge<T>> _halfEdges;
+        private double _x;
+        private double _y;
+        private double _z;
+        private List<HalfEdge> _halfEdges;
 
 
-        public T X { get => _x; init => _x = value; }
-        public T Y { get => _y; init => _y = value; }
-        public T Z { get => _z; init => _z = value; }
-        public List<HalfEdge<T>> HalfEdges { get => _halfEdges; init => _halfEdges = value; }
-        public IEnumerable<Polygon<T>> Polygons
+        public double X { get => _x; init => _x = value; }
+        public double Y { get => _y; init => _y = value; }
+        public double Z { get => _z; init => _z = value; }
+        public List<HalfEdge> HalfEdges { get => _halfEdges; init => _halfEdges = value; }
+        public IEnumerable<Polygon> Polygons
         {
             get
             {
@@ -36,18 +36,18 @@ namespace Models.Base
             _y = default;
             _z = default;
 
-            _halfEdges = new List<HalfEdge<T>>();
+            _halfEdges = new List<HalfEdge>();
             _halfEdges.NotNull();
         }
 
-        public Vertex(T x, T y, T z) : this()
+        public Vertex(double x, double y, double z) : this()
         {
             _x = x;
             _y = y;
             _z = z;
         }
 
-        public void Deconstruct(out T x, out T y, out T z)
+        public void Deconstruct(out double x, out double y, out double z)
         {
             x = _x;
             y = _y;
@@ -55,8 +55,8 @@ namespace Models.Base
         }
 
 
-        public static implicit operator T[](Vertex<T> vertex) => new[] { vertex._x, vertex._y, vertex._z };
-        public static implicit operator Vertex<T>(T[] vertexData)
+        public static implicit operator double[](Vertex vertex) => new[] { vertex._x, vertex._y, vertex._z };
+        public static implicit operator Vertex(double[] vertexData)
         {
             vertexData.NotNullOrEmpty();
             vertexData.HasElementCountEqualTo(3);

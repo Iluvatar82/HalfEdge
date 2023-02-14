@@ -2,16 +2,16 @@
 
 namespace Models.Base
 {
-    public record class HalfEdge<T> where T : struct
+    public record class HalfEdge
     {
-        private Vertex<T> _start;
-        private Vertex<T> _end;
-        private HalfEdge<T>? _opposite;
-        private HalfEdge<T>? _next;
-        private HalfEdge<T>? _previous;
-        private Polygon<T>? _polygon;
+        private Vertex _start;
+        private Vertex _end;
+        private HalfEdge? _opposite;
+        private HalfEdge? _next;
+        private HalfEdge? _previous;
+        private Polygon? _polygon;
 
-        public Vertex<T> Start
+        public Vertex Start
         {
             get => _start; init
             {
@@ -19,13 +19,13 @@ namespace Models.Base
                 _start.HalfEdges.Add(this);
             }
         }
-        public Vertex<T> End
+        public Vertex End
         {
             get => _end;
             init { _end = value; }
         }
-        public HalfEdge<T>? Opposite { get => _opposite; set => _opposite = value; }
-        public HalfEdge<T>? Next
+        public HalfEdge? Opposite { get => _opposite; set => _opposite = value; }
+        public HalfEdge? Next
         {
             get => _next;
             set
@@ -38,7 +38,7 @@ namespace Models.Base
                 _next = value;
             }
         }
-        public HalfEdge<T>? Previous
+        public HalfEdge? Previous
         {
             get => _previous;
             set
@@ -51,7 +51,7 @@ namespace Models.Base
                 _previous = value;
             }
         }
-        public Polygon<T>? Polygon
+        public Polygon? Polygon
         {
             get => _polygon;
             set => _polygon = value;
@@ -61,11 +61,11 @@ namespace Models.Base
 
         public HalfEdge()
         {
-            _start = new Vertex<T>();
-            _end = new Vertex<T>();
+            _start = new Vertex();
+            _end = new Vertex();
         }
 
-        public HalfEdge(Vertex<T> start, Vertex<T> end, HalfEdge<T>? opposite = default) : this()
+        public HalfEdge(Vertex start, Vertex end, HalfEdge? opposite = default) : this()
         {
             start.NotNull();
             end.NotNull();
@@ -75,14 +75,14 @@ namespace Models.Base
             Opposite = opposite;
         }
 
-        public void Deconstruct(out Vertex<T> start, out Vertex<T> end)
+        public void Deconstruct(out Vertex start, out Vertex end)
         {
             start = Start;
             end = End;
         }
 
 
-        public HalfEdge<T> CreateOpposite()
+        public HalfEdge CreateOpposite()
         {
             var oppositeHalfEdge = this with { Start = End, End = Start, Opposite = this, Previous = null, Next = null };
             Opposite = oppositeHalfEdge;
@@ -90,7 +90,7 @@ namespace Models.Base
         }
 
 
-        public static implicit operator HalfEdge<T>((Vertex<T> Start, Vertex<T> End) vertices) => new(vertices.Start, vertices.End);
+        public static implicit operator HalfEdge((Vertex Start, Vertex End) vertices) => new(vertices.Start, vertices.End);
 
 
         public override string ToString() => $"Start: [{_start}], End: [{_end}], Opposite: {_opposite is not null}, Previous: {_previous is not null}, Next: {_next is not null}";

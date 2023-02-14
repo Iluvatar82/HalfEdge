@@ -3,7 +3,7 @@ using Models.Base;
 namespace Validation.Tests
 {
     [TestFixture]
-    public class ValidationExtensions
+    public class ValidationExtensionsTests
     {
         [SetUp]
         public void Setup()
@@ -22,7 +22,7 @@ namespace Validation.Tests
         [Test]
         public void Validate_Null()
         {
-            Vertex<int>? myVertex = null;
+            Vertex? myVertex = null;
             Assert.Throws<ArgumentNullException>(() => myVertex.NotNull());
         }
 

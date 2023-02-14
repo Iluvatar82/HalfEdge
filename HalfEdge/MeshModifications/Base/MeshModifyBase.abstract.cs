@@ -2,24 +2,24 @@
 
 namespace HalfEdge.MeshModifications.Base
 {
-    public abstract class MeshModifyBase<T> : IMeshModify<T> where T : struct
+    public abstract class MeshModifyBase : IMeshModify
     {
-        protected Mesh<T> _inputMesh;
-        protected Mesh<T> _outputMesh;
+        protected Mesh _inputMesh;
+        protected Mesh _outputMesh;
 
 
-        public Mesh<T> InputMesh => _inputMesh;
+        public Mesh InputMesh => _inputMesh;
 
-        public Mesh<T> OutputMesh => _outputMesh;
+        public Mesh OutputMesh => _outputMesh;
 
 
         public MeshModifyBase()
         {
-            _inputMesh = new Mesh<T>();
-            _outputMesh = new Mesh<T>();
+            _inputMesh = new Mesh();
+            _outputMesh = new Mesh();
         }
 
-        public void Modify(Mesh<T> mesh)
+        public void Modify(Mesh mesh)
         {
             _inputMesh = mesh;
             CreateOutputMesh();

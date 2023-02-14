@@ -4,7 +4,7 @@ using Validation;
 namespace Models.Tests
 {
     [TestFixture]
-    public class HalfEdge
+    public class HalfEdgeTests
     {
         [SetUp]
         public void Setup()
@@ -15,10 +15,10 @@ namespace Models.Tests
         [Test]
         public void Create_HalfEdge()
         {
-            var vertexStart = new Vertex<double>(0, 0, 0);
-            var vertexEnd = new Vertex<double>(1, 1, 1);
+            var vertexStart = new Vertex(0, 0, 0);
+            var vertexEnd = new Vertex(1, 1, 1);
 
-            var halfEdge = new HalfEdge<double>(vertexStart, vertexEnd);
+            var halfEdge = new HalfEdge(vertexStart, vertexEnd);
 
             Assert.Multiple(() =>
             {
@@ -38,7 +38,7 @@ namespace Models.Tests
         [Test]
         public void Create_Empty_HalfEdge()
         {
-            var halfEdge = new HalfEdge<double>();
+            var halfEdge = new HalfEdge();
             Assert.Multiple(() =>
             {
                 Assert.That(halfEdge.Start, Is.Not.Null);
@@ -63,10 +63,10 @@ namespace Models.Tests
         [Test]
         public void Create_HalfEdge_Opposite()
         {
-            var vertexStart = new Vertex<double>(0, 0, 0);
-            var vertexEnd = new Vertex<double>(1, 1, 1);
+            var vertexStart = new Vertex(0, 0, 0);
+            var vertexEnd = new Vertex(1, 1, 1);
 
-            var halfEdge = new HalfEdge<double>(vertexStart, vertexEnd);
+            var halfEdge = new HalfEdge(vertexStart, vertexEnd);
             var halfEdgeOpposite = halfEdge.CreateOpposite();
 
             Assert.Multiple(() =>
@@ -91,10 +91,10 @@ namespace Models.Tests
         [Test]
         public void Deconstruct_HalfEdge_Split()
         {
-            var vertexStart = new Vertex<double>(0, 0, 0);
-            var vertexEnd = new Vertex<double>(1, 1, 1);
+            var vertexStart = new Vertex(0, 0, 0);
+            var vertexEnd = new Vertex(1, 1, 1);
 
-            var halfEdge = new HalfEdge<double>(vertexStart, vertexEnd);
+            var halfEdge = new HalfEdge(vertexStart, vertexEnd);
             var (start, end) = halfEdge;
 
             Assert.Multiple(() =>
@@ -107,10 +107,10 @@ namespace Models.Tests
         [Test]
         public void HalfEdge_Conversion_Implicit_Start_End_to_HalfEdge()
         {
-            var vertexStart = new Vertex<double>(0, 0, 0);
-            var vertexEnd = new Vertex<double>(1, 1, 1);
+            var vertexStart = new Vertex(0, 0, 0);
+            var vertexEnd = new Vertex(1, 1, 1);
 
-            HalfEdge<double> halfEdge = (vertexStart, vertexEnd);
+            HalfEdge halfEdge = (vertexStart, vertexEnd);
 
             Assert.Multiple(() =>
             {

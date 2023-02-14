@@ -14,7 +14,7 @@ namespace HalfEdge.Tests
         [Test]
         public void CreateGenerator_Test()
         {
-            var mesh = MeshFactory.CreateMesh(new List<Vertex<double>>(), new List<List<int>>());
+            var mesh = MeshFactory.CreateMesh(new List<Vertex>(), new List<List<int>>());
             Assert.Multiple(() =>
             {
                 Assert.That(mesh.Vertices, Is.Empty);
@@ -26,13 +26,13 @@ namespace HalfEdge.Tests
         [Test]
         public void CreateGeneratorIndicesNull_Test()
         {
-            Assert.Throws<ArgumentNullException>(() => MeshFactory.CreateMesh(new List<Vertex<double>>(), null));
+            Assert.Throws<ArgumentNullException>(() => MeshFactory.CreateMesh(new List<Vertex>(), null));
         }
 
         [Test]
         public void CreateGenerator_WithVertices_Test()
         {
-            var vertices = new List<Vertex<double>> { new Vertex<double>(0, 0, 0), new Vertex<double>(1, 1, 1), new Vertex<double>(0, 1, 1) };
+            var vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 1, 1), new Vertex(0, 1, 1) };
             var mesh = MeshFactory.CreateMesh(vertices, new List<List<int>>());
             Assert.Multiple(() =>
             {
@@ -46,7 +46,7 @@ namespace HalfEdge.Tests
         [Test]
         public void CreateGenerator_WithOnePolygon_Test()
         {
-            var vertices = new List<Vertex<double>> { new Vertex<double>(0, 0, 0), new Vertex<double>(1, 1, 1), new Vertex<double>(0, 1, 1) };
+            var vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 1, 1), new Vertex(0, 1, 1) };
             var indices = new List<List<int>> { new List<int> { 0, 1, 2 } };
             var mesh = MeshFactory.CreateMesh(vertices, indices);
             Assert.Multiple(() =>
@@ -71,7 +71,7 @@ namespace HalfEdge.Tests
         [Test]
         public void CreateGenerator_WithTwoPolygon_Test()
         {
-            var vertices = new List<Vertex<double>> { new Vertex<double>(0, 0, 0), new Vertex<double>(1, 0, 0), new Vertex<double>(1, 1, 1), new Vertex<double>(0, 1, 0) };
+            var vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 0, 0), new Vertex(1, 1, 1), new Vertex(0, 1, 0) };
             var indices = new List<List<int>> { new List<int> { 0, 1, 2 }, new List<int> { 0, 2, 3 } };
             var mesh = MeshFactory.CreateMesh(vertices, indices);
             Assert.Multiple(() =>
@@ -99,7 +99,7 @@ namespace HalfEdge.Tests
         [Test]
         public void CreateGenerator_WithTwoClosedMesh_Test()
         {
-            var vertices = new List<Vertex<double>> { new Vertex<double>(0, 0, 0), new Vertex<double>(1, 0, 0), new Vertex<double>(1, 1, 0), new Vertex<double>(1, 1, 1) };
+            var vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 0, 0), new Vertex(1, 1, 0), new Vertex(1, 1, 1) };
             var indices = new List<List<int>> { new List<int> { 2, 1, 0 }, new List<int> { 0, 1, 3 }, new List<int> { 1, 2, 3 }, new List<int> { 2, 0, 3 } };
             var mesh = MeshFactory.CreateMesh(vertices, indices);
             Assert.Multiple(() =>

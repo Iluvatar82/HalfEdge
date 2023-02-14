@@ -2,9 +2,9 @@
 
 namespace Triangulator
 {
-    public static class Triangulator<T> where T : struct
+    public static class Triangulator
     {
-        public static List<Polygon<T>> Triangulate(Polygon<T> polygon)
+        public static List<Polygon> Triangulate(Polygon polygon)
         {
             //Assumption: all Points are on one Plane!
             //Test this?

@@ -4,23 +4,23 @@ using Validation;
 
 namespace Models
 {
-    public class TriangleMesh<T> : Mesh<T> where T : struct
+    public class TriangleMesh : Mesh
     {
 
-        public TriangleMesh(List<Vertex<T>> vertices)
+        public TriangleMesh(List<Vertex> vertices)
             :base()
         {
             _vertices = vertices;
         }
 
-        public override void AddPolygon(Polygon<T> polygon)
+        public override void AddPolygon(Polygon polygon)
         {
             polygon.HalfEdges.HasElementCountEqualTo(3);
 
             base.AddPolygon(polygon);
         }
 
-        public override void AddPolygons(IEnumerable<Polygon<T>> polygons)
+        public override void AddPolygons(IEnumerable<Polygon> polygons)
         {
             polygons.ForEach(p => p.HalfEdges.HasElementCountEqualTo(3));
 

@@ -2,18 +2,18 @@
 
 namespace Models.Base
 {
-    public class Mesh<T> where T : struct
+    public class Mesh
     {
-        protected List<Vertex<T>> _vertices;
+        protected List<Vertex> _vertices;
         protected List<List<int>> _indices;
-        protected List<HalfEdge<T>> _halfEdges;
-        protected List<Polygon<T>> _polygons;
+        protected List<HalfEdge> _halfEdges;
+        protected List<Polygon> _polygons;
 
-        public ReadOnlyCollection<Vertex<T>> Vertices => _vertices.AsReadOnly<Vertex<T>>();
+        public ReadOnlyCollection<Vertex> Vertices => _vertices.AsReadOnly<Vertex>();
         public ReadOnlyCollection<List<int>> Indices => _indices.AsReadOnly<List<int>>();
-        public ReadOnlyCollection<HalfEdge<T>> HalfEdges => _halfEdges.AsReadOnly<HalfEdge<T>>();
-        public ReadOnlyCollection<Polygon<T>> Polygons => _polygons.AsReadOnly<Polygon<T>>();
-        public IEnumerable<List<HalfEdge<T>>> Borders
+        public ReadOnlyCollection<HalfEdge> HalfEdges => _halfEdges.AsReadOnly<HalfEdge>();
+        public ReadOnlyCollection<Polygon> Polygons => _polygons.AsReadOnly<Polygon>();
+        public IEnumerable<List<HalfEdge>> Borders
         {
             get
             {
@@ -23,7 +23,7 @@ namespace Models.Base
 
                 while (allBorderHalfEdges.Any())
                 {
-                    var borderLoop = new List<HalfEdge<T>>();
+                    var borderLoop = new List<HalfEdge>();
                     var currentHalfEdge = allBorderHalfEdges.First();
                     allBorderHalfEdges.Remove(currentHalfEdge);
                     while (true)
@@ -45,25 +45,25 @@ namespace Models.Base
 
         public Mesh()
         {
-            _vertices = new List<Vertex<T>>();
+            _vertices = new List<Vertex>();
             _indices = new List<List<int>>();
-            _halfEdges = new List<HalfEdge<T>>();
-            _polygons = new List<Polygon<T>>();
+            _halfEdges = new List<HalfEdge>();
+            _polygons = new List<Polygon>();
         }
 
-        public Mesh(List<Vertex<T>> vertices, List<List<int>> indices)
+        public Mesh(List<Vertex> vertices, List<List<int>> indices)
         {
             _vertices = vertices;
             _indices = indices;
-            _halfEdges = new List<HalfEdge<T>>();
-            _polygons = new List<Polygon<T>>();
+            _halfEdges = new List<HalfEdge>();
+            _polygons = new List<Polygon>();
         }
 
 
-        public void AddHalfEdges(IEnumerable<HalfEdge<T>> halfEdges) => _halfEdges.AddRange(halfEdges);
+        public void AddHalfEdges(IEnumerable<HalfEdge> halfEdges) => _halfEdges.AddRange(halfEdges);
 
-        public virtual void AddPolygon(Polygon<T> polygon) => _polygons.Add(polygon);
+        public virtual void AddPolygon(Polygon polygon) => _polygons.Add(polygon);
 
-        public virtual void AddPolygons(IEnumerable<Polygon<T>> polygons) => _polygons.AddRange(polygons);
+        public virtual void AddPolygons(IEnumerable<Polygon> polygons) => _polygons.AddRange(polygons);
     }
 }

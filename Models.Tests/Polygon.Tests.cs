@@ -4,7 +4,7 @@ using Models.Base;
 namespace Models.Tests
 {
     [TestFixture]
-    public class Polygon
+    public class PolygonTests
     {
         [SetUp]
         public void Setup()
@@ -14,7 +14,7 @@ namespace Models.Tests
         [Test]
         public void CreatePolygon_Empty_Ok()
         {
-            var polygon = new Polygon<double>();
+            var polygon = new Polygon();
             Assert.Multiple(() =>
             {
                 Assert.That(polygon.HalfEdges, Is.Empty);
@@ -27,11 +27,11 @@ namespace Models.Tests
         [Test]
         public void CreatePolygon_from_Vertices_Ok()
         {
-            var vertex1 = new Vertex<double>(0, 0, 0);
-            var vertex2 = new Vertex<double>(1, 1, 1);
-            var vertex3 = new Vertex<double>(0, 1, 1);
+            var vertex1 = new Vertex(0, 0, 0);
+            var vertex2 = new Vertex(1, 1, 1);
+            var vertex3 = new Vertex(0, 1, 1);
 
-            var polygon = new Polygon<double>(new List<Vertex<double>> { vertex1, vertex2, vertex3 });
+            var polygon = new Polygon(new List<Vertex> { vertex1, vertex2, vertex3 });
             Assert.Multiple(() =>
             {
                 Assert.That(polygon.HalfEdges, Has.Count.EqualTo(3));
@@ -47,15 +47,15 @@ namespace Models.Tests
         [Test]
         public void CreatePolygon_from_HalfEdges_Ok()
         {
-            var vertex1 = new Vertex<double>(0, 0, 0);
-            var vertex2 = new Vertex<double>(1, 1, 1);
-            var vertex3 = new Vertex<double>(0, 1, 1);
+            var vertex1 = new Vertex(0, 0, 0);
+            var vertex2 = new Vertex(1, 1, 1);
+            var vertex3 = new Vertex(0, 1, 1);
 
-            var halfEdge1 = new HalfEdge<double>(vertex1, vertex2);
-            var halfEdge2 = new HalfEdge<double>(vertex2, vertex3);
-            var halfEdge3 = new HalfEdge<double>(vertex3, vertex1);
+            var halfEdge1 = new HalfEdge(vertex1, vertex2);
+            var halfEdge2 = new HalfEdge(vertex2, vertex3);
+            var halfEdge3 = new HalfEdge(vertex3, vertex1);
 
-            var polygon = new Polygon<double>(new[] { halfEdge1, halfEdge2, halfEdge3 });
+            var polygon = new Polygon(new[] { halfEdge1, halfEdge2, halfEdge3 });
             Assert.Multiple(() =>
             {
                 Assert.That(polygon.HalfEdges, Has.Count.EqualTo(3));
@@ -71,25 +71,25 @@ namespace Models.Tests
         [Test]
         public void CreatePolygon_from_HalfEdges_NotComplete()
         {
-            var vertex1 = new Vertex<double>(0, 0, 0);
-            var vertex2 = new Vertex<double>(1, 1, 1);
-            var vertex3 = new Vertex<double>(0, 1, 1);
+            var vertex1 = new Vertex(0, 0, 0);
+            var vertex2 = new Vertex(1, 1, 1);
+            var vertex3 = new Vertex(0, 1, 1);
 
-            var halfEdge1 = new HalfEdge<double>(vertex1, vertex2);
-            var halfEdge2 = new HalfEdge<double>(vertex2, vertex3);
+            var halfEdge1 = new HalfEdge(vertex1, vertex2);
+            var halfEdge2 = new HalfEdge(vertex2, vertex3);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Polygon<double>(new[] { halfEdge1, halfEdge2 }));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Polygon(new[] { halfEdge1, halfEdge2 }));
         }
 
         [Test]
         public void Deconstruct_Polygon_Ok()
         {
-            var vertex1 = new Vertex<double>(0, 0, 0);
-            var vertex2 = new Vertex<double>(1, 0, 1);
-            var vertex3 = new Vertex<double>(1, 1, 1);
-            var vertex4 = new Vertex<double>(0, 1, 0);
+            var vertex1 = new Vertex(0, 0, 0);
+            var vertex2 = new Vertex(1, 0, 1);
+            var vertex3 = new Vertex(1, 1, 1);
+            var vertex4 = new Vertex(0, 1, 0);
 
-            var polygon = new Polygon<double>(new List<Vertex<double>> { vertex1, vertex2, vertex3, vertex4 });
+            var polygon = new Polygon(new List<Vertex> { vertex1, vertex2, vertex3, vertex4 });
             var (vertices, halfEdges) = polygon;
 
             Assert.Multiple(() =>
@@ -102,12 +102,12 @@ namespace Models.Tests
         [Test]
         public void Polygon_Conversion_Implicit_to_Vertices()
         {
-            var vertex1 = new Vertex<double>(0, 0, 0);
-            var vertex2 = new Vertex<double>(1, 1, 1);
-            var vertex3 = new Vertex<double>(0, 1, 1);
+            var vertex1 = new Vertex(0, 0, 0);
+            var vertex2 = new Vertex(1, 1, 1);
+            var vertex3 = new Vertex(0, 1, 1);
 
-            var polygon = new Polygon<double>(new List<Vertex<double>> { vertex1, vertex2, vertex3 });
-            Vertex<double>[] vertices = polygon;
+            var polygon = new Polygon(new List<Vertex> { vertex1, vertex2, vertex3 });
+            Vertex[] vertices = polygon;
 
             Assert.That(vertices, Has.Length.EqualTo(3));
         }
@@ -115,12 +115,12 @@ namespace Models.Tests
         [Test]
         public void Polygon_Conversion_Implicit_to_HalfEdges()
         {
-            var vertex1 = new Vertex<double>(0, 0, 0);
-            var vertex2 = new Vertex<double>(1, 1, 1);
-            var vertex3 = new Vertex<double>(0, 1, 1);
+            var vertex1 = new Vertex(0, 0, 0);
+            var vertex2 = new Vertex(1, 1, 1);
+            var vertex3 = new Vertex(0, 1, 1);
 
-            var polygon = new Polygon<double>(new List<Vertex<double>> { vertex1, vertex2, vertex3 });
-            HalfEdge<double>[] halfEdges = polygon;
+            var polygon = new Polygon(new List<Vertex> { vertex1, vertex2, vertex3 });
+            HalfEdge[] halfEdges = polygon;
 
             Assert.That(halfEdges, Has.Length.EqualTo(3));
         }
@@ -128,10 +128,10 @@ namespace Models.Tests
         [Test]
         public void Polygon_Conversion_Implicit_VertexArray_to_Polygon_Ok()
         {
-            var vertex1 = new Vertex<double>(0, 0, 0);
-            var vertex2 = new Vertex<double>(1, 1, 1);
-            var vertex3 = new Vertex<double>(0, 1, 1);
-            Polygon<double> polygon = new Vertex<double>[] { vertex1, vertex2, vertex3 };
+            var vertex1 = new Vertex(0, 0, 0);
+            var vertex2 = new Vertex(1, 1, 1);
+            var vertex3 = new Vertex(0, 1, 1);
+            Polygon polygon = new Vertex[] { vertex1, vertex2, vertex3 };
 
             Assert.Multiple(() =>
             {
@@ -148,26 +148,26 @@ namespace Models.Tests
         [Test]
         public void Polygon_Conversion_Implicit_VertexArray_to_Polygon_Null()
         {
-            Vertex<double>[]? vertexArray = null;
+            Vertex[]? vertexArray = null;
 #pragma warning disable CS8604 // Mögliches Nullverweisargument.
-            Assert.Throws<ArgumentNullException>(() => { Polygon<double> polygon = vertexArray; });
+            Assert.Throws<ArgumentNullException>(() => { Polygon polygon = vertexArray; });
 #pragma warning restore CS8604 // Mögliches Nullverweisargument.
         }
 
         [Test]
         public void Polygon_Conversion_Implicit_VertexArray_to_Polygon_Empty()
         {
-            var vertexArray = new Vertex<double>[] { };
-            Assert.Throws<ArgumentOutOfRangeException>(() => { Polygon<double> polygon = vertexArray; });
+            var vertexArray = new Vertex[] { };
+            Assert.Throws<ArgumentOutOfRangeException>(() => { Polygon polygon = vertexArray; });
         }
 
         [Test]
         public void Polygon_Conversion_Implicit_VertexArray_to_Polygon_too_few_Elements()
         {
-            var vertex1 = new Vertex<double>(0, 0, 0);
-            var vertex2 = new Vertex<double>(1, 1, 1);
+            var vertex1 = new Vertex(0, 0, 0);
+            var vertex2 = new Vertex(1, 1, 1);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => { Polygon<double> polygon = new[] { vertex1, vertex2 }; });
+            Assert.Throws<ArgumentOutOfRangeException>(() => { Polygon polygon = new[] { vertex1, vertex2 }; });
         }
     }
 }

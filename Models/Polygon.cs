@@ -3,13 +3,13 @@ using Validation;
 
 namespace Models
 {
-    public record class Polygon<T> where T : struct
+    public record class Polygon
     {
-        private List<HalfEdge<T>> _halfEdges;
+        private List<HalfEdge> _halfEdges;
 
 
-        public IEnumerable<Vertex<T>> Vertices => _halfEdges.Select(h => h.Start);
-        public List<HalfEdge<T>> HalfEdges
+        public IEnumerable<Vertex> Vertices => _halfEdges.Select(h => h.Start);
+        public List<HalfEdge> HalfEdges
         {
             get => _halfEdges;
             init 
@@ -23,7 +23,7 @@ namespace Models
                 }
             }
         }
-        public IEnumerable<Polygon<T>> Neighbors
+        public IEnumerable<Polygon> Neighbors
         {
             get
             {
@@ -42,16 +42,16 @@ namespace Models
 
         public Polygon()
         {
-            _halfEdges = new List<HalfEdge<T>>();
+            _halfEdges = new List<HalfEdge>();
         }
 
-        public Polygon(List<Vertex<T>> vertices) : this()
+        public Polygon(List<Vertex> vertices) : this()
         {
             vertices.NotNullOrEmpty();
             vertices.HasElementCount(e => e > 2);
 
-            var halfEdges = new List<HalfEdge<T>>();
-            Vertex<T>? first = null;
+            var halfEdges = new List<HalfEdge>();
+            Vertex? first = null;
             foreach(var vertex in vertices)
             {
                 first ??= vertex;
@@ -66,24 +66,24 @@ namespace Models
             HalfEdges = halfEdges;
         }
 
-        public Polygon(IEnumerable<HalfEdge<T>> halfEdges) : this()
+        public Polygon(IEnumerable<HalfEdge> halfEdges) : this()
         {
             halfEdges.NotNullOrEmpty();
             halfEdges.Select(h => (h.Start, h.End)).FormsLoop();
 
-            HalfEdges = new List<HalfEdge<T>>(halfEdges);
+            HalfEdges = new List<HalfEdge>(halfEdges);
         }
 
-        public void Deconstruct(out IEnumerable<Vertex<T>> vertices, out IEnumerable<HalfEdge<T>> halfEdges)
+        public void Deconstruct(out IEnumerable<Vertex> vertices, out IEnumerable<HalfEdge> halfEdges)
         { 
             vertices = Vertices; 
             halfEdges = HalfEdges;
         }
 
 
-        public static implicit operator Vertex<T>[](Polygon<T> polygon) => polygon.Vertices.ToArray();
-        public static implicit operator HalfEdge<T>[](Polygon<T> polygon) => polygon._halfEdges.ToArray();
-        public static implicit operator Polygon<T>(Vertex<T>[] vertices)
+        public static implicit operator Vertex[](Polygon polygon) => polygon.Vertices.ToArray();
+        public static implicit operator HalfEdge[](Polygon polygon) => polygon._halfEdges.ToArray();
+        public static implicit operator Polygon(Vertex[] vertices)
         {
             vertices.NotNullOrEmpty();
             vertices.HasElementCount(e => e > 2);

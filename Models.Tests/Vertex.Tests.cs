@@ -3,7 +3,7 @@ using Models.Base;
 namespace Models.Tests
 {
     [TestFixture]
-    public class Vertex
+    public class VertexTests
     {
         [SetUp]
         public void Setup()
@@ -14,7 +14,7 @@ namespace Models.Tests
         [Test]
         public void Create_Vertex()
         {
-            var vertex = new Vertex<double>(1, 1, 1);
+            var vertex = new Vertex(1, 1, 1);
             Assert.Multiple(() =>
             {
                 Assert.That(vertex.X, Is.EqualTo(1));
@@ -29,7 +29,7 @@ namespace Models.Tests
         [Test]
         public void Create_Empty_Vertex()
         {
-            var vertex = new Vertex<double>();
+            var vertex = new Vertex();
             Assert.Multiple(() =>
             {
                 Assert.That(vertex.X, Is.EqualTo(default(double)));
@@ -44,7 +44,7 @@ namespace Models.Tests
         [Test]
         public void Deconstruct_Vertex_Split()
         {
-            var vertex = new Vertex<double>(2, 4, 8);
+            var vertex = new Vertex(2, 4, 8);
             var (x, y, z) = vertex;
 
             Assert.Multiple(() =>
@@ -61,7 +61,7 @@ namespace Models.Tests
         [Test]
         public void Vertex_Conversion_Implicit_Vertex_to_Array()
         {
-            var vertex = new Vertex<double>(2, 4, 8);
+            var vertex = new Vertex(2, 4, 8);
             double[] vertexData = vertex;
 
             Assert.Multiple(() =>
@@ -81,7 +81,7 @@ namespace Models.Tests
         public void Vertex_Conversion_Implicit_Array_to_Vertex()
         {
             var vertexData = new[] { 1d, 2d, 3d };
-            Vertex<double> vertex = vertexData;
+            Vertex vertex = vertexData;
 
             Assert.Multiple(() =>
             {
@@ -99,7 +99,7 @@ namespace Models.Tests
         public void Vertex_Conversion_Implicit_Array_to_Vertex_Array_Not_Ok()
         {
             var vertexData = new[] { 1d, 2d, 3d, 4d, 5d };
-            Assert.Throws<ArgumentOutOfRangeException>(() => { Vertex<double> vertex = vertexData; });
+            Assert.Throws<ArgumentOutOfRangeException>(() => { Vertex vertex = vertexData; });
         }
     }
 }

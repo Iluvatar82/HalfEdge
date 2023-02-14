@@ -2,10 +2,10 @@
 
 namespace HalfEdge.MeshModifications.Base
 {
-    public interface IMeshModify<T> where T : struct
+    public interface IMeshModify
     {
-        Mesh<T> InputMesh { get; }
-        Mesh<T> OutputMesh { get; }
-        void Modify(Mesh<T> mesh);
+        Mesh InputMesh { get; }
+        Mesh OutputMesh { get; }
+        void Modify(Mesh mesh);
     }
 }
