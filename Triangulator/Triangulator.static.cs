@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Framework.Extensions;
+using Models;
 using Models.Base;
 
 namespace Triangulator
@@ -20,12 +21,18 @@ namespace Triangulator
             var sizeZ = boundingBox.Max.Z - boundingBox.Min.Z;
             var minSize = new[] { sizeX, sizeY, sizeZ }.Min();
 
+            var result = new List<Vertex2D>();
             if (minSize == sizeX)
-                return polygon.Vertices.Select(v => new Vertex2D(v.Y, v.Z)).ToList();
+                result = polygon.Vertices.Select(v => new Vertex2D(v.Y, v.Z)).ToList();
             else if (minSize == sizeY)
-                return polygon.Vertices.Select(v => new Vertex2D(v.X, v.Z)).ToList();
+                result = polygon.Vertices.Select(v => new Vertex2D(v.X, v.Z)).ToList();
             else
-                return polygon.Vertices.Select(v => new Vertex2D(v.X, v.Y)).ToList();
+                result = polygon.Vertices.Select(v => new Vertex2D(v.X, v.Y)).ToList();
+
+            if (!result.Select(v => (v.X, v.Y)).ToList().IsCCW())
+                result.Reverse();
+
+            return result;
         }
     }
 }

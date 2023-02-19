@@ -6,12 +6,13 @@ namespace Models
 {
     public class TriangleMesh : Mesh
     {
-
-        public TriangleMesh(List<Vertex> vertices)
-            :base()
+        public TriangleMesh(List<Vertex> vertices, List<List<int>> indices, List<HalfEdge> halfEdges, List<Polygon> polygons)
+            :base(vertices, indices)
         {
-            _vertices = vertices;
+            _halfEdges = halfEdges;
+            _polygons = polygons;
         }
+
 
         public override void AddPolygon(Polygon polygon)
         {

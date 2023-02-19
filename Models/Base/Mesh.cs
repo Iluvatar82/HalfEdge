@@ -66,6 +66,8 @@ namespace Models.Base
         public virtual void RemoveIndices(List<int> indices) => _indices.Remove(indices);
 
         public void AddHalfEdges(IEnumerable<HalfEdge> halfEdges) => _halfEdges.AddRange(halfEdges);
+        public void RemoveHalfEdge(HalfEdge halfEdge) => _halfEdges.Remove(halfEdge);
+        public void RemoveHalfEdges(IEnumerable<HalfEdge> halfEdges) => halfEdges.ForEach(RemoveHalfEdge);
         
         public virtual void AddPolygon(Polygon polygon) => _polygons.Add(polygon);
 

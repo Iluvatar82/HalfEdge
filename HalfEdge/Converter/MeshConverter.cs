@@ -7,9 +7,8 @@ namespace HalfEdge.Converter
     {
         public static TriangleMesh ConvertToTriangleMesh(Mesh mesh)
         {
-            var result = new TriangleMesh(mesh.Vertices.ToList());
-            result.AddHalfEdges(mesh.HalfEdges);
-            foreach (var polygon in mesh.Polygons)
+            var result = new TriangleMesh(mesh.Vertices.ToList(), mesh.Indices.ToList(), mesh.HalfEdges.ToList(), mesh.Polygons.ToList());
+            foreach (var polygon in mesh.Polygons.ToList())
             {
                 switch(polygon.HalfEdges.Count)
                 {
@@ -21,11 +20,11 @@ namespace HalfEdge.Converter
                         var polygonVertices = polygon.Vertices.ToList();
 
                         var triangulationIndices = Triangulator.Triangulator.Triangulate(polygon);
-                        var meshTriangleIndices = triangulationIndices.Select(triangleIndices => triangleIndices.Select(index => mesh.Vertices.IndexOf(polygonVertices[index])).ToList()).ToList();
+                        var meshTriangleIndices = triangulationIndices.Select(triangleIndices => triangleIndices.Select(index => result.Vertices.IndexOf(polygonVertices[index])).ToList()).ToList();
 
-                        MeshFactory.RemovePolygon(mesh, polygon);
+                        MeshFactory.RemovePolygonFromMesh(result, polygon);
                         foreach (var triangleIndices in meshTriangleIndices)
-                            MeshFactory.AddPolygon(mesh, triangleIndices);
+                            MeshFactory.AddPolygonToMesh(result, triangleIndices, true);
 
                         break;
                 }

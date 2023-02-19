@@ -1,6 +1,7 @@
 ﻿using Models.Base;
 using System.Diagnostics.CodeAnalysis;
 using Validation;
+using Framework.Extensions;
 
 namespace Triangulator
 {
@@ -18,7 +19,7 @@ namespace Triangulator
 
             var count = vertices.Count;
             var didReverse = false;
-            if (!IsCCW(vertices))
+            if (!vertices.Select(v => (v.X, v.Y)).ToList().IsCCW())
             {
                 vertices.Reverse();
                 didReverse = true;
@@ -53,6 +54,8 @@ namespace Triangulator
                     var triangle = new List<int>();
                     foreach (var index in triangleIndices)
                         triangle.Add(count - index - 1);
+
+                    result.Add(triangle);
                 }
             }
 
@@ -126,13 +129,13 @@ namespace Triangulator
 
                     while (pointStack.Count != 0)
                     {
-                        if (right == newPoint && IsCCW(new List<Vertex2D> { newPoint.Point, p2.Point, pointStack.Peek().Point }))
+                        if (right == newPoint && new List<Vertex2D> { newPoint.Point, p2.Point, pointStack.Peek().Point }.Select(v => (v.X, v.Y)).ToList().IsCCW())
                         {
                             top = pointStack.Pop();
                             result.Add(new List<int> { newPoint.Index, p2.Index, top.Index });
                             p2 = top;
                         }
-                        else if (left == newPoint && !IsCCW(new List<Vertex2D> { newPoint.Point, p2.Point, pointStack.Peek().Point }))
+                        else if (left == newPoint && !new List<Vertex2D> { newPoint.Point, p2.Point, pointStack.Peek().Point }.Select(v => (v.X, v.Y)).ToList().IsCCW())
                         {
                             top = pointStack.Pop();
                             result.Add(new List<int> { newPoint.Index, top.Index, p2.Index });
@@ -293,16 +296,6 @@ namespace Triangulator
             }
 
             return bestEdge;
-        }
-
-        internal static bool IsCCW(IList<Vertex2D> polygon)
-        {
-            int n = polygon.Count;
-            double area = 0.0;
-            for (int p = n - 1, q = 0; q < n; p = q++)
-                area += polygon[p].X * polygon[q].Y - polygon[q].X * polygon[p].Y;
-
-            return area > 0.0f;
         }
     }
 
@@ -641,7 +634,7 @@ namespace Triangulator
 
         internal void AddHole(List<Vertex2D> points)
         {
-            if (SweepLinePolygonTriangulator.IsCCW(points))
+            if (points.Select(p => (p.X, p.Y)).ToList().IsCCW())
                 points.Reverse();
 
             var polyPoints = points.Select(p => new PolygonPoint(p)).ToList();
