@@ -42,7 +42,7 @@
 
         public void Normalize()
         {
-            if (_length != default)
+            if (_length == default)
                 return;
 
             _x /= _length;
