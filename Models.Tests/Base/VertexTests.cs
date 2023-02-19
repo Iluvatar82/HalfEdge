@@ -59,6 +59,61 @@ namespace Models.Tests.Base
         }
 
         [Test]
+        public void Create_Vertex_With_ValueFunction()
+        {
+            var vertex1 = new Vertex(1, -2, 3);
+            var vertex2 = new Vertex(-1, 4, 9);
+
+            var vertex= new Vertex(vertex1, vertex2, Average);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(vertex.X, Is.EqualTo(0));
+                Assert.That(vertex.Y, Is.EqualTo(1));
+                Assert.That(vertex.Z, Is.EqualTo(6));
+                Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.IsBorder, Is.True);
+            });
+        }
+
+        [Test]
+        public void Create_Vertex_With_AggregateFunction()
+        {
+            var vertex1 = new Vertex(1, -2, 3);
+            var vertex2 = new Vertex(-1, 4, 9);
+            var vertex3 = new Vertex(3, 2, -1);
+
+            var vertex = new Vertex((vl) => vl.Sum(), vertex1, vertex2, vertex3);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(vertex.X, Is.EqualTo(3));
+                Assert.That(vertex.Y, Is.EqualTo(4));
+                Assert.That(vertex.Z, Is.EqualTo(1));
+                Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.IsBorder, Is.True);
+            });
+        }
+
+        [Test]
+        public void Vertex_Conversion_Implicit_Vertex2D_to_Vertex()
+        {
+            Vertex vertex = new Vertex2D(2, 4);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(vertex.X, Is.EqualTo(2));
+                Assert.That(vertex.Y, Is.EqualTo(4));
+                Assert.That(vertex.Z, Is.EqualTo(0));
+                Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.IsBorder, Is.True);
+            });
+        }
+
+        [Test]
         public void Vertex_Conversion_Implicit_Vertex_to_Array()
         {
             var vertex = new Vertex(2, 4, 8);
@@ -101,5 +156,7 @@ namespace Models.Tests.Base
             var vertexData = new[] { 1d, 2d, 3d, 4d, 5d };
             Assert.Throws<ArgumentOutOfRangeException>(() => { Vertex vertex = vertexData; });
         }
+
+        private double Average(double first, double second) => (first + second) * .5;
     }
 }

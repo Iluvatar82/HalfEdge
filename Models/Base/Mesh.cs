@@ -40,7 +40,7 @@ namespace Models.Base
                 }
             }
         }
-        public bool IsOpenMesh => _halfEdges.Any(h => h.Opposite is null);
+        public bool IsOpenMesh => !_halfEdges.Any() || _halfEdges.Any(h => h.Opposite is null);
         public int PolygonCount => _polygons.Count;
 
 
