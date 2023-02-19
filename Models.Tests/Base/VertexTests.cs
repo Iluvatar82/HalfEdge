@@ -1,6 +1,6 @@
 using Models.Base;
 
-namespace Models.Tests
+namespace Models.Tests.Base
 {
     [TestFixture]
     public class VertexTests

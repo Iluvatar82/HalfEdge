@@ -13,7 +13,6 @@ namespace HalfEdge.Converter
                 switch(polygon.HalfEdges.Count)
                 {
                     case 3:
-                        result.AddPolygon(polygon);
                         break;
 
                     case > 3:

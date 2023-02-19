@@ -1,7 +1,6 @@
 ﻿using Models.Base;
-using Validation;
 
-namespace Models.Tests
+namespace Models.Tests.Base
 {
     [TestFixture]
     public class HalfEdgeTests
@@ -59,6 +58,21 @@ namespace Models.Tests
             });
         }
 
+        [Test]
+        public void Deconstruct_HalfEdge_Split()
+        {
+            var vertexStart = new Vertex(0, 0, 0);
+            var vertexEnd = new Vertex(1, 1, 1);
+
+            var halfEdge = new HalfEdge(vertexStart, vertexEnd);
+            var (start, end) = halfEdge;
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(start, Is.EqualTo(vertexStart));
+                Assert.That(end, Is.EqualTo(vertexEnd));
+            });
+        }
 
         [Test]
         public void Create_HalfEdge_Opposite()
@@ -85,22 +99,6 @@ namespace Models.Tests
                 Assert.That(halfEdgeOpposite.Opposite?.Opposite, Is.EqualTo(halfEdgeOpposite));
                 Assert.That(halfEdge.IsBorder, Is.False);
                 Assert.That(halfEdgeOpposite.IsBorder, Is.False);
-            });
-        }
-
-        [Test]
-        public void Deconstruct_HalfEdge_Split()
-        {
-            var vertexStart = new Vertex(0, 0, 0);
-            var vertexEnd = new Vertex(1, 1, 1);
-
-            var halfEdge = new HalfEdge(vertexStart, vertexEnd);
-            var (start, end) = halfEdge;
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(start, Is.EqualTo(vertexStart));
-                Assert.That(end, Is.EqualTo(vertexEnd));
             });
         }
 
