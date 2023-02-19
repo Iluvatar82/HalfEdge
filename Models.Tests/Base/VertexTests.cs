@@ -90,7 +90,7 @@ namespace Models.Tests.Base
             {
                 Assert.That(vertex.X, Is.EqualTo(3));
                 Assert.That(vertex.Y, Is.EqualTo(4));
-                Assert.That(vertex.Z, Is.EqualTo(1));
+                Assert.That(vertex.Z, Is.EqualTo(11));
                 Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
                 Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
                 Assert.That(vertex.IsBorder, Is.True);
