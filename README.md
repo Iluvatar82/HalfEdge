@@ -13,9 +13,9 @@
     A HalfEdge Data-Structure to use in your projects!
     <br />
     <br />
-    <a href="/issues">Report Bug</a>
+    [Report Bug]([https://github.com/Iluvatar82/HalfEdge/issues])
     ·
-    <a href="/issues">Request Feature</a>
+    [Request Feature]([https://github.com/Iluvatar82/HalfEdge/issues])
   </p>
 </div>
 
@@ -88,7 +88,7 @@ tbd
     - [ ] Union
     - [ ] Difference
 
-See the [open issues]([https://github.com/Iluvatar82/HalfEdge/issues](https://github.com/Iluvatar82/HalfEdge/issues)) for a full list of proposed features (and known issues).
+See the [open issues]([https://github.com/Iluvatar82/HalfEdge/issues]) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
