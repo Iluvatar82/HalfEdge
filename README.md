@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Iluvatar82/HalfEdge">
-    <img src="assets/logo.svg" alt="Logo" width="80" height="80">
+    <img src="/blob/master/Assets/Logo.svg" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">HalfEdge</h3>
