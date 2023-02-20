@@ -13,9 +13,9 @@
     A HalfEdge Data-Structure to use in your projects!
     <br />
     <br />
-    <a href="https://github.com/Iluvatar82/HalfEdge/issues">Report Bug</a>
+    <a href="/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Iluvatar82/HalfEdge/issues">Request Feature</a>
+    <a href="/issues">Request Feature</a>
   </p>
 </div>
 
@@ -62,7 +62,7 @@ Benefits of using this Library:
 ## Getting Started
 
 After including the Library in your Project, either via adding the Code directly to your solution or by adding a Reference to the DLL-File. You can start using the Library to do your computations.
-Simple Conversions exist e.g. for the <a href="/blob/master/Models/Base/Vertex.cs">Vertex</a> class to support an easy way to create your first <a href="/blob/master/Models/Base/Mesh.cs">Mesh</a>.
+Simple Conversions exist e.g. for the <a href="/Models/Base/Vertex.cs">Vertex</a> class to support an easy way to create your first <a href="/Models/Base/Mesh.cs">Mesh</a>.
 
 ### Installation
 
@@ -88,7 +88,7 @@ tbd
     - [ ] Union
     - [ ] Difference
 
-See the [open issues](https://github.com/Iluvatar82/HalfEdge/issues) for a full list of proposed features (and known issues).
+See the [open issues]([/issues](https://github.com/Iluvatar82/HalfEdge/issues)) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
