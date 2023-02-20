@@ -29,9 +29,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{50FC73
 		Assets\Logo.svg = Assets\Logo.svg
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{1CEB08FD-3F5B-4CA7-993C-6ADCA7EB44C8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Projektmappenelemente", "{9EE07AAE-FC12-4262-B68B-828324622B7E}"
 	ProjectSection(SolutionItems) = preProject
-		HalfEdge\README.md = HalfEdge\README.md
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
