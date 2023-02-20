@@ -1,3 +1,4 @@
+using Framework;
 using Models.Base;
 
 namespace Models.Tests.Base
@@ -155,6 +156,39 @@ namespace Models.Tests.Base
         {
             var vertexData = new[] { 1d, 2d, 3d, 4d, 5d };
             Assert.Throws<ArgumentOutOfRangeException>(() => { Vertex vertex = vertexData; });
+        }
+
+        [Test]
+        public void Vertex_SquaredDistanceTo_Zero()
+        {
+            var vertex1 = new Vertex(5d, 5d, 3d);
+            var vertex2 = new Vertex(5d, 5d, 3d);
+
+            var distance = vertex1.SquaredDistanceTo(vertex2);
+
+            Assert.That(distance, Is.EqualTo(0).Within(Constants.Epsilon));
+        }
+
+        [Test]
+        public void Vertex_SquaredDistanceTo()
+        {
+            var vertex1 = new Vertex(5d, 5d, 3d);
+            var vertex2 = new Vertex(0d, 5d, 3d);
+
+            var distance = vertex1.SquaredDistanceTo(vertex2);
+
+            Assert.That(distance, Is.EqualTo(25).Within(Constants.Epsilon));
+        }
+
+        [Test]
+        public void Vertex_DistanceTo()
+        {
+            var vertex1 = new Vertex(5d, 5d, 3d);
+            var vertex2 = new Vertex(-2d, 5d, 3d);
+
+            var distance = vertex1.DistanceTo(vertex2);
+
+            Assert.That(distance, Is.EqualTo(7).Within(Constants.Epsilon));
         }
 
         private double Average(double first, double second) => (first + second) * .5;

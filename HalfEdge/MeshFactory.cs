@@ -22,7 +22,7 @@ namespace HalfEdge
         {
             var halfEdges = new List<Models.Base.HalfEdge>();
             var pointCount = polygonIndices.Count;
-            for(var i = 0; i < pointCount; i++)
+            for (var i = 0; i < pointCount; i++)
             {
                 var existingOpposite = mesh.HalfEdges.SingleOrDefault(o => o.End == mesh.Vertices[polygonIndices[i]] && o.Start == mesh.Vertices[polygonIndices[(i + 1) % pointCount]]);
                 if (existingOpposite != default)
@@ -36,6 +36,37 @@ namespace HalfEdge
             if (addIndices)
                 mesh.AddIndices(polygonIndices);
 
+            mesh.AddHalfEdges(halfEdges);
+            mesh.AddPolygon(new Polygon(halfEdges));
+        }
+
+        public static void AddPolygonToMesh(Mesh mesh, List<Vertex> vertices)
+        {
+            var halfEdges = new List<Models.Base.HalfEdge>();
+            var pointCount = vertices.Count;
+            var vertexIndex = vertices.Select(v => (Vertex: v, Index: mesh.GetVertexIndex(v))).ToList();
+            for(var i = 0; i < pointCount; i++)
+            {
+                if (vertexIndex[i].Index > -1)
+                    continue;
+
+                vertexIndex[i] = (vertexIndex[i].Vertex, mesh.Vertices.Count);
+                mesh.AddVertex(vertexIndex[i].Vertex);
+            }
+
+            var polygonIndices = vertexIndex.Select(vi => vi.Index).ToList();
+            for (var i = 0; i < pointCount; i++)
+            {
+                var existingOpposite = mesh.HalfEdges.SingleOrDefault(o => o.End == mesh.Vertices[polygonIndices[i]] && o.Start == mesh.Vertices[polygonIndices[(i + 1) % pointCount]]);
+                if (existingOpposite != default)
+                    halfEdges.Add(existingOpposite.CreateOpposite());
+                else
+                    halfEdges.Add(new Models.Base.HalfEdge(mesh.Vertices[polygonIndices[i]], mesh.Vertices[polygonIndices[(i + 1) % pointCount]]));
+            }
+
+            halfEdges.HasElementCount(c => c > 2);
+
+            mesh.AddIndices(polygonIndices);
             mesh.AddHalfEdges(halfEdges);
             mesh.AddPolygon(new Polygon(halfEdges));
         }
