@@ -14,7 +14,7 @@
     <br />
     <br />
     <a href="https://github.com/Iluvatar82/HalfEdge/issues">Report Bug</a>
-    ·
+    Â·
     <a href="https://github.com/Iluvatar82/HalfEdge/issues">Request Feature</a>
   </p>
 </div>
@@ -73,18 +73,27 @@ Download the Source-Code and add the Project to your Solution or get on the the 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-tbd
+To get a valid <a href="/Models/Base/Mesh.cs">Mesh</a>, the most convenient way is to use the <a href="/HalfEdge/MeshFactory.cs">MeshFactory</a> (which is a static class) and let it generate the Half-Edge Information for you! You just provide all Vertices and the Polygon-Indices in the Vertex-List.
+A simple example would be:
+```cs
+var vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(2, 1, 1), new Vertex(0, 1, 1) };
+var indices = new List<List<int>> { new List<int> { 0, 1, 2 } };
+var mesh = MeshFactory.CreateMesh(vertices, indices);
+```
+Of course the Mesh is not restricted to only consist of triangles (this is where the <a href="/Models/TriangleMesh.cs">TriangleMesh</a> comes into play), so you can create Meshes with e.g. only Polygons consisting of five and six Vertices.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Add Changelog
 - [x] Add back to top links here
-- [ ] HalfEdge Subdivision(s)
+- [ ] Add Changelog
+- [ ] More convenient Way of adding/removing Polygons (without the need to add the Vertices and HalfEdges beforehand)
+- [ ] HalfEdge Subdivision(s) (probably multiple Variants)
+- [ ] Adding Texture-Coordinates (maybe?)
 - [ ] Mesh-Cutoffs
-- [ ] Boolean Operations
+- [ ] Boolean Operations for two Meshes
     - [ ] Union
     - [ ] Difference
 
