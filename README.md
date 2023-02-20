@@ -95,7 +95,7 @@ See the <a href="https://github.com/Iluvatar82/HalfEdge/issues">open Issues</a> 
 <!-- LICENSE -->
 ## License
 
-tbd
+Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
