@@ -23,6 +23,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Tests", "Framewor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Triangulator.Tests", "Triangulator.Tests\Triangulator.Tests.csproj", "{FD81A3DC-975F-4B05-AD4D-B03881F9D8CA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{50FC7375-8EAB-48EC-8D96-872411ED7830}"
+	ProjectSection(SolutionItems) = preProject
+		Assets\Logo.afdesign = Assets\Logo.afdesign
+		Assets\Logo.svg = Assets\Logo.svg
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
