@@ -1,4 +1,5 @@
-﻿using Framework.Extensions;
+﻿using Framework;
+using Framework.Extensions;
 using System.Collections.ObjectModel;
 
 namespace Models.Base
@@ -92,5 +93,24 @@ namespace Models.Base
         public virtual void RemovePolygon(Polygon polygon) => _polygons.Remove(polygon);
         
         public virtual void RemovePolygons(IEnumerable<Polygon> polygons) => polygons.ForEach(RemovePolygon);
+
+        public int GetVertexIndex(Vertex vertex)
+        {
+            var directMatch = _vertices.IndexOf(vertex);
+            if (directMatch > -1)
+                return directMatch;
+
+            var matches = _vertices.Where(v => v.SquaredDistanceTo(vertex) < Constants.Epsilon).ToList();
+            if (!matches.Any())
+                return -1;
+            else if (matches.Count == 1)
+                return _vertices.IndexOf(matches[0]);
+
+            var min = matches.MinBy(v => v.SquaredDistanceTo(vertex));
+            if (min is null)
+                return -1;
+
+            return _vertices.IndexOf(min);
+        }
     }
 }

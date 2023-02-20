@@ -1,4 +1,5 @@
-﻿using Models.Base;
+﻿using Framework;
+using Models.Base;
 
 namespace Models.Tests.Base
 {
@@ -40,6 +41,33 @@ namespace Models.Tests.Base
                 Assert.That(mesh.PolygonCount, Is.EqualTo(0));
                 Assert.That(mesh.Vertices, Has.Count.EqualTo(3));
             });
+        }
+
+        [Test]
+        public void GetVertexIndex_Found()
+        {
+            var mesh = new Mesh(new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 1, 0), new Vertex(0, 1, 0) }, new List<List<int>>());
+            var vertexIndex = mesh.GetVertexIndex(new Vertex(1, 1, 0));
+
+            Assert.That(vertexIndex, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void GetVertexIndex_Found_Within()
+        {
+            var mesh = new Mesh(new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 1, 0), new Vertex(0, 1, 0) }, new List<List<int>>());
+            var vertexIndex = mesh.GetVertexIndex(new Vertex(1 + Constants.Epsilon * 0.5, 1, 0));
+
+            Assert.That(vertexIndex, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void GetVertexIndex_NotFound()
+        {
+            var mesh = new Mesh(new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 1, 0), new Vertex(0, 1, 0) }, new List<List<int>>());
+            var vertexIndex = mesh.GetVertexIndex(new Vertex(1.1, 1, 0));
+
+            Assert.That(vertexIndex, Is.EqualTo(-1));
         }
     }
 }

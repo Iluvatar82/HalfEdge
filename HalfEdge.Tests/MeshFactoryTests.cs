@@ -144,6 +144,30 @@ namespace HalfEdge.Tests
         }
 
         [Test]
+        public void CreateGenerator_Add_Polygon_ByVertices_Ok()
+        {
+            var vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(3, 3, 0), new Vertex(0, 6, 0) };
+            var mesh = MeshFactory.CreateMesh(vertices, new List<List<int>> { new List<int> { 0, 1, 2 } });
+            MeshFactory.AddPolygonToMesh(mesh, new List<Vertex> { new Vertex(4, 0, 4), new Vertex(3, 3, 0), new Vertex(0, 0, 0) });
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(mesh.Vertices, Is.Not.Empty);
+                Assert.That(mesh.Vertices, Has.Count.EqualTo(4));
+                Assert.That(mesh.Indices, Is.Not.Empty);
+                Assert.That(mesh.Indices, Has.Count.EqualTo(2));
+                Assert.That(mesh.HalfEdges, Is.Not.Empty);
+                Assert.That(mesh.HalfEdges, Has.Count.EqualTo(6));
+                Assert.That(mesh.Polygons, Is.Not.Empty);
+                Assert.That(mesh.Polygons, Has.Count.EqualTo(2));
+                Assert.That(mesh.PolygonCount, Is.EqualTo(2));
+                Assert.That(mesh.HalfEdges.Count(h => h.IsBorder), Is.EqualTo(4));
+                Assert.That(mesh.IsOpenMesh, Is.True);
+                Assert.That(mesh.Borders.ToList(), Has.Count.EqualTo(1));
+            });
+        }
+
+        [Test]
         public void CreateGenerator_WithTwoPolygons_RemovePolygon()
         {
             var vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 0, 0), new Vertex(1, 1, 1), new Vertex(0, 1, 0) };
