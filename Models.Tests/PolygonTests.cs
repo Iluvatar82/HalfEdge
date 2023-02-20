@@ -45,6 +45,14 @@ namespace Models.Tests
         }
 
         [Test]
+        public void CreatePolygon_from_Vertices_Not_Ok()
+        {
+            var vertex = new Vertex(4, 3, 2);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => { var polygon = new Polygon(new List<Vertex> { vertex }); });
+        }
+
+        [Test]
         public void CreatePolygon_from_HalfEdges_Ok()
         {
             var vertex1 = new Vertex(0, 0, 0);

@@ -1,12 +1,11 @@
-﻿using Models.Base;
+﻿using Framework;
+using Models.Base;
 
 namespace Models.Tests.Base
 {
     [TestFixture]
     public class Vector2DTests
     {
-        private const double Epsilon = 0.000001;
-
         [SetUp]
         public void SetUp()
         {
@@ -107,8 +106,8 @@ namespace Models.Tests.Base
 
             Assert.Multiple(() =>
             {
-                Assert.That(vector.X, Is.InRange(Math.Sqrt(2) / 2 - Epsilon, Math.Sqrt(2) / 2 + Epsilon));
-                Assert.That(vector.Y, Is.InRange(Math.Sqrt(2) / 2 - Epsilon, Math.Sqrt(2) / 2 + Epsilon));
+                Assert.That(vector.X, Is.EqualTo(Math.Sqrt(2) / 2).Within(Constants.Epsilon));
+                Assert.That(vector.Y, Is.EqualTo(Math.Sqrt(2) / 2).Within(Constants.Epsilon));
                 Assert.That(vector.Length, Is.EqualTo(1));
             });
         }

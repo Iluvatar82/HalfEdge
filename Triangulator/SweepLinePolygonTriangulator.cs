@@ -1,15 +1,13 @@
-﻿using Models.Base;
+﻿using Framework;
+using Framework.Extensions;
+using Models.Base;
 using System.Diagnostics.CodeAnalysis;
 using Validation;
-using Framework.Extensions;
 
 namespace Triangulator
 {
     public static class SweepLinePolygonTriangulator
     {
-        public const float Epsilon = 0.0000001f;
-
-
         public static List<List<int>> Triangulate(List<Vertex2D> vertices, List<List<Vertex2D>>? holes = null)
         {
             vertices.HasElementCount(c => c > 3);
@@ -338,7 +336,7 @@ namespace Triangulator
                     continue;
 
                 var xValue = she.Edge.PointOne.X + (py - she.Edge.PointOne.Y) * she.Factor;
-                if (xValue <= (px + SweepLinePolygonTriangulator.Epsilon))
+                if (xValue <= (px + (float)Constants.Epsilon))
                 {
                     var sheDist = px - xValue;
                     if (sheDist < dist)
