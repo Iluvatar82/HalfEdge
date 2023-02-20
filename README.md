@@ -26,6 +26,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
     </li>
+    <li><a href="#status">Status></a></li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
@@ -57,6 +58,9 @@ Benefits of using this Library:
   * Boolean Operations with multiple Meshes, like the Union and Difference
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Status
+* Build and Test: [![.NET](https://github.com/Iluvatar82/HalfEdge/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/Iluvatar82/HalfEdge/actions/workflows/build_and_test.yml)
 
 <!-- GETTING STARTED -->
 ## Getting Started
