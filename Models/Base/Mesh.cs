@@ -94,13 +94,13 @@ namespace Models.Base
         
         public virtual void RemovePolygons(IEnumerable<Polygon> polygons) => polygons.ForEach(RemovePolygon);
 
-        public int GetVertexIndex(Vertex vertex)
+        public int GetVertexIndex(Vertex vertex, double epsilon = Constants.Epsilon)
         {
             var directMatch = _vertices.IndexOf(vertex);
             if (directMatch > -1)
                 return directMatch;
 
-            var matches = _vertices.Where(v => v.SquaredDistanceTo(vertex) < Constants.Epsilon).ToList();
+            var matches = _vertices.Where(v => v.SquaredDistanceTo(vertex) < epsilon).ToList();
             if (!matches.Any())
                 return -1;
             else if (matches.Count == 1)

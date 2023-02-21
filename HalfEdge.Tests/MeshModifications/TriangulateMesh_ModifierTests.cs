@@ -6,7 +6,8 @@ namespace HalfEdge.Tests.MeshModifications
     [TestFixture]
     public class TriangulateMesh_ModifierTests
     {
-        [SetUp] public void SetUp()
+        [SetUp]
+        public void SetUp()
         {
         }
 
