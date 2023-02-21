@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Validation
@@ -9,6 +10,12 @@ namespace Validation
         {
             if (value is null)
                 ThrowNull(valueExpression);
+        }
+
+        public static void Satisfies<T>(this T value, Func<T, bool> condition, [CallerArgumentExpression("value")] string? valueExpression = null, [CallerArgumentExpression("condition")] string? conditionExpression = null)
+        {
+            if (!condition(value))
+                ThrowCondition(valueExpression, conditionExpression, value);
         }
 
         public static void NotEmpty<T>( this IEnumerable<T> enumerable, [CallerArgumentExpression("enumerable")] string? enumerableExpression = null)
@@ -65,6 +72,10 @@ namespace Validation
 
         [DoesNotReturn]
         private static void ThrowNoLoop(string? paramName) => throw new ArgumentOutOfRangeException(paramName);
+
+        [DoesNotReturn]
+        private static void ThrowCondition<T>(string? paramName, string? expected, T value)
+            => throw new ArgumentOutOfRangeException(paramName, $"The Condition is not satisfied. {expected} is false for {value}.");
 
         [DoesNotReturn]
         private static void ThrowElementCount(string? paramName, int actualCount, int expected)
