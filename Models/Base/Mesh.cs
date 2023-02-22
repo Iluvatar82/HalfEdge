@@ -1,6 +1,7 @@
 ﻿using Framework;
 using Framework.Extensions;
 using System.Collections.ObjectModel;
+using Validation;
 
 namespace Models.Base
 {
@@ -62,6 +63,14 @@ namespace Models.Base
             _polygons = new List<Polygon>();
         }
 
+
+        public virtual void UpdateVertex(Vertex vertex, int index)
+        {
+            index.Satisfies(i => i >= 0);
+            index.Satisfies(i => i < _vertices.Count);
+
+            _vertices[index] = vertex;
+        }
 
         public virtual void AddVertex(Vertex vertex) => _vertices.Add(vertex);
 

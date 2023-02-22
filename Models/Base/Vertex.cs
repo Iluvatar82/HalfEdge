@@ -10,9 +10,9 @@ namespace Models.Base
         private List<HalfEdge> _halfEdges;
 
 
-        public double X { get => _x; init => _x = value; }
-        public double Y { get => _y; init => _y = value; }
-        public double Z { get => _z; init => _z = value; }
+        public double X { get => _x; set => _x = value; }
+        public double Y { get => _y; set => _y = value; }
+        public double Z { get => _z; set => _z = value; }
         public List<HalfEdge> HalfEdges { get => _halfEdges; init => _halfEdges = value; }
         public IEnumerable<Polygon> Polygons
         {
@@ -87,7 +87,6 @@ namespace Models.Base
         public double SquaredDistanceTo(Vertex other) => (other.X - X) * (other.X - X) + (other.Y - Y) * (other.Y - Y) + (other.Z - Z) * (other.Z - Z);
         
         public double DistanceTo(Vertex other) => Math.Sqrt(SquaredDistanceTo(other));
-
 
         public override string ToString() => $"X: {_x}, Y: {_y}, Z: {_z}";
     }

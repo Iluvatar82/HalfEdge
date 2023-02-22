@@ -55,6 +55,22 @@ namespace Models.Tests.Base
         }
 
         [Test]
+        public void UpdateVertex_Ok()
+        {
+            var mesh = new Mesh(new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 1, 0), new Vertex(0, 1, 0) }, new List<List<int>>());
+            mesh.UpdateVertex(mesh.Vertices[0] with { X = -1 }, 0);
+
+            Assert.That(mesh.Vertices[0].X, Is.EqualTo(-1));
+        }
+
+        [Test]
+        public void UpdateVertex_Index_Not_Ok()
+        {
+            var mesh = new Mesh(new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 1, 0), new Vertex(0, 1, 0) }, new List<List<int>>());
+            Assert.Throws<ArgumentOutOfRangeException>(() => mesh.UpdateVertex(mesh.Vertices[0] with { X = -1 }, 3));
+        }
+
+        [Test]
         public void GetVertexIndex_Found_Within()
         {
             var mesh = new Mesh(new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 1, 0), new Vertex(0, 1, 0) }, new List<List<int>>());
