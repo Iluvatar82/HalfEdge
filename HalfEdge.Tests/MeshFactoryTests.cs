@@ -99,7 +99,7 @@ namespace HalfEdge.Tests
 
 
         [Test]
-        public void CreateGenerator_WithTwoClosedMesh()
+        public void CreateGenerator_WithClosedMesh()
         {
             var vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 0, 0), new Vertex(1, 1, 0), new Vertex(1, 1, 1) };
             var indices = new List<List<int>> { new List<int> { 2, 1, 0 }, new List<int> { 0, 1, 3 }, new List<int> { 1, 2, 3 }, new List<int> { 2, 0, 3 } };
@@ -126,6 +126,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.IsOpenMesh, Is.False);
                 Assert.That(mesh.Borders.ToList(), Has.Count.EqualTo(0));
                 Assert.That(mesh.Vertices.Select(v => v.Polygons.ToList().Count), Has.All.EqualTo(3));
+                Assert.That(mesh.Vertices.Select(v => v.VertexNeighbors.ToList().Count), Has.All.EqualTo(3));
             });
         }
 

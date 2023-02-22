@@ -27,6 +27,24 @@ namespace Models.Base
                 yield break;
             }
         }
+        public IEnumerable<Vertex> VertexNeighbors
+        {
+            get
+            {
+                foreach (var h in _halfEdges)
+                {
+                    yield return h.End;
+                    if (h.Polygon is not null)
+                    {
+                        var pH = h.Polygon.HalfEdges.Single(ph => ph.End == this);
+                        if (pH.Opposite is null)
+                            yield return h.Polygon.HalfEdges.Single(ph => ph.End == this).Start;
+                    }
+                }
+
+                yield break;
+            }
+        }
         public bool IsBorder => !_halfEdges.Any() || _halfEdges.Any(h => h.IsBorder);
 
 

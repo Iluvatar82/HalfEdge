@@ -41,6 +41,7 @@ namespace Models.Tests
                 Assert.That(polygon.HalfEdges.Select(h => h.Polygon), Has.All.EqualTo(polygon));
                 Assert.That(polygon.IsBorder, Is.True);
                 Assert.That(polygon.Vertices.Select(v => v.Polygons.ToList().Count), Has.All.EqualTo(1));
+                Assert.That(polygon.Vertices.Select(v => v.VertexNeighbors.ToList().Count), Has.All.EqualTo(2));
             });
         }
 
@@ -73,6 +74,7 @@ namespace Models.Tests
                 Assert.That(polygon.HalfEdges.Select(h => h.Polygon), Has.All.EqualTo(polygon));
                 Assert.That(polygon.IsBorder, Is.True);
                 Assert.That(polygon.Vertices.Select(v => v.Polygons.ToList().Count), Has.All.EqualTo(1));
+                Assert.That(polygon.Vertices.Select(v => v.VertexNeighbors.ToList().Count), Has.All.EqualTo(2));
             });
         }
 
@@ -150,6 +152,7 @@ namespace Models.Tests
                 Assert.That(polygon.HalfEdges.Select(h => h.Polygon), Has.All.EqualTo(polygon));
                 Assert.That(polygon.IsBorder, Is.True);
                 Assert.That(polygon.Vertices.Select(v => v.Polygons.ToList().Count), Has.All.EqualTo(1));
+                Assert.That(polygon.Vertices.Select(v => v.VertexNeighbors.ToList().Count), Has.All.EqualTo(2));
             });
         }
 
