@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace Models.Base
 {
-    public class Mesh
+    public record class Mesh
     {
         protected List<Vertex> _vertices;
         protected List<List<int>> _indices;
@@ -43,6 +43,7 @@ namespace Models.Base
         }
         public bool IsOpenMesh => !_halfEdges.Any() || _halfEdges.Any(h => h.Opposite is null);
         public int PolygonCount => _polygons.Count;
+        public int EdgeCount => _halfEdges.Count(h => h.Opposite is not null) / 2 + _halfEdges.Count(h => h.Opposite is null);
 
 
         public Mesh()
