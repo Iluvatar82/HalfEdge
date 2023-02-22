@@ -4,7 +4,7 @@ using Validation;
 
 namespace Models
 {
-    public class TriangleMesh : Mesh
+    public record class TriangleMesh : Mesh
     {
         public TriangleMesh(List<Vertex> vertices, List<List<int>> indices, List<HalfEdge> halfEdges, List<Polygon> polygons)
             :base(vertices, indices)

@@ -32,6 +32,7 @@ namespace Models.Tests
             {
                 Assert.That(triangleMesh.Borders.ToList(), Has.Count.EqualTo(1));
                 Assert.That(triangleMesh.HalfEdges, Has.Count.EqualTo(6));
+                Assert.That(triangleMesh.EdgeCount, Is.EqualTo(5));
                 Assert.That(triangleMesh.Indices, Has.Count.EqualTo(2));
                 Assert.That(triangleMesh.IsOpenMesh, Is.True);
                 Assert.That(triangleMesh.PolygonCount, Is.EqualTo(2));
@@ -55,6 +56,7 @@ namespace Models.Tests
                 Assert.That(triangleMesh.Borders.ToList(), Has.Count.EqualTo(1));
                 Assert.That(triangleMesh.Borders.ElementAt(0), Has.Count.EqualTo(5));
                 Assert.That(triangleMesh.HalfEdges, Has.Count.EqualTo(9));
+                Assert.That(triangleMesh.EdgeCount, Is.EqualTo(7));
                 Assert.That(triangleMesh.Indices, Has.Count.EqualTo(3));
                 Assert.That(triangleMesh.IsOpenMesh, Is.True);
                 Assert.That(triangleMesh.PolygonCount, Is.EqualTo(3));

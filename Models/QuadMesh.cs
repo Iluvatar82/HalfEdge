@@ -4,7 +4,7 @@ using Validation;
 
 namespace Models
 {
-    public class QuadMesh : Mesh
+    public record class QuadMesh : Mesh
     {
         public QuadMesh(List<Vertex> vertices, List<List<int>> indices, List<HalfEdge> halfEdges, List<Polygon> polygons)
             :base(vertices, indices)
