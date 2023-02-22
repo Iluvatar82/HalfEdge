@@ -66,7 +66,7 @@ namespace Models.Base
 
         public virtual void UpdateVertex(Vertex vertex, int index)
         {
-            index.Satisfies(i => i > 0);
+            index.Satisfies(i => i >= 0);
             index.Satisfies(i => i < _vertices.Count);
 
             _vertices[index] = vertex;
