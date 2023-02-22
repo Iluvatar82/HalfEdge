@@ -35,6 +35,30 @@ namespace Framework.Tests.Extensions
         }
 
         [Test]
+        public void ForEach_WithIndex_Ok()
+        {
+            IEnumerable<int> items = new List<int> { 1, 2, 3, 4, 5, 6 };
+            var expectedResult = items.Select(i => i - 1).ToList();
+
+            var result = new List<int>();
+            items.ForEach((i, idx) => result.Add(idx));
+
+            Assert.That(expectedResult, Is.EqualTo(result));
+        }
+
+        [Test]
+        public void ForEach_WithIndex_Sum_Ok()
+        {
+            IEnumerable<int> items = new List<int> { 1, 2, 3, 4, 5, 6 };
+            var expectedResult = items.Sum(i => i - 1);
+
+            int result = 0;
+            items.ForEach((i, idx) => result += idx);
+
+            Assert.That(expectedResult, Is.EqualTo(result));
+        }
+
+        [Test]
         public void IsCCW_IsCCW()
         {
             IList<(double X, double Y)> items = new List<(double, double)> { (0, 0), (.5, .5), (0, 1) };

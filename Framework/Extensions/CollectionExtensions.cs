@@ -11,6 +11,15 @@ namespace Framework.Extensions
             foreach (var item in enumerable)
                 action(item);
         }
+        
+        public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T, int> action)
+        {
+            enumerable.NotNull();
+
+            var index = 0;
+            foreach (var item in enumerable)
+                action(item, index++);
+        }
 
         public static bool IsCCW(this IList<(double X, double Y)> polygon)
         {
