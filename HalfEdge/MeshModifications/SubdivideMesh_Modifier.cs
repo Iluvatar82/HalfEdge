@@ -2,7 +2,6 @@
 using HalfEdge.Enumerations;
 using HalfEdge.MeshModifications.Base;
 using Models.Base;
-using System.Linq;
 using Validation;
 
 namespace HalfEdge.MeshModifications
@@ -45,7 +44,7 @@ namespace HalfEdge.MeshModifications
             var currentIteration = 0;
             while(currentIteration++ < Iterations)
             {
-                var subdividedMeshVertices = _outputMesh.Vertices.ToList();
+                var subdividedMeshVertices = _outputMesh.Vertices.Select(v => v with { HalfEdges = new List<Models.Base.HalfEdge>() }).ToList();
                 var existingVerticesCount = subdividedMeshVertices.Count;
                 var subdividedMeshIndices = new List<List<int>>();
                 for(var idx = 0; idx < _outputMesh.PolygonCount; idx++)
@@ -53,7 +52,14 @@ namespace HalfEdge.MeshModifications
                     var indices = _outputMesh.Indices[idx];
                     var polygon = _outputMesh.Polygons[idx];
 
-                    var firstNewIndex = subdividedMeshVertices.Count;
+                    //TODO NEW!!!! (to avoid odd vertices created multiple times!)
+                    //Add "Number of Edges" new (odd) vertices "in the right position"
+                    //Move the existing "event vertices according to the rules
+                    //calculate the new triangle Indices
+                    //Create the mesh
+
+
+                    /*var firstNewIndex = subdividedMeshVertices.Count;
                     if (polygon.HalfEdges[0].IsBorder)
                         subdividedMeshVertices.Add(Vertex.Average(polygon.HalfEdges[0].Start, polygon.HalfEdges[0].End));
                     else
@@ -105,33 +111,35 @@ namespace HalfEdge.MeshModifications
                     subdividedMeshIndices.Add(new List<int> { indices[0], firstNewIndex, firstNewIndex + 2 });
                     subdividedMeshIndices.Add(new List<int> { indices[1], firstNewIndex + 1, firstNewIndex });
                     subdividedMeshIndices.Add(new List<int> { indices[2], firstNewIndex + 2, firstNewIndex + 1 });
-                    subdividedMeshIndices.Add(new List<int> { firstNewIndex, firstNewIndex + 1, firstNewIndex + 2 });
+                    subdividedMeshIndices.Add(new List<int> { firstNewIndex, firstNewIndex + 1, firstNewIndex + 2 });*/
                 }
 
                 _outputMesh = MeshFactory.CreateMesh(subdividedMeshVertices, subdividedMeshIndices);
 
-                /*//Modify odd Vertices
-                for (var vIdx = existingVerticesCount; vIdx < _outputMesh.Vertices.Count; vIdx++)
-                {
-                    if (!_outputMesh.Vertices[vIdx].IsBorder)
-                        continue;
-
-
-                }*/
-
-                //Modify even Vertices
+                /*//Modify even Vertices
                 for (var vIdx = 0; vIdx < existingVerticesCount; vIdx++)
                 {
-                    var vertex = _outputMesh.Vertices[vIdx];
+                    var vertex = _outputMesh.Vertices[vIdx] with { };
                     if (vertex.IsBorder)
                     {
-
+                        var borderNeighbors = vertex.VertexNeighbors.Where(n => n.IsBorder).ToList();
+                        vertex.X = borderNeighbors.Sum(v => v.X) * .25 + vertex.X * .75;
+                        vertex.Y = borderNeighbors.Sum(v => v.Y) * .25 + vertex.Y * .75;
+                        vertex.Z = borderNeighbors.Sum(v => v.Z) * .25 + vertex.Z * .75;
+                        _outputMesh.UpdateVertex(vertex, vIdx);
                     }
                     else
                     {
-
+                        var neighbors = vertex.VertexNeighbors.ToList();
+                        var neighborsCount = neighbors.Count;
+                        var beta = (neighborsCount) switch { 3 => .1875, > 3 => .375 / neighborsCount, _ => throw new NotImplementedException() };
+                        var vertexFactor = 1 - neighborsCount * beta;
+                        vertex.X = neighbors.Sum(v => v.X) * beta + vertex.X * vertexFactor;
+                        vertex.Y = neighbors.Sum(v => v.Y) * beta + vertex.Y * vertexFactor;
+                        vertex.Z = neighbors.Sum(v => v.Z) * beta + vertex.Z * vertexFactor;
+                        _outputMesh.UpdateVertex(vertex, vIdx);
                     }
-                }
+                }*/
             }
         }
     }
