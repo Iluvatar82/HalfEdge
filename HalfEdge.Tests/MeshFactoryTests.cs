@@ -20,6 +20,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.Vertices, Is.Empty);
                 Assert.That(mesh.Indices, Is.Empty);
                 Assert.That(mesh.HalfEdges, Is.Empty);
+                Assert.That(mesh.Edges, Is.Empty);
             });
         }
 
@@ -40,6 +41,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.Vertices, Has.Count.EqualTo(3));
                 Assert.That(mesh.Indices, Is.Empty);
                 Assert.That(mesh.HalfEdges, Is.Empty);
+                Assert.That(mesh.Edges, Is.Empty);
             });
         }
 
@@ -59,6 +61,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.HalfEdges, Has.Count.EqualTo(3));
                 Assert.That(mesh.HalfEdges.All(h => h.IsBorder), Is.True);
                 Assert.That(mesh.EdgeCount, Is.EqualTo(3));
+                Assert.That(mesh.Edges.ToList(), Has.Count.EqualTo(3));
                 Assert.That(mesh.Polygons, Is.Not.Empty);
                 Assert.That(mesh.Polygons, Has.Count.EqualTo(1));
                 Assert.That(mesh.Polygons.All(p => p.IsBorder), Is.True);
@@ -84,6 +87,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.HalfEdges, Is.Not.Empty);
                 Assert.That(mesh.HalfEdges, Has.Count.EqualTo(6));
                 Assert.That(mesh.EdgeCount, Is.EqualTo(5));
+                Assert.That(mesh.Edges.ToList(), Has.Count.EqualTo(5));
                 Assert.That(mesh.Polygons, Is.Not.Empty);
                 Assert.That(mesh.Polygons, Has.Count.EqualTo(2));
                 Assert.That(mesh.Polygons.All(p => p.IsBorder), Is.True);
@@ -113,6 +117,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.HalfEdges, Is.Not.Empty);
                 Assert.That(mesh.HalfEdges, Has.Count.EqualTo(12));
                 Assert.That(mesh.EdgeCount, Is.EqualTo(6));
+                Assert.That(mesh.Edges.ToList(), Has.Count.EqualTo(6));
                 Assert.That(mesh.Polygons, Is.Not.Empty);
                 Assert.That(mesh.Polygons, Has.Count.EqualTo(4));
                 Assert.That(mesh.Polygons.All(p => p.IsBorder), Is.False);
@@ -163,6 +168,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.HalfEdges, Is.Not.Empty);
                 Assert.That(mesh.HalfEdges, Has.Count.EqualTo(6));
                 Assert.That(mesh.EdgeCount, Is.EqualTo(5));
+                Assert.That(mesh.Edges.ToList(), Has.Count.EqualTo(5));
                 Assert.That(mesh.Polygons, Is.Not.Empty);
                 Assert.That(mesh.Polygons, Has.Count.EqualTo(2));
                 Assert.That(mesh.PolygonCount, Is.EqualTo(2));
@@ -188,6 +194,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.HalfEdges, Is.Not.Empty);
                 Assert.That(mesh.HalfEdges, Has.Count.EqualTo(3));
                 Assert.That(mesh.EdgeCount, Is.EqualTo(3));
+                Assert.That(mesh.Edges.ToList(), Has.Count.EqualTo(3));
                 Assert.That(mesh.Polygons, Is.Not.Empty);
                 Assert.That(mesh.Polygons, Has.Count.EqualTo(1));
                 Assert.That(mesh.Polygons.All(p => p.IsBorder), Is.True);

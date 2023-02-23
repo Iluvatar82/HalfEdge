@@ -106,6 +106,6 @@ namespace Models.Base
         
         public double DistanceTo(Vertex other) => Math.Sqrt(SquaredDistanceTo(other));
 
-        public override string ToString() => $"X: {_x}, Y: {_y}, Z: {_z}";
+        public override string ToString() => $"X: {_x:F2}, Y: {_y:F2}, Z: {_z:F2}";
     }
 }

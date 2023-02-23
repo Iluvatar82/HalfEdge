@@ -47,85 +47,52 @@ namespace HalfEdge.MeshModifications
                 var subdividedMeshVertices = _outputMesh.Vertices.Select(v => v with { HalfEdges = new List<Models.Base.HalfEdge>() }).ToList();
                 var existingVerticesCount = subdividedMeshVertices.Count;
                 var subdividedMeshIndices = new List<List<int>>();
-                for(var idx = 0; idx < _outputMesh.PolygonCount; idx++)
+                var existingEdges = _outputMesh.Edges.ToList();
+                for(var idx = 0; idx < existingEdges.Count; idx++)
+                {
+                    var edge = existingEdges[idx];
+                    if (edge.IsBorder)
+                        subdividedMeshVertices.Add(Vertex.Average(edge.Start, edge.End));
+                    else
+                    {
+                        var directVertices = new[] { edge.Start, edge.End };
+                        var indirectVertices = new[] { edge.Next.End, edge.Opposite.Next.End };
+
+                        subdividedMeshVertices.Add(
+                            new Vertex(
+                                new Vertex(directVertices[0], directVertices[1], (ff, fs) => (ff + fs) * .375),
+                                new Vertex(indirectVertices[0], indirectVertices[1], (sf, ss) => (sf + ss) * .125),
+                            (f, s) => f + s));
+                    };
+                }
+
+
+                for (var idx = 0; idx < _outputMesh.PolygonCount; idx++)
                 {
                     var indices = _outputMesh.Indices[idx];
                     var polygon = _outputMesh.Polygons[idx];
+                    var polygonHalfEdgeOrderInfo = polygon.HalfEdges.SelectMany(h => new[] { (h.Start, h.End), (h.End, h.Start) }).ToList();
+                    var polygonEdges = existingEdges.Where(e => polygon.Vertices.Contains(e.Start) && polygon.Vertices.Contains(e.End))
+                        .OrderBy(e => polygonHalfEdgeOrderInfo.IndexOf((e.Start, e.End))).ToList();
+                    var newIndices = polygonEdges.Select(e => existingEdges.IndexOf(e) + existingVerticesCount).ToList();
 
-                    //TODO NEW!!!! (to avoid odd vertices created multiple times!)
-                    //Add "Number of Edges" new (odd) vertices "in the right position"
-                    //Move the existing "event vertices according to the rules
-                    //calculate the new triangle Indices
-                    //Create the mesh
-
-
-                    /*var firstNewIndex = subdividedMeshVertices.Count;
-                    if (polygon.HalfEdges[0].IsBorder)
-                        subdividedMeshVertices.Add(Vertex.Average(polygon.HalfEdges[0].Start, polygon.HalfEdges[0].End));
-                    else
-                    {
-                        var relevantVertices = polygon.HalfEdges[0].Polygon?.Vertices ?? Enumerable.Empty<Vertex>();
-                        relevantVertices = relevantVertices.Union(polygon.HalfEdges[0].Opposite?.Polygon?.Vertices ?? Enumerable.Empty<Vertex>()).ToList();
-                        var directVertices = relevantVertices.Where(v => v == polygon.HalfEdges[0].Start || v == polygon.HalfEdges[0].End).ToList();
-                        var indirectVertices = relevantVertices.Where(v => v != polygon.HalfEdges[0].Start && v != polygon.HalfEdges[0].End).ToList();
-
-                        subdividedMeshVertices.Add(
-                            new Vertex(
-                                new Vertex(directVertices[0], directVertices[1], (ff, fs) => (ff + fs) * .375),
-                                new Vertex(indirectVertices[0], indirectVertices[1], (sf, ss) => (sf + ss) * .125),
-                            (f, s) => f + s));
-                    };
-
-                    if (polygon.HalfEdges[1].IsBorder)
-                        subdividedMeshVertices.Add(Vertex.Average(polygon.HalfEdges[1].Start, polygon.HalfEdges[1].End));
-                    else
-                    {
-                        var relevantVertices = polygon.HalfEdges[1].Polygon?.Vertices ?? Enumerable.Empty<Vertex>();
-                        relevantVertices = relevantVertices.Union(polygon.HalfEdges[1].Opposite?.Polygon?.Vertices ?? Enumerable.Empty<Vertex>()).ToList();
-                        var directVertices = relevantVertices.Where(v => v == polygon.HalfEdges[1].Start || v == polygon.HalfEdges[1].End).ToList();
-                        var indirectVertices = relevantVertices.Where(v => v != polygon.HalfEdges[1].Start && v != polygon.HalfEdges[1].End).ToList();
-
-                        subdividedMeshVertices.Add(
-                            new Vertex(
-                                new Vertex(directVertices[0], directVertices[1], (ff, fs) => (ff + fs) * .375),
-                                new Vertex(indirectVertices[0], indirectVertices[1], (sf, ss) => (sf + ss) * .125),
-                            (f, s) => f + s));
-                    };
-
-                    if (polygon.HalfEdges[2].IsBorder)
-                        subdividedMeshVertices.Add(Vertex.Average(polygon.HalfEdges[2].Start, polygon.HalfEdges[2].End));
-                    else
-                    {
-                        var relevantVertices = polygon.HalfEdges[2].Polygon?.Vertices ?? Enumerable.Empty<Vertex>();
-                        relevantVertices = relevantVertices.Union(polygon.HalfEdges[2].Opposite?.Polygon?.Vertices ?? Enumerable.Empty<Vertex>()).ToList();
-                        var directVertices = relevantVertices.Where(v => v == polygon.HalfEdges[2].Start || v == polygon.HalfEdges[2].End).ToList();
-                        var indirectVertices = relevantVertices.Where(v => v != polygon.HalfEdges[2].Start && v != polygon.HalfEdges[2].End).ToList();
-
-                        subdividedMeshVertices.Add(
-                            new Vertex(
-                                new Vertex(directVertices[0], directVertices[1], (ff, fs) => (ff + fs) * .375),
-                                new Vertex(indirectVertices[0], indirectVertices[1], (sf, ss) => (sf + ss) * .125),
-                            (f, s) => f + s));
-                    };
-
-                    subdividedMeshIndices.Add(new List<int> { indices[0], firstNewIndex, firstNewIndex + 2 });
-                    subdividedMeshIndices.Add(new List<int> { indices[1], firstNewIndex + 1, firstNewIndex });
-                    subdividedMeshIndices.Add(new List<int> { indices[2], firstNewIndex + 2, firstNewIndex + 1 });
-                    subdividedMeshIndices.Add(new List<int> { firstNewIndex, firstNewIndex + 1, firstNewIndex + 2 });*/
+                    subdividedMeshIndices.Add(new List<int> { indices[0], newIndices[0], newIndices[2] });
+                    subdividedMeshIndices.Add(new List<int> { indices[1], newIndices[1], newIndices[0] });
+                    subdividedMeshIndices.Add(new List<int> { indices[2], newIndices[2], newIndices[1] });
+                    subdividedMeshIndices.Add(new List<int> { newIndices[0], newIndices[1], newIndices[2] });
                 }
 
                 _outputMesh = MeshFactory.CreateMesh(subdividedMeshVertices, subdividedMeshIndices);
 
-                /*//Modify even Vertices
                 for (var vIdx = 0; vIdx < existingVerticesCount; vIdx++)
                 {
                     var vertex = _outputMesh.Vertices[vIdx] with { };
                     if (vertex.IsBorder)
                     {
                         var borderNeighbors = vertex.VertexNeighbors.Where(n => n.IsBorder).ToList();
-                        vertex.X = borderNeighbors.Sum(v => v.X) * .25 + vertex.X * .75;
-                        vertex.Y = borderNeighbors.Sum(v => v.Y) * .25 + vertex.Y * .75;
-                        vertex.Z = borderNeighbors.Sum(v => v.Z) * .25 + vertex.Z * .75;
+                        vertex.X = borderNeighbors.Sum(v => v.X) * .125 + vertex.X * .75;
+                        vertex.Y = borderNeighbors.Sum(v => v.Y) * .125 + vertex.Y * .75;
+                        vertex.Z = borderNeighbors.Sum(v => v.Z) * .125 + vertex.Z * .75;
                         _outputMesh.UpdateVertex(vertex, vIdx);
                     }
                     else
@@ -139,7 +106,7 @@ namespace HalfEdge.MeshModifications
                         vertex.Z = neighbors.Sum(v => v.Z) * beta + vertex.Z * vertexFactor;
                         _outputMesh.UpdateVertex(vertex, vIdx);
                     }
-                }*/
+                }
             }
         }
     }
