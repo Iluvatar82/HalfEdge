@@ -21,8 +21,9 @@ namespace Models.Tests.Base
                 Assert.That(vertex.X, Is.EqualTo(1));
                 Assert.That(vertex.Y, Is.EqualTo(1));
                 Assert.That(vertex.Z, Is.EqualTo(1));
-                Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
-                Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.HalfEdges, Is.Empty);
+                Assert.That(vertex.Polygons, Is.Empty);
+                Assert.That(vertex.VertexNeighbors, Is.Empty);
                 Assert.That(vertex.IsBorder, Is.True);
             });
         }
@@ -36,8 +37,9 @@ namespace Models.Tests.Base
                 Assert.That(vertex.X, Is.EqualTo(default(double)));
                 Assert.That(vertex.Y, Is.EqualTo(default(double)));
                 Assert.That(vertex.Z, Is.EqualTo(default(double)));
-                Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
-                Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.HalfEdges.ToList(), Is.Empty);
+                Assert.That(vertex.Polygons.ToList(), Is.Empty);
+                Assert.That(vertex.VertexNeighbors, Is.Empty);
                 Assert.That(vertex.IsBorder, Is.True);
             });
         }
@@ -53,8 +55,9 @@ namespace Models.Tests.Base
                 Assert.That(x, Is.EqualTo(vertex.X));
                 Assert.That(y, Is.EqualTo(vertex.Y));
                 Assert.That(z, Is.EqualTo(vertex.Z));
-                Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
-                Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.HalfEdges, Is.Empty);
+                Assert.That(vertex.Polygons, Is.Empty);
+                Assert.That(vertex.VertexNeighbors, Is.Empty);
                 Assert.That(vertex.IsBorder, Is.True);
             });
         }
@@ -72,8 +75,9 @@ namespace Models.Tests.Base
                 Assert.That(vertex.X, Is.EqualTo(0));
                 Assert.That(vertex.Y, Is.EqualTo(1));
                 Assert.That(vertex.Z, Is.EqualTo(6));
-                Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
-                Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.HalfEdges, Is.Empty);
+                Assert.That(vertex.Polygons, Is.Empty);
+                Assert.That(vertex.VertexNeighbors, Is.Empty);
                 Assert.That(vertex.IsBorder, Is.True);
             });
         }
@@ -92,8 +96,9 @@ namespace Models.Tests.Base
                 Assert.That(vertex.X, Is.EqualTo(3));
                 Assert.That(vertex.Y, Is.EqualTo(4));
                 Assert.That(vertex.Z, Is.EqualTo(11));
-                Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
-                Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.HalfEdges, Is.Empty);
+                Assert.That(vertex.Polygons, Is.Empty);
+                Assert.That(vertex.VertexNeighbors, Is.Empty);
                 Assert.That(vertex.IsBorder, Is.True);
             });
         }
@@ -108,8 +113,9 @@ namespace Models.Tests.Base
                 Assert.That(vertex.X, Is.EqualTo(2));
                 Assert.That(vertex.Y, Is.EqualTo(4));
                 Assert.That(vertex.Z, Is.EqualTo(0));
-                Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
-                Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.HalfEdges, Is.Empty);
+                Assert.That(vertex.Polygons, Is.Empty);
+                Assert.That(vertex.VertexNeighbors, Is.Empty);
                 Assert.That(vertex.IsBorder, Is.True);
             });
         }
@@ -126,9 +132,9 @@ namespace Models.Tests.Base
                 Assert.That(vertexData[0], Is.EqualTo(vertex.X));
                 Assert.That(vertexData[1], Is.EqualTo(vertex.Y));
                 Assert.That(vertexData[2], Is.EqualTo(vertex.Z));
-
-                Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
-                Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.HalfEdges, Is.Empty);
+                Assert.That(vertex.Polygons, Is.Empty);
+                Assert.That(vertex.VertexNeighbors, Is.Empty);
                 Assert.That(vertex.IsBorder, Is.True);
             });
         }
@@ -144,9 +150,9 @@ namespace Models.Tests.Base
                 Assert.That(vertex.X, Is.EqualTo(vertexData[0]));
                 Assert.That(vertex.Y, Is.EqualTo(vertexData[1]));
                 Assert.That(vertex.Z, Is.EqualTo(vertexData[2]));
-
-                Assert.That(vertex.HalfEdges.ToList(), Has.Count.EqualTo(0));
-                Assert.That(vertex.Polygons.ToList(), Has.Count.EqualTo(0));
+                Assert.That(vertex.HalfEdges, Is.Empty);
+                Assert.That(vertex.Polygons, Is.Empty);
+                Assert.That(vertex.VertexNeighbors, Is.Empty);
                 Assert.That(vertex.IsBorder, Is.True);
             });
         }

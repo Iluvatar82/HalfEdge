@@ -31,6 +31,7 @@ namespace Models.Tests
                 Assert.That(quadMesh.Borders.ToList(), Has.Count.EqualTo(1));
                 Assert.That(quadMesh.HalfEdges, Has.Count.EqualTo(4));
                 Assert.That(quadMesh.EdgeCount, Is.EqualTo(4));
+                Assert.That(quadMesh.Edges.ToList(), Has.Count.EqualTo(4));
                 Assert.That(quadMesh.Indices, Has.Count.EqualTo(1));
                 Assert.That(quadMesh.IsOpenMesh, Is.True);
                 Assert.That(quadMesh.PolygonCount, Is.EqualTo(1));
@@ -56,6 +57,7 @@ namespace Models.Tests
                 Assert.That(quadMesh.Borders.ElementAt(0), Has.Count.EqualTo(6));
                 Assert.That(quadMesh.HalfEdges, Has.Count.EqualTo(8));
                 Assert.That(quadMesh.EdgeCount, Is.EqualTo(7));
+                Assert.That(quadMesh.Edges.ToList(), Has.Count.EqualTo(7));
                 Assert.That(quadMesh.Indices, Has.Count.EqualTo(2));
                 Assert.That(quadMesh.IsOpenMesh, Is.True);
                 Assert.That(quadMesh.PolygonCount, Is.EqualTo(2));

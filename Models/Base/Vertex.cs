@@ -27,6 +27,24 @@ namespace Models.Base
                 yield break;
             }
         }
+        public IEnumerable<Vertex> VertexNeighbors
+        {
+            get
+            {
+                foreach (var h in _halfEdges)
+                {
+                    yield return h.End;
+                    if (h.Polygon is not null)
+                    {
+                        var pH = h.Polygon.HalfEdges.Single(ph => ph.End == this);
+                        if (pH.Opposite is null)
+                            yield return h.Polygon.HalfEdges.Single(ph => ph.End == this).Start;
+                    }
+                }
+
+                yield break;
+            }
+        }
         public bool IsBorder => !_halfEdges.Any() || _halfEdges.Any(h => h.IsBorder);
 
 
@@ -88,6 +106,6 @@ namespace Models.Base
         
         public double DistanceTo(Vertex other) => Math.Sqrt(SquaredDistanceTo(other));
 
-        public override string ToString() => $"X: {_x}, Y: {_y}, Z: {_z}";
+        public override string ToString() => $"X: {_x:F2}, Y: {_y:F2}, Z: {_z:F2}";
     }
 }

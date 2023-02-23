@@ -20,6 +20,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.Vertices, Is.Empty);
                 Assert.That(mesh.Indices, Is.Empty);
                 Assert.That(mesh.HalfEdges, Is.Empty);
+                Assert.That(mesh.Edges, Is.Empty);
             });
         }
 
@@ -40,6 +41,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.Vertices, Has.Count.EqualTo(3));
                 Assert.That(mesh.Indices, Is.Empty);
                 Assert.That(mesh.HalfEdges, Is.Empty);
+                Assert.That(mesh.Edges, Is.Empty);
             });
         }
 
@@ -59,6 +61,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.HalfEdges, Has.Count.EqualTo(3));
                 Assert.That(mesh.HalfEdges.All(h => h.IsBorder), Is.True);
                 Assert.That(mesh.EdgeCount, Is.EqualTo(3));
+                Assert.That(mesh.Edges.ToList(), Has.Count.EqualTo(3));
                 Assert.That(mesh.Polygons, Is.Not.Empty);
                 Assert.That(mesh.Polygons, Has.Count.EqualTo(1));
                 Assert.That(mesh.Polygons.All(p => p.IsBorder), Is.True);
@@ -84,6 +87,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.HalfEdges, Is.Not.Empty);
                 Assert.That(mesh.HalfEdges, Has.Count.EqualTo(6));
                 Assert.That(mesh.EdgeCount, Is.EqualTo(5));
+                Assert.That(mesh.Edges.ToList(), Has.Count.EqualTo(5));
                 Assert.That(mesh.Polygons, Is.Not.Empty);
                 Assert.That(mesh.Polygons, Has.Count.EqualTo(2));
                 Assert.That(mesh.Polygons.All(p => p.IsBorder), Is.True);
@@ -99,7 +103,7 @@ namespace HalfEdge.Tests
 
 
         [Test]
-        public void CreateGenerator_WithTwoClosedMesh()
+        public void CreateGenerator_WithClosedMesh()
         {
             var vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 0, 0), new Vertex(1, 1, 0), new Vertex(1, 1, 1) };
             var indices = new List<List<int>> { new List<int> { 2, 1, 0 }, new List<int> { 0, 1, 3 }, new List<int> { 1, 2, 3 }, new List<int> { 2, 0, 3 } };
@@ -113,6 +117,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.HalfEdges, Is.Not.Empty);
                 Assert.That(mesh.HalfEdges, Has.Count.EqualTo(12));
                 Assert.That(mesh.EdgeCount, Is.EqualTo(6));
+                Assert.That(mesh.Edges.ToList(), Has.Count.EqualTo(6));
                 Assert.That(mesh.Polygons, Is.Not.Empty);
                 Assert.That(mesh.Polygons, Has.Count.EqualTo(4));
                 Assert.That(mesh.Polygons.All(p => p.IsBorder), Is.False);
@@ -126,6 +131,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.IsOpenMesh, Is.False);
                 Assert.That(mesh.Borders.ToList(), Has.Count.EqualTo(0));
                 Assert.That(mesh.Vertices.Select(v => v.Polygons.ToList().Count), Has.All.EqualTo(3));
+                Assert.That(mesh.Vertices.Select(v => v.VertexNeighbors.ToList().Count), Has.All.EqualTo(3));
             });
         }
 
@@ -162,6 +168,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.HalfEdges, Is.Not.Empty);
                 Assert.That(mesh.HalfEdges, Has.Count.EqualTo(6));
                 Assert.That(mesh.EdgeCount, Is.EqualTo(5));
+                Assert.That(mesh.Edges.ToList(), Has.Count.EqualTo(5));
                 Assert.That(mesh.Polygons, Is.Not.Empty);
                 Assert.That(mesh.Polygons, Has.Count.EqualTo(2));
                 Assert.That(mesh.PolygonCount, Is.EqualTo(2));
@@ -187,6 +194,7 @@ namespace HalfEdge.Tests
                 Assert.That(mesh.HalfEdges, Is.Not.Empty);
                 Assert.That(mesh.HalfEdges, Has.Count.EqualTo(3));
                 Assert.That(mesh.EdgeCount, Is.EqualTo(3));
+                Assert.That(mesh.Edges.ToList(), Has.Count.EqualTo(3));
                 Assert.That(mesh.Polygons, Is.Not.Empty);
                 Assert.That(mesh.Polygons, Has.Count.EqualTo(1));
                 Assert.That(mesh.Polygons.All(p => p.IsBorder), Is.True);

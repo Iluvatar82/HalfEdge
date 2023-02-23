@@ -5,8 +5,8 @@
     /// </summary>
     public enum SubdivisionType
     {
-        CatmullClarke,
         Loop,
-        Butterfly
+        ModifiedButterfly,
+        CatmullClark
     }
 }

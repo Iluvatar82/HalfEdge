@@ -45,6 +45,21 @@ namespace Models.Base
         public bool IsOpenMesh => !_halfEdges.Any() || _halfEdges.Any(h => h.Opposite is null);
         public int PolygonCount => _polygons.Count;
         public int EdgeCount => _halfEdges.Count(h => h.Opposite is not null) / 2 + _halfEdges.Count(h => h.Opposite is null);
+        public IEnumerable<HalfEdge> Edges
+        {
+            get
+            {
+                var allHalfEdges = new HashSet<(Vertex Start, Vertex End)>();
+                foreach (var edge in _halfEdges.ToList().Where(h => !allHalfEdges.Contains((h.Start, h.End)) && !allHalfEdges.Contains((h.End, h.Start))))
+                {
+                    yield return edge;
+                    allHalfEdges.Add((edge.Start, edge.End));
+                    allHalfEdges.Add((edge.End, edge.Start));
+                }
+
+                yield break;
+            }
+        }
 
 
         public Mesh()

@@ -21,6 +21,7 @@ namespace Models.Tests.Base
                 Assert.That(mesh.Borders, Is.Empty);
                 Assert.That(mesh.HalfEdges, Is.Empty);
                 Assert.That(mesh.EdgeCount, Is.Zero);
+                Assert.That(mesh.Edges, Is.Empty);
                 Assert.That(mesh.Indices, Is.Empty);
                 Assert.That(mesh.Polygons, Is.Empty);
                 Assert.That(mesh.PolygonCount, Is.Zero);
@@ -38,6 +39,7 @@ namespace Models.Tests.Base
                 Assert.That(mesh.Borders, Is.Empty);
                 Assert.That(mesh.HalfEdges, Is.Empty);
                 Assert.That(mesh.EdgeCount, Is.Zero);
+                Assert.That(mesh.Edges, Is.Empty);
                 Assert.That(mesh.Indices, Has.Count.EqualTo(1));
                 Assert.That(mesh.Polygons, Is.Empty);
                 Assert.That(mesh.PolygonCount, Is.Zero);

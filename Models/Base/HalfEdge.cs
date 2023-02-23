@@ -31,9 +31,7 @@ namespace Models.Base
             get => _next;
             set
             {
-                if (value is null && _next is not null)
-                    _next._previous = null;
-                else if (value is not null)
+                if (value is not null)
                     value._previous = this;
 
                 _next = value;
@@ -44,9 +42,7 @@ namespace Models.Base
             get => _previous;
             set
             {
-                if (value is null && _previous is not null)
-                    _previous._next = null;
-                else if (value is not null)
+                if (value is not null)
                     value._next = this;
 
                 _previous = value;
