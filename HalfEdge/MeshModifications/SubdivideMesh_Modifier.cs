@@ -55,6 +55,10 @@ namespace HalfEdge.MeshModifications
                         subdividedMeshVertices.Add(Vertex.Average(edge.Start, edge.End));
                     else
                     {
+                        edge.Next.NotNull();
+                        edge.Opposite.NotNull();
+                        edge.Opposite.Next.NotNull();
+
                         var directVertices = new[] { edge.Start, edge.End };
                         var indirectVertices = new[] { edge.Next.End, edge.Opposite.Next.End };
 
