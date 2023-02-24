@@ -26,12 +26,38 @@ namespace HalfEdge.MeshModifications
                     break;
 
                 case SubdivisionType.ModifiedButterfly:
-
+                    CreateModifiedButterflySubdivision();
                     break;
 
                 case SubdivisionType.CatmullClark:
-
+                    CreateCatmullClarkflySubdivision();
                     break;
+            }
+        }
+
+        private void CreateCatmullClarkflySubdivision()
+        {
+            _inputMesh.Indices.ForEach(indices => indices.HasElementCount(c => c == 4));
+            _inputMesh.PolygonCount.Satisfies(c => c == _inputMesh.Indices.Count);
+
+            _outputMesh = _inputMesh with { };
+            var currentIteration = 0;
+            while (currentIteration++ < Iterations)
+            {
+                //TODO
+            }
+        }
+
+        private void CreateModifiedButterflySubdivision()
+        {
+            _inputMesh.Indices.ForEach(indices => indices.HasElementCount(c => c == 4));
+            _inputMesh.PolygonCount.Satisfies(c => c == _inputMesh.Indices.Count);
+
+            _outputMesh = _inputMesh with { };
+            var currentIteration = 0;
+            while (currentIteration++ < Iterations)
+            {
+                //TODO
             }
         }
 
