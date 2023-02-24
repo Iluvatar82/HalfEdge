@@ -1,4 +1,5 @@
-﻿using Models.Base;
+﻿using Framework.Extensions;
+using Models.Base;
 
 namespace Models.Tests
 {
@@ -13,7 +14,7 @@ namespace Models.Tests
         [SetUp]
         public void SetUp()
         {
-            vertices = new List<Vertex> { new Vertex(1, 0, 0), new Vertex(3, 3, 0), new Vertex(2, 4, 0), new Vertex(0, 2, 0) };
+            vertices = new List<Vertex> { new Vertex(1, 0, 0), new Vertex(2, 0, 0), new Vertex(2, 2, 0), new Vertex(0, 2, 0) };
             indices = new List<List<int>> { new List<int> { 0, 1, 2 }, new List<int> { 2, 3, 0 } };
             var sharedHalfEdge = new HalfEdge(vertices[2], vertices[0]);
             halfEdges = new HalfEdge[] {
@@ -27,6 +28,7 @@ namespace Models.Tests
         public void Constructor_Full()
         {
             var triangleMesh = new TriangleMesh(vertices, indices, halfEdges.ToList(), polygons);
+            halfEdges.Where(h => h.Opposite is null).ForEach(h => triangleMesh.BorderHalfEdgeDictionary.Add((h.Start, h.End), h));
 
             Assert.Multiple(() =>
             {
@@ -46,9 +48,12 @@ namespace Models.Tests
         public void AddPolygon_OK()
         {
             var triangleMesh = new TriangleMesh(vertices, indices, halfEdges.ToList(), polygons);
-            triangleMesh.AddVertex(new Vertex(1, 0, 2));
-            triangleMesh.AddIndices(new List<int> { 4, 0, 3 });
+            halfEdges.Where(h => h.Opposite is null).ForEach(h => triangleMesh.BorderHalfEdgeDictionary.Add((h.Start, h.End), h));
+            triangleMesh.AddVertex(new Vertex(1, 4, 0));
+            triangleMesh.AddIndices(new List<int> { 4, 3, 2 });
             var newHalfEdges = new List<HalfEdge> { new HalfEdge(vertices[4], vertices[0]), halfEdges.Last().CreateOpposite(), new HalfEdge(vertices[3], vertices[4]) };
+            halfEdges.Where(h => h.Opposite is not null).ForEach(h => triangleMesh.BorderHalfEdgeDictionary.Remove((h.Start, h.End)));
+            newHalfEdges.Where(h => h.Opposite is null).ForEach(h => triangleMesh.BorderHalfEdgeDictionary.Add((h.Start, h.End), h));
             triangleMesh.AddHalfEdges(newHalfEdges);
             triangleMesh.AddPolygon(new Polygon(newHalfEdges));
 

@@ -181,7 +181,7 @@ namespace HalfEdge.Tests
         [Test]
         public void CreateGenerator_WithTwoPolygons_RemovePolygon()
         {
-            var vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 0, 0), new Vertex(1, 1, 1), new Vertex(0, 1, 0) };
+            var vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(1, 0, 0), new Vertex(1, 1, 0), new Vertex(0, 1, 0) };
             var indices = new List<List<int>> { new List<int> { 0, 1, 2 }, new List<int> { 0, 2, 3 } };
             var mesh = MeshFactory.CreateMesh(vertices, indices);
             MeshFactory.RemovePolygonFromMesh(mesh, mesh.Polygons.Last());
