@@ -12,10 +12,10 @@ namespace Models
         public List<HalfEdge> HalfEdges
         {
             get => _halfEdges;
-            init 
+            init
             {
                 _halfEdges = value;
-                for(var i = 0; i < _halfEdges.Count; i++)
+                for (var i = 0; i < _halfEdges.Count; i++)
                 {
                     _halfEdges[i].Polygon = this;
                     var next = (i + 1) % _halfEdges.Count;
@@ -51,7 +51,7 @@ namespace Models
 
             var halfEdges = new List<HalfEdge>();
             Vertex? first = null;
-            foreach(var vertex in vertices)
+            foreach (var vertex in vertices)
             {
                 first ??= vertex;
                 if (vertex != first)
@@ -74,8 +74,8 @@ namespace Models
         }
 
         public void Deconstruct(out IEnumerable<Vertex> vertices, out IEnumerable<HalfEdge> halfEdges)
-        { 
-            vertices = Vertices; 
+        {
+            vertices = Vertices;
             halfEdges = HalfEdges;
         }
 

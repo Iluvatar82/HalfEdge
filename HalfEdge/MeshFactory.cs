@@ -56,7 +56,7 @@ namespace HalfEdge
             var halfEdges = new List<Models.Base.HalfEdge>();
             var pointCount = vertices.Count;
             var vertexIndex = vertices.Select(v => (Vertex: v, Index: mesh.GetVertexIndex(v))).ToList();
-            for(var i = 0; i < pointCount; i++)
+            for (var i = 0; i < pointCount; i++)
             {
                 if (vertexIndex[i].Index > -1)
                     continue;
@@ -84,7 +84,7 @@ namespace HalfEdge
             mesh.RemoveHalfEdges(polygon.HalfEdges);
             mesh.RemoveIndices(mesh.Indices.First(indexList => indexList.All(index => vertexIndices.Contains(index))));
             mesh.RemovePolygon(polygon);
-            
+
             polygon.HalfEdges.Where(h => h.Opposite is null).ForEach(h => mesh.BorderHalfEdgeDictionary.Remove((h.Start, h.End)));
             polygon.HalfEdges.Where(h => h.Opposite is not null).Select(h => h.Opposite).ForEach(o => mesh.BorderHalfEdgeDictionary.Add((o.Start, o.End), o));
         }

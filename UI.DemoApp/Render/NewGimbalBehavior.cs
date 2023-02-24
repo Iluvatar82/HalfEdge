@@ -10,7 +10,7 @@ namespace UI.DemoApp.Render
         {
             var leftRight = Vector3.Cross(state.Up, state.LookAt);
             var forward = Vector3.Cross(leftRight, state.Up);
-            
+
             var rot = Matrix3.CreateFromAxisAngle(state.Up, delta.X) * Matrix3.CreateFromAxisAngle(leftRight, delta.Y);
             Vector3.Transform(state.LookAt, Quaternion.FromMatrix(rot), out state.LookAt);
             state.LookAt.Normalize();

@@ -7,7 +7,7 @@ namespace Models
     public record class QuadMesh : Mesh
     {
         public QuadMesh(List<Vertex> vertices, List<List<int>> indices, List<HalfEdge> halfEdges, List<Polygon> polygons)
-            :base(vertices, indices)
+            : base(vertices, indices)
         {
             _halfEdges = halfEdges;
             _polygons = polygons;

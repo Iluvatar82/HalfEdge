@@ -43,7 +43,7 @@ namespace Models.Tests.Base
             var first = new Vertex2D(8, -6);
             var second = new Vertex2D(-8, 6);
 
-            var vector = new Vector2D(first, second, Math.Min); 
+            var vector = new Vector2D(first, second, Math.Min);
 
             Assert.Multiple(() =>
             {
