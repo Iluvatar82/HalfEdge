@@ -20,8 +20,8 @@ namespace UI.DemoApp.Models.Shapes
             Vertices = vertices.Select(v => v.ToVector3()).ToArray();
             Indices = indices.SelectMany(t => t.Select(i => (uint)i)).ToArray();
 
-            Colors = Enumerable.Repeat(color ?? DefaultColor, Vertices.Length).Select(_ => _.ToRgba32()).ToArray();
-            WireframeColors = Enumerable.Repeat(wireframeColor ?? DefaultWireframeColor, Vertices.Length).Select(_ => _.ToRgba32()).ToArray();
+            Colors = Enumerable.Repeat(color ?? DefaultColor, Vertices.Length).Select(c => c.ToRgba32()).ToArray();
+            WireframeColors = Enumerable.Repeat(wireframeColor ?? DefaultWireframeColor, Vertices.Length).Select(c => c.ToRgba32()).ToArray();
         }
     }
 }

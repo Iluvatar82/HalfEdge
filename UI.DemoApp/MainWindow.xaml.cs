@@ -54,11 +54,18 @@ namespace UI.DemoApp
             if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
             {
                 var delta = currentPosition - _mousePosition;
-                _scene.HandleViewChange(delta * .01f / MathHelper.Pi);
+                delta.Y *= -1;
+                _scene.HandleViewChange(delta * .01f / MathHelper.Pi, 1f);
                 ViewControl.InvalidateVisual();
             }
 
             _mousePosition = currentPosition;
+        }
+
+        private void ViewControl_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            _scene.HandleViewChange(Vector2.Zero, (.25f * e.Delta) / 120f);
+            ViewControl.InvalidateVisual();
         }
     }
 }

@@ -8,6 +8,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <gl:GLWpfControl x:Name="ViewControl" Render="ViewControl_OnRender" SizeChanged="ViewControl_SizeChanged" MouseMove="ViewControl_MouseMove" />
+        <gl:GLWpfControl x:Name="ViewControl" Render="ViewControl_OnRender" SizeChanged="ViewControl_SizeChanged" MouseMove="ViewControl_MouseMove" MouseWheel="ViewControl_MouseWheel" />
     </Grid>
 </Window>

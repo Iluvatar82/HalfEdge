@@ -52,7 +52,7 @@ namespace UI.DemoApp.Models
 
             var vertices = new List<Vertex> { new Vertex(-1, -1, 0), new Vertex(1, -1, 0), new Vertex(0, 1, 0) };
             var indices = new List<List<int>> { new List<int> { 0, 1, 2 } };
-            _shapeHelpers.Add(new ShapeHelper(new MeshShape(vertices, indices), new Vector3(-offset, -offset, -distance), _program));
+            _shapeHelpers.Add(new ShapeHelper(new MeshShape(vertices, indices, Color.LightGray, Color.DarkGreen), new Vector3(-offset, -offset, -distance), _program));
             
             var subdivisionModifier = new SubdivideMesh_Modifier()
             {
@@ -63,7 +63,7 @@ namespace UI.DemoApp.Models
             var triangleMesh = MeshFactory.CreateMesh(vertices, indices);
             subdivisionModifier.Modify(triangleMesh);
             var subdividedTriangleMesh = subdivisionModifier.OutputMesh;
-            _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedTriangleMesh.Vertices.ToList(), subdividedTriangleMesh.Indices.ToList()), new Vector3(offset, -offset, -distance + 0.0001f), _program));
+            _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedTriangleMesh.Vertices.ToList(), subdividedTriangleMesh.Indices.ToList(), Color.LightGray, Color.DarkGreen), new Vector3(offset, -offset, -distance + 0.0001f), _program));
 
             vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(2, 0, 0), new Vertex(1, 2, 0), new Vertex(1, 1, 2) };
             indices = new List<List<int>> { new List<int> { 2, 1, 0 }, new List<int> { 0, 1, 3 }, new List<int> { 1, 2, 3 }, new List<int> { 2, 0, 3 } };
@@ -88,9 +88,13 @@ namespace UI.DemoApp.Models
                 shapeHelper.Render(width, height, _camera);
         }
 
-        internal void HandleViewChange(Vector2 delta)
+        internal void HandleViewChange(Vector2 delta, float scale)
         {
-            _cameraBehavior.MouseMove(_camera.State, delta);
+            if (delta != Vector2.Zero)
+                _cameraBehavior.MouseMove(_camera.State, delta);
+
+            if (scale != 1f)
+                _cameraBehavior.MouseWheelChanged(_camera.State, scale);
         }
     }
 }
