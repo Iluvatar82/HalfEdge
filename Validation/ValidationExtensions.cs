@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Validation
@@ -18,7 +17,7 @@ namespace Validation
                 ThrowCondition(valueExpression, conditionExpression, value);
         }
 
-        public static void NotEmpty<T>( this IEnumerable<T> enumerable, [CallerArgumentExpression("enumerable")] string? enumerableExpression = null)
+        public static void NotEmpty<T>(this IEnumerable<T> enumerable, [CallerArgumentExpression("enumerable")] string? enumerableExpression = null)
         {
             if (!enumerable.Any())
                 ThrowEmpty(enumerableExpression);

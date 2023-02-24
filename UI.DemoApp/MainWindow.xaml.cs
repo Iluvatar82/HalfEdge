@@ -26,7 +26,10 @@ namespace UI.DemoApp
 
         private void InitializeOpenGL()
         {
-            var mainSettings = new GLWpfControlSettings { MajorVersion = 4, MinorVersion = 6,
+            var mainSettings = new GLWpfControlSettings
+            {
+                MajorVersion = 4,
+                MinorVersion = 6,
                 GraphicsProfile = ContextProfile.Compatability,
                 GraphicsContextFlags = ContextFlags.Debug,
                 RenderContinuously = false

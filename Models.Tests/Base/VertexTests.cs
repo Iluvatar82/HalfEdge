@@ -68,7 +68,7 @@ namespace Models.Tests.Base
             var vertex1 = new Vertex(1, -2, 3);
             var vertex2 = new Vertex(-1, 4, 9);
 
-            var vertex= new Vertex(vertex1, vertex2, Average);
+            var vertex = new Vertex(vertex1, vertex2, Average);
 
             Assert.Multiple(() =>
             {

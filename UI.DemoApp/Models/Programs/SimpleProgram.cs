@@ -13,7 +13,7 @@ namespace UI.DemoApp.Models.Programs
     {
         [VertexAttrib(3, VertexAttribPointerType.Float)]
         public VertexAttrib InPosition { get; protected set; }
-        
+
         [VertexAttrib(4, VertexAttribPointerType.UnsignedByte, true)]
         public VertexAttrib InColor { get; protected set; }
 

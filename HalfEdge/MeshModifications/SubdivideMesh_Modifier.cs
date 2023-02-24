@@ -19,7 +19,7 @@ namespace HalfEdge.MeshModifications
             SubdivisionType.NotNull();
             Iterations.Satisfies(it => it > 0);
 
-            switch(SubdivisionType)
+            switch (SubdivisionType)
             {
                 case SubdivisionType.Loop:
                     CreateLoopSubdivision();
@@ -30,7 +30,7 @@ namespace HalfEdge.MeshModifications
                     break;
 
                 case SubdivisionType.CatmullClark:
-                    
+
                     break;
             }
         }
@@ -42,14 +42,14 @@ namespace HalfEdge.MeshModifications
 
             _outputMesh = _inputMesh with { };
             var currentIteration = 0;
-            while(currentIteration++ < Iterations)
+            while (currentIteration++ < Iterations)
             {
                 var subdividedMeshVertices = _outputMesh.Vertices.Select(v => v with { HalfEdges = new List<Models.Base.HalfEdge>() }).ToList();
                 var existingVerticesCount = subdividedMeshVertices.Count;
                 var subdividedMeshIndices = new List<List<int>>();
                 var existingEdges = _outputMesh.Edges.ToList();
                 var halfEdgeIndexInformation = new Dictionary<(Vertex Start, Vertex End), int>();
-                for(var idx = 0; idx < existingEdges.Count; idx++)
+                for (var idx = 0; idx < existingEdges.Count; idx++)
                 {
                     var edge = existingEdges[idx];
                     halfEdgeIndexInformation.Add((edge.Start, edge.End), idx + existingVerticesCount);

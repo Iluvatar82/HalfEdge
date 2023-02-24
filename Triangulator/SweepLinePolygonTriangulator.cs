@@ -255,7 +255,7 @@ namespace Triangulator
                     currentPoint = nextEdge.PointTwo;
                 }
                 while (subPolygonPoints[0].Index != currentPoint.Index);
-                
+
                 subPolygons.Add(new PolygonData(subPolygonPoints));
             }
 

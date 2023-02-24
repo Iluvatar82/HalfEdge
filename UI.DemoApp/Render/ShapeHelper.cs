@@ -46,7 +46,7 @@ namespace UI.DemoApp.Render
             _vertexArray.Bind();
             _vertexArray.BindElementBuffer(_shape.IndexBuffer);
             _vertexArray.DrawElements(_shape.DefaultMode, _shape.IndexBuffer.ElementCount);
-                
+
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
             _vertexArray.BindAttribute(simpleProgram.InColor, _shape.WireframeColorBuffer);
             simpleProgram.ModelViewProjectionMatrix.Set(

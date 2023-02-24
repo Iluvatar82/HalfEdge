@@ -10,7 +10,7 @@ namespace HalfEdge.Converter
             var result = new TriangleMesh(mesh.Vertices.ToList(), mesh.Indices.ToList(), mesh.HalfEdges.ToList(), mesh.Polygons.ToList());
             foreach (var polygon in mesh.Polygons.ToList())
             {
-                switch(polygon.HalfEdges.Count)
+                switch (polygon.HalfEdges.Count)
                 {
                     case 3:
                         break;

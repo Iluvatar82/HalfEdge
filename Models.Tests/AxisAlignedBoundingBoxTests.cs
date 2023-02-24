@@ -1,5 +1,4 @@
-﻿using Framework;
-using Models.Base;
+﻿using Models.Base;
 
 namespace Models.Tests
 {

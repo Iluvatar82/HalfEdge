@@ -10,8 +10,8 @@ namespace Models.Base
 
         public double X { get => _x; init => _x = value; }
         public double Y { get => _y; init => _y = value; }
-        
-        
+
+
         public Vertex2D()
         {
             _x = default;

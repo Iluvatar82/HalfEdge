@@ -54,7 +54,7 @@ namespace UI.DemoApp.Models
             var vertices = new List<Vertex> { new Vertex(-1, -1, 0), new Vertex(1, -1, 0), new Vertex(0, 1, 0) };
             var indices = new List<List<int>> { new List<int> { 0, 1, 2 } };
             _shapeHelpers.Add(new ShapeHelper(new MeshShape(vertices, indices, Color.LightGray, Color.DarkGreen), new Vector3(-offset, -offset, -distance), _program));
-            
+
             var subdivisionModifier = new SubdivideMesh_Modifier()
             {
                 Iterations = 7,
