@@ -92,14 +92,23 @@ Of course the Mesh is not restricted to only consist of triangles (this is where
 ## Roadmap
 
 - [x] Add back to top links here
-- [ ] Add Changelog
-- [ ] More convenient Way of adding/removing Polygons (without the need to add the Vertices and HalfEdges beforehand)
-- [ ] HalfEdge Subdivision(s) (probably multiple Variants)
-- [ ] Adding Texture-Coordinates (maybe?)
-- [ ] Mesh-Cutoffs
+- [x] More convenient Way of adding/removing Polygons (without the need to add the Vertices and HalfEdges beforehand)
+- [ ] HalfEdge Subdivision(s)
+    - [x] Loop
+    - [ ] Modified Butterfly
+    - [ ] Catmull-Clark
+- [ ] Texture-Coordinates
+- [ ] Normals
+    - [ ] Per Polygon
+    - [ ] Per Vertex
+- [ ] Curvature Calculations and related:
+- [ ] Mesh Optimization (reduce Triangles where possible!)
+- [ ] Mesh-Cutoffs (via Plane)
 - [ ] Boolean Operations for two Meshes
     - [ ] Union
     - [ ] Difference
+- [x] Demo Application
+    - [ ] Add functionality to it (interactivity)
 
 See the <a href="https://github.com/Iluvatar82/HalfEdge/issues">open Issues</a> for a full list of proposed features (and known issues).
 
