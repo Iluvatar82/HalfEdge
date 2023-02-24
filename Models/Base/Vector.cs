@@ -54,8 +54,7 @@ namespace Models.Base
         public static Vector operator +(Vector vector, Vector other) => new(vector, other, (f, s) => f + s);
         public static Vector operator *(Vector vector, double factor) => new(vector, (v) => v * factor);
         public static Vector operator *(double factor, Vector vector) => vector * factor;
-        public static Vector operator /(Vector vector, double divisor) { divisor.Satisfies(d => d != 0); return new (vector, (v) => v / divisor)); }
-        public static Vector operator /(double divisor, Vector vector) => vector / divisor;
+        public static Vector operator /(Vector vector, double divisor) { divisor.Satisfies(d => d != 0); return new (vector, (v) => v / divisor); }
 
 
         public void Normalize()
