@@ -91,6 +91,7 @@ namespace Models.Base
         public static Vertex Average(Vertex first, Vertex second) => new(first, second, (f, s) => (f + s) * .5);
         public static Vertex Average(params Vertex[] vertices) => new((v) => v.Average(), vertices);
 
+        public static implicit operator Vertex(Vector vector) => new(vector.X, vector.Y, vector.Z);
         public static implicit operator Vertex(Vertex2D vertex) => new(vertex.X, vertex.Y, 0);
         public static implicit operator double[](Vertex vertex) => new[] { vertex._x, vertex._y, vertex._z };
         public static implicit operator Vertex(double[] vertexData)
