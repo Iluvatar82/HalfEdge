@@ -7,10 +7,7 @@ using UI.DemoApp.Models;
 
 namespace UI.DemoApp
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : System.Windows.Window
+    public partial class MainWindow : Window
     {
         private ExampleScene _scene;
         private Size _size;
@@ -23,6 +20,7 @@ namespace UI.DemoApp
             InitializeOpenGL();
 
             _scene = new ExampleScene();
+            Title = $"HalfEdge Demo - displaying {_scene.TriangleCount} Triangles...";
         }
 
 

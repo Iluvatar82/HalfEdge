@@ -14,6 +14,7 @@ namespace UI.DemoApp.Render
         private WireframeShape _shape;
         private VertexArray _vertexArray;
         private Vector3 _position;
+        public int TriangleCount => _shape.Indices.Length / 3;
 
         public ShapeHelper(WireframeShape shape, Vector3 position, Program program)
         {

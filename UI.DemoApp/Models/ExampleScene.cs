@@ -20,15 +20,16 @@ namespace UI.DemoApp.Models
         private CameraBehavior _cameraBehavior;
         private SimpleProgram _program;
         private List<ShapeHelper> _shapeHelpers;
-
+        public int TriangleCount;
 
         public CameraBehavior CameraBehavior { get => _cameraBehavior; set => _cameraBehavior = value; }
 
 
         public ExampleScene()
         {
+            TriangleCount = 0;
             var distance = 8f;
-            var offset = 1.5f;
+            var offset = 1f;
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -56,7 +57,7 @@ namespace UI.DemoApp.Models
             
             var subdivisionModifier = new SubdivideMesh_Modifier()
             {
-                Iterations = 5,
+                Iterations = 7,
                 SubdivisionType = HalfEdge.Enumerations.SubdivisionType.Loop
             };
 
@@ -65,7 +66,7 @@ namespace UI.DemoApp.Models
             var subdividedTriangleMesh = subdivisionModifier.OutputMesh;
             _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedTriangleMesh.Vertices.ToList(), subdividedTriangleMesh.Indices.ToList(), Color.LightGray, Color.DarkGreen), new Vector3(offset, -offset, -distance + 0.0001f), _program));
 
-            vertices = new List<Vertex> { new Vertex(0, 0, 0), new Vertex(2, 0, 0), new Vertex(1, 2, 0), new Vertex(1, 1, 2) };
+            vertices = new List<Vertex> { new Vertex(-1, 0, 0), new Vertex(1, 0, 0), new Vertex(0, 2, 0), new Vertex(0, 1, 2) };
             indices = new List<List<int>> { new List<int> { 2, 1, 0 }, new List<int> { 0, 1, 3 }, new List<int> { 1, 2, 3 }, new List<int> { 2, 0, 3 } };
 
             _shapeHelpers.Add(new ShapeHelper(new MeshShape(vertices, indices), new Vector3(-offset, offset, -distance), _program));
@@ -74,6 +75,7 @@ namespace UI.DemoApp.Models
             subdivisionModifier.Modify(shapeMesh);
             var subdividedShapeMesh = subdivisionModifier.OutputMesh;
             _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedShapeMesh.Vertices.ToList(), subdividedShapeMesh.Indices.ToList()), new Vector3(offset, offset, -distance + 0.0001f), _program));
+            TriangleCount = _shapeHelpers.Sum(sh => sh.TriangleCount);
         }
 
         public void Render(int width, int height)
