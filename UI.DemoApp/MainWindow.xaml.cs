@@ -1,4 +1,5 @@
-﻿using OpenTK.Windowing.Common;
+﻿using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
 using OpenTK.Wpf;
 using System;
 using System.Windows;
@@ -9,10 +10,11 @@ namespace UI.DemoApp
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : System.Windows.Window
     {
         private ExampleScene _scene;
         private Size _size;
+        private Vector2 _mousePosition;
 
 
         public MainWindow()
@@ -43,6 +45,26 @@ namespace UI.DemoApp
         private void ViewControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             _size = e.NewSize;
+            ViewControl.InvalidateVisual();
+        }
+
+        private void ViewControl_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var currentPosition = new Vector2((float)e.GetPosition(this).X, (float)e.GetPosition(this).Y);
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
+                var delta = currentPosition - _mousePosition;
+                delta.Y *= -1;
+                _scene.HandleViewChange(delta * .01f / MathHelper.Pi, 1f);
+                ViewControl.InvalidateVisual();
+            }
+
+            _mousePosition = currentPosition;
+        }
+
+        private void ViewControl_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            _scene.HandleViewChange(Vector2.Zero, (.25f * e.Delta) / 120f);
             ViewControl.InvalidateVisual();
         }
     }

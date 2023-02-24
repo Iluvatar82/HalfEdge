@@ -1,7 +1,7 @@
 ﻿using Models.Base;
 using OpenTK.Mathematics;
 
-namespace UI.DemoApp.Data.Conversion
+namespace UI.DemoApp.Data.Converter
 {
     public static class VertexToVector3
     {
