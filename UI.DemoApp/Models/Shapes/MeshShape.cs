@@ -4,7 +4,7 @@ using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using UI.DemoApp.Data.Conversion;
+using UI.DemoApp.Data.Converter;
 
 namespace UI.DemoApp.Models.Shapes
 {
