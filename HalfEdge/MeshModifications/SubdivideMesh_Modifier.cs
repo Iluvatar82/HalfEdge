@@ -48,9 +48,12 @@ namespace HalfEdge.MeshModifications
                 var existingVerticesCount = subdividedMeshVertices.Count;
                 var subdividedMeshIndices = new List<List<int>>();
                 var existingEdges = _outputMesh.Edges.ToList();
+                var halfEdgeIndexInformation = new Dictionary<(Vertex Start, Vertex End), int>();
                 for(var idx = 0; idx < existingEdges.Count; idx++)
                 {
                     var edge = existingEdges[idx];
+                    halfEdgeIndexInformation.Add((edge.Start, edge.End), idx + existingVerticesCount);
+                    halfEdgeIndexInformation.Add((edge.End, edge.Start), idx + existingVerticesCount);
                     if (edge.IsBorder)
                         subdividedMeshVertices.Add(Vertex.Average(edge.Start, edge.End));
                     else
@@ -75,10 +78,7 @@ namespace HalfEdge.MeshModifications
                 {
                     var indices = _outputMesh.Indices[idx];
                     var polygon = _outputMesh.Polygons[idx];
-                    var polygonHalfEdgeOrderInfo = polygon.HalfEdges.SelectMany(h => new[] { (h.Start, h.End), (h.End, h.Start) }).ToList();
-                    var polygonEdges = existingEdges.Where(e => polygon.Vertices.Contains(e.Start) && polygon.Vertices.Contains(e.End))
-                        .OrderBy(e => polygonHalfEdgeOrderInfo.IndexOf((e.Start, e.End))).ToList();
-                    var newIndices = polygonEdges.Select(e => existingEdges.IndexOf(e) + existingVerticesCount).ToList();
+                    var newIndices = polygon.HalfEdges.Select(h => halfEdgeIndexInformation[(h.Start, h.End)]).ToList();
 
                     subdividedMeshIndices.Add(new List<int> { indices[0], newIndices[0], newIndices[2] });
                     subdividedMeshIndices.Add(new List<int> { indices[1], newIndices[1], newIndices[0] });

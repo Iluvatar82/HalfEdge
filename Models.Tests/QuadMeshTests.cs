@@ -1,4 +1,5 @@
-﻿using Models.Base;
+﻿using Framework.Extensions;
+using Models.Base;
 
 namespace Models.Tests
 {
@@ -25,6 +26,7 @@ namespace Models.Tests
         public void Constructor_Full()
         {
             var quadMesh = new QuadMesh(vertices, indices, halfEdges.ToList(), polygons);
+            halfEdges.ForEach(h => quadMesh.BorderHalfEdgeDictionary.Add((h.Start, h.End), h));
 
             Assert.Multiple(() =>
             {
@@ -44,10 +46,13 @@ namespace Models.Tests
         public void AddPolygon_OK()
         {
             var quadMesh = new QuadMesh(vertices, indices, halfEdges.ToList(), polygons);
+            halfEdges.ForEach(h => quadMesh.BorderHalfEdgeDictionary.Add((h.Start, h.End), h));
             quadMesh.AddVertices(new List<Vertex> { new Vertex(1, 0, 2), new Vertex(3, 3, 2) });
             quadMesh.AddIndices(new List<int> { 4, 5, 1, 0 });
 
             var newHalfEdges = new List<HalfEdge> { new HalfEdge(vertices[4], vertices[5]), new HalfEdge(vertices[5], vertices[1]), halfEdges.First().CreateOpposite(), new HalfEdge(vertices[0], vertices[4]) };
+            halfEdges.Where(h => h.Opposite is not null).ForEach(h => quadMesh.BorderHalfEdgeDictionary.Remove((h.Start, h.End)));
+            newHalfEdges.Where(h => h.Opposite is null).ForEach(h => quadMesh.BorderHalfEdgeDictionary.Add((h.Start, h.End), h));
             quadMesh.AddHalfEdges(newHalfEdges);
             quadMesh.AddPolygon(new Polygon(newHalfEdges));
 

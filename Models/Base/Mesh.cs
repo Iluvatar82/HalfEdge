@@ -10,30 +10,36 @@ namespace Models.Base
         protected List<Vertex> _vertices;
         protected List<List<int>> _indices;
         protected List<HalfEdge> _halfEdges;
+        protected Dictionary<(Vertex Start, Vertex End), HalfEdge> _borderHalfEdges;
         protected List<Polygon> _polygons;
 
         public ReadOnlyCollection<Vertex> Vertices => _vertices.AsReadOnly<Vertex>();
         public ReadOnlyCollection<List<int>> Indices => _indices.AsReadOnly<List<int>>();
         public ReadOnlyCollection<HalfEdge> HalfEdges => _halfEdges.AsReadOnly<HalfEdge>();
         public ReadOnlyCollection<Polygon> Polygons => _polygons.AsReadOnly<Polygon>();
+        public Dictionary<(Vertex Start, Vertex End), HalfEdge> BorderHalfEdgeDictionary => _borderHalfEdges;
+        public List<HalfEdge> BorderHalfEdges => _borderHalfEdges.Values.ToList();
         public IEnumerable<List<HalfEdge>> Borders
         {
             get
             {
-                var allBorderHalfEdges = _halfEdges.Where(h => h.Opposite is null).ToList();
+                var allBorderHalfEdges = _borderHalfEdges.ToDictionary(e => e.Key, e => e.Value);
                 if (!allBorderHalfEdges.Any())
                     yield break;
 
                 while (allBorderHalfEdges.Any())
                 {
                     var borderLoop = new List<HalfEdge>();
-                    var currentHalfEdge = allBorderHalfEdges.First();
-                    allBorderHalfEdges.Remove(currentHalfEdge);
+                    var currentHalfEdge = allBorderHalfEdges.First().Value;
+                    allBorderHalfEdges.Remove((currentHalfEdge.Start, currentHalfEdge.End));
+                    allBorderHalfEdges.Remove((currentHalfEdge.End, currentHalfEdge.Start));
+
                     while (true)
                     {
                         borderLoop.Add(currentHalfEdge);
                         currentHalfEdge = currentHalfEdge.End.HalfEdges.Single(h => h != currentHalfEdge && h.Opposite is null);
-                        allBorderHalfEdges.Remove(currentHalfEdge);
+                        allBorderHalfEdges.Remove((currentHalfEdge.Start, currentHalfEdge.End));
+                        allBorderHalfEdges.Remove((currentHalfEdge.End, currentHalfEdge.Start));
                         if (borderLoop[0] == currentHalfEdge)
                             break;
                     }
@@ -67,6 +73,7 @@ namespace Models.Base
             _vertices = new List<Vertex>();
             _indices = new List<List<int>>();
             _halfEdges = new List<HalfEdge>();
+            _borderHalfEdges = new Dictionary<(Vertex Start, Vertex End), HalfEdge>();
             _polygons = new List<Polygon>();
         }
 
@@ -75,6 +82,7 @@ namespace Models.Base
             _vertices = vertices;
             _indices = indices;
             _halfEdges = new List<HalfEdge>();
+            _borderHalfEdges = new Dictionary<(Vertex Start, Vertex End), HalfEdge>();
             _polygons = new List<Polygon>();
         }
 
@@ -108,7 +116,7 @@ namespace Models.Base
         public virtual void AddHalfEdges(IEnumerable<HalfEdge> halfEdges) => _halfEdges.AddRange(halfEdges);
         
         public virtual void RemoveHalfEdge(HalfEdge halfEdge) => _halfEdges.Remove(halfEdge);
-        
+
         public virtual void RemoveHalfEdges(IEnumerable<HalfEdge> halfEdges) => halfEdges.ForEach(RemoveHalfEdge);
 
         public virtual void AddPolygon(Polygon polygon) => _polygons.Add(polygon);

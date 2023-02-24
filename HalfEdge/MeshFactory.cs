@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Framework.Extensions;
+using Models;
 using Models.Base;
 using Validation;
 
@@ -24,11 +25,21 @@ namespace HalfEdge
             var pointCount = polygonIndices.Count;
             for (var i = 0; i < pointCount; i++)
             {
-                var existingOpposite = mesh.HalfEdges.SingleOrDefault(o => o.End == mesh.Vertices[polygonIndices[i]] && o.Start == mesh.Vertices[polygonIndices[(i + 1) % pointCount]]);
-                if (existingOpposite != default)
+                var startVertex = mesh.Vertices[polygonIndices[i]];
+                var endVertex = mesh.Vertices[polygonIndices[(i + 1) % pointCount]];
+
+                mesh.BorderHalfEdgeDictionary.TryGetValue((endVertex, startVertex), out var existingOpposite);
+                if (existingOpposite != null)
+                {
                     halfEdges.Add(existingOpposite.CreateOpposite());
+                    mesh.BorderHalfEdgeDictionary.Remove((endVertex, startVertex));
+                }
                 else
-                    halfEdges.Add(new Models.Base.HalfEdge(mesh.Vertices[polygonIndices[i]], mesh.Vertices[polygonIndices[(i + 1) % pointCount]]));
+                {
+                    var newHalfEdge = new Models.Base.HalfEdge(startVertex, endVertex);
+                    halfEdges.Add(newHalfEdge);
+                    mesh.BorderHalfEdgeDictionary.Add((startVertex, endVertex), newHalfEdge);
+                }
             }
 
             halfEdges.HasElementCount(c => c > 2);
@@ -55,20 +66,7 @@ namespace HalfEdge
             }
 
             var polygonIndices = vertexIndex.Select(vi => vi.Index).ToList();
-            for (var i = 0; i < pointCount; i++)
-            {
-                var existingOpposite = mesh.HalfEdges.SingleOrDefault(o => o.End == mesh.Vertices[polygonIndices[i]] && o.Start == mesh.Vertices[polygonIndices[(i + 1) % pointCount]]);
-                if (existingOpposite != default)
-                    halfEdges.Add(existingOpposite.CreateOpposite());
-                else
-                    halfEdges.Add(new Models.Base.HalfEdge(mesh.Vertices[polygonIndices[i]], mesh.Vertices[polygonIndices[(i + 1) % pointCount]]));
-            }
-
-            halfEdges.HasElementCount(c => c > 2);
-
-            mesh.AddIndices(polygonIndices);
-            mesh.AddHalfEdges(halfEdges);
-            mesh.AddPolygon(new Polygon(halfEdges));
+            AddPolygonToMesh(mesh, polygonIndices, true);
         }
 
         public static void RemovePolygonFromMesh(Mesh mesh, Polygon polygon)
@@ -86,6 +84,9 @@ namespace HalfEdge
             mesh.RemoveHalfEdges(polygon.HalfEdges);
             mesh.RemoveIndices(mesh.Indices.First(indexList => indexList.All(index => vertexIndices.Contains(index))));
             mesh.RemovePolygon(polygon);
+            
+            polygon.HalfEdges.Where(h => h.Opposite is null).ForEach(h => mesh.BorderHalfEdgeDictionary.Remove((h.Start, h.End)));
+            polygon.HalfEdges.Where(h => h.Opposite is not null).Select(h => h.Opposite).ForEach(o => mesh.BorderHalfEdgeDictionary.Add((o.Start, o.End), o));
         }
     }
 }
