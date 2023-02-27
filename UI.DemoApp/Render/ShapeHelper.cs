@@ -14,7 +14,8 @@ namespace UI.DemoApp.Render
         private WireframeShape _shape;
         private VertexArray _vertexArray;
         private Vector3 _position;
-        public int TriangleCount => _shape.Indices.Length / 3;
+        public WireframeShape Shape => _shape;
+        public int TriangleCount => _shape.Indices.Length / 4;
 
         public ShapeHelper(WireframeShape shape, Vector3 position, Program program)
         {
@@ -34,14 +35,14 @@ namespace UI.DemoApp.Render
             _vertexArray.BindElementBuffer(_shape.IndexBuffer);
         }
 
-        public void Render(int width, int height, Camera camera)
+        public void Render(int width, int height, Camera camera, Vector3 origin)
         {
             if (_program is not SimpleProgram simpleProgram)
                 return;
 
             simpleProgram.ModelViewProjectionMatrix.Set(
                 Matrix4.CreateTranslation(_position) *
-                Matrix4.LookAt(camera.State.Position, Vector3.UnitZ * -8, camera.State.Up) *
+                Matrix4.LookAt(camera.State.Position, origin, camera.State.Up) *
                 Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, width / (float)height, 0.1f, 100));
             _vertexArray.Bind();
             _vertexArray.BindElementBuffer(_shape.IndexBuffer);
@@ -51,7 +52,7 @@ namespace UI.DemoApp.Render
             _vertexArray.BindAttribute(simpleProgram.InColor, _shape.WireframeColorBuffer);
             simpleProgram.ModelViewProjectionMatrix.Set(
                 Matrix4.CreateTranslation(_position + Vector3.UnitZ * 0.0001f) *
-                Matrix4.LookAt(camera.State.Position, Vector3.UnitZ * -8, camera.State.Up) *
+                Matrix4.LookAt(camera.State.Position, origin, camera.State.Up) *
                 Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, width / (float)height, 0.1f, 100));
             _vertexArray.DrawElements(_shape.DefaultMode, _shape.IndexBuffer.ElementCount);
             _vertexArray.BindAttribute(simpleProgram.InColor, _shape.ColorBuffer);

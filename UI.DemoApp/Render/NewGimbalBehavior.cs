@@ -23,5 +23,14 @@ namespace UI.DemoApp.Render
             Vector3.Cross(state.LookAt, leftRight, out state.Up);
             state.Up.Normalize();
         }
+
+        public void MousePan(CameraState state, Vector2 delta)
+        {
+            var leftRight = Vector3.Cross(state.Up, state.LookAt).Normalized();
+            var totalTranslation = leftRight * delta.X * .05f + state.Up * delta.Y * .05f;
+
+            Origin += totalTranslation;
+            state.Position += totalTranslation;
+        }
     }
 }

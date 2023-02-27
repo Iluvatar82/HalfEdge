@@ -13,9 +13,9 @@ namespace UI.DemoApp.Models.Shapes
         private readonly Color DefaultColor = Color.White;
         private readonly Color DefaultWireframeColor = Color.OrangeRed;
 
-        public MeshShape(List<Vertex> vertices, List<List<int>> indices, Color? color = null, Color? wireframeColor = null)
+        public MeshShape(List<Vertex> vertices, List<List<int>> indices, Color? color = null, Color? wireframeColor = null, PrimitiveType? primitiveType = null)
         {
-            DefaultMode = PrimitiveType.Triangles;
+            DefaultMode = primitiveType ?? PrimitiveType.Triangles;
 
             Vertices = vertices.Select(v => v.ToVector3()).ToArray();
             Indices = indices.SelectMany(t => t.Select(i => (uint)i)).ToArray();

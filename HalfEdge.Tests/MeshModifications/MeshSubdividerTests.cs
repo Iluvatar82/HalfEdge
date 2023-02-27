@@ -4,7 +4,7 @@ using Models.Base;
 namespace HalfEdge.Tests.MeshModifications
 {
     [TestFixture]
-    public class SubdivideMesh_ModifierTests
+    public class MeshSubdividerTests
     {
         [SetUp]
         public void SetUp()
@@ -18,7 +18,7 @@ namespace HalfEdge.Tests.MeshModifications
             var indices = new List<List<int>> { new List<int> { 2, 1, 0 }, new List<int> { 0, 1, 3 }, new List<int> { 1, 2, 3 }, new List<int> { 2, 0, 3 } };
             var mesh = MeshFactory.CreateMesh(vertices, indices);
 
-            var meshModifier = new SubdivideMesh_Modifier();
+            var meshModifier = new MeshSubdivider();
             Assert.Throws<ArgumentOutOfRangeException>(() => meshModifier.Modify(mesh));
         }
 
@@ -30,7 +30,7 @@ namespace HalfEdge.Tests.MeshModifications
             var mesh = MeshFactory.CreateMesh(vertices, indices);
 
 
-            var meshModifier = new SubdivideMesh_Modifier()
+            var meshModifier = new MeshSubdivider()
             {
                 SubdivisionType = Enumerations.SubdivisionType.Loop,
                 Iterations = 1
@@ -60,7 +60,7 @@ namespace HalfEdge.Tests.MeshModifications
             var mesh = MeshFactory.CreateMesh(vertices, indices);
 
 
-            var meshModifier = new SubdivideMesh_Modifier()
+            var meshModifier = new MeshSubdivider()
             {
                 SubdivisionType = Enumerations.SubdivisionType.Loop,
                 Iterations = 1

@@ -39,6 +39,7 @@ namespace Models.Base
             _z = valueFunction(existing.Z);
             _length = valueFunction(existing.Length);
         }
+
         public Vector(Vertex first, Vertex second, Func<double, double, double> valueFunction)
             : this()
         {

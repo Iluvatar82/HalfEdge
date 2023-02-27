@@ -4,7 +4,7 @@ using Models;
 
 namespace HalfEdge.MeshModifications
 {
-    public class TriangulateMesh_Modifier : MeshModifyBase
+    public class MeshTriangulator : MeshModifyBase
     {
         protected override void CreateOutputMesh()
         {

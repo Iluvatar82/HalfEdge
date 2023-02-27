@@ -89,7 +89,7 @@ namespace Models.Tests.Base
             var vertex2 = new Vertex(-1, 4, 9);
             var vertex3 = new Vertex(3, 2, -1);
 
-            var vertex = new Vertex((vl) => vl.Sum(), vertex1, vertex2, vertex3);
+            var vertex = new Vertex((vl) => vl.Sum(), new[] { vertex1, vertex2, vertex3 });
 
             Assert.Multiple(() =>
             {
