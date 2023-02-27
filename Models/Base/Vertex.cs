@@ -71,7 +71,16 @@ namespace Models.Base
             _z = valueFunction(first.Z, second.Z);
         }
 
-        public Vertex(Func<IEnumerable<double>, double> aggregateFunction, params Vertex[] vertices) : this()
+        public Vertex(Vertex existing, Func<double, double> valueFunction)
+            : this()
+        {
+            _x = valueFunction(existing.X);
+            _y = valueFunction(existing.Y);
+            _z = valueFunction(existing.Z);
+        }
+
+
+        public Vertex(Func<IEnumerable<double>, double> aggregateFunction, IEnumerable<Vertex> vertices) : this()
         {
             _x = aggregateFunction(vertices.Select(v => v.X));
             _y = aggregateFunction(vertices.Select(v => v.Y));
@@ -89,7 +98,14 @@ namespace Models.Base
         public static Vertex Minimum(Vertex first, Vertex second) => new(first, second, Math.Min);
         public static Vertex Maximum(Vertex first, Vertex second) => new(first, second, Math.Max);
         public static Vertex Average(Vertex first, Vertex second) => new(first, second, (f, s) => (f + s) * .5);
-        public static Vertex Average(params Vertex[] vertices) => new((v) => v.Average(), vertices);
+        public static Vertex Average(IEnumerable<Vertex> vertices) => new((v) => v.Average(), vertices);
+        public static Vertex Sum(IEnumerable<Vertex> vertices) => new((v) => v.Sum(), vertices);
+
+        public static Vertex operator -(Vertex vertex, Vertex other) => new(vertex, other, (f, s) => f - s);
+        public static Vertex operator +(Vertex vertex, Vertex other) => new(vertex, other, (f, s) => f + s);
+        public static Vertex operator *(Vertex vertex, double factor) => new(vertex, (v) => v * factor);
+        public static Vertex operator *(double factor, Vertex vertex) => vertex * factor;
+        public static Vertex operator /(Vertex vertex, double divisor) { divisor.Satisfies(d => d != 0); return new(vertex, (v) => v / divisor); }
 
         public static implicit operator Vertex(Vector vector) => new(vector.X, vector.Y, vector.Z);
         public static implicit operator Vertex(Vertex2D vertex) => new(vertex.X, vertex.Y, 0);
