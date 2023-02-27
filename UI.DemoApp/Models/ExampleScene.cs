@@ -17,12 +17,12 @@ namespace UI.DemoApp.Models
     public class ExampleScene
     {
         private Camera _camera;
-        private CameraBehavior _cameraBehavior;
+        private NewGimbalBehavior _cameraBehavior;
         private SimpleProgram _program;
         private List<ShapeHelper> _shapeHelpers;
         public int TriangleCount;
 
-        public CameraBehavior CameraBehavior { get => _cameraBehavior; set => _cameraBehavior = value; }
+        public NewGimbalBehavior CameraBehavior { get => _cameraBehavior; set => _cameraBehavior = value; }
 
 
         public ExampleScene()
@@ -88,14 +88,16 @@ namespace UI.DemoApp.Models
             _program.Use();
 
             foreach (var shapeHelper in _shapeHelpers)
-                shapeHelper.Render(width, height, _camera);
+                shapeHelper.Render(width, height, _camera, _cameraBehavior.Origin);
         }
 
-        internal void HandleViewChange(Vector2 delta, float scale)
+        internal void HandleViewChange(Vector2 delta, float scale, bool pan = false)
         {
-            if (delta != Vector2.Zero)
+            if (delta != Vector2.Zero && !pan)
                 _cameraBehavior.MouseMove(_camera.State, delta);
-
+            else if (delta != Vector2.Zero && pan)
+                _cameraBehavior.MousePan(_camera.State, delta);
+            
             if (scale != 1f)
                 _cameraBehavior.MouseWheelChanged(_camera.State, scale);
         }

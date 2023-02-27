@@ -59,6 +59,12 @@ namespace UI.DemoApp
                 _scene.HandleViewChange(delta * .01f / MathHelper.Pi, 1f);
                 ViewControl.InvalidateVisual();
             }
+            else if (e.MiddleButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
+                var delta = currentPosition - _mousePosition;
+                _scene.HandleViewChange(delta / MathHelper.Pi, 1f, true);
+                ViewControl.InvalidateVisual();
+            }
 
             _mousePosition = currentPosition;
         }
