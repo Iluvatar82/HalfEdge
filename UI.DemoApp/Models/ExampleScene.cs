@@ -63,7 +63,7 @@ namespace UI.DemoApp.Models
 
             var subdivisionModifier = new MeshSubdivider()
             {
-                Iterations = 7,
+                Iterations = 5,
                 SubdivisionType = HalfEdge.Enumerations.SubdivisionType.Loop
             };
 
