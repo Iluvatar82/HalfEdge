@@ -20,16 +20,16 @@ namespace UI.DemoApp.Models
         private NewGimbalBehavior _cameraBehavior;
         private SimpleProgram _program;
         private List<ShapeHelper> _shapeHelpers;
-        public int TriangleCount;
+        public int PrimitiveCount { get; private set; }
 
         public NewGimbalBehavior CameraBehavior { get => _cameraBehavior; set => _cameraBehavior = value; }
 
 
         public ExampleScene()
         {
-            TriangleCount = 0;
+            PrimitiveCount = 0;
             var distance = 8f;
-            var offset = 1f;
+            var offset = 1.25f;
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -51,32 +51,40 @@ namespace UI.DemoApp.Models
             _program = ProgramFactory.Create<SimpleProgram>();
             _program.Use();
 
-            var vertices = new List<Vertex> { new Vertex(-1, -1, 0), new Vertex(1, -1, 0), new Vertex(0, 1, 0) };
-            var indices = new List<List<int>> { new List<int> { 0, 1, 2 } };
-            _shapeHelpers.Add(new ShapeHelper(new MeshShape(vertices, indices, Color.LightGray, Color.DarkGreen), new Vector3(-offset, -offset, -distance), _program));
-            var subdivisionModifier = new MeshSubdivider()
-            {
-                Iterations = 5,
-                SubdivisionType = HalfEdge.Enumerations.SubdivisionType.CatmullClark
+            var vertices = new List<Vertex> {
+                new Vertex(-1, -1, -1), new Vertex( 1, -1, -1), new Vertex( 1,  1, -1), new Vertex(-1,  1, -1),
+                new Vertex(-1, -1,  1), new Vertex( 1, -1,  1), new Vertex( 1,  1,  1), new Vertex(-1,  1,  1)
+            };
+            var indices = new List<List<int>> {
+                new List<int> { 3, 2, 1, 0 },
+                new List<int> { 0, 1, 5, 4 }, new List<int> { 1, 2, 6, 5 }, new List<int> { 2, 3, 7, 6 }, new List<int> { 3, 0, 4, 7 },
+                new List<int> { 4, 5, 6, 7 }
             };
 
-            var triangleMesh = MeshFactory.CreateMesh(vertices, indices);
-            subdivisionModifier.Modify(triangleMesh);
-            var subdividedTriangleMesh = subdivisionModifier.OutputMesh;
-            _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedTriangleMesh.Vertices.ToList(), subdividedTriangleMesh.Indices.ToList(), Color.LightGray, Color.DarkGreen, PrimitiveType.Quads), new Vector3(offset, -offset, -distance + 0.0001f), _program));
+            var subdivisionModifier = new MeshSubdivider()
+            {
+                Iterations = 7,
+                SubdivisionType = HalfEdge.Enumerations.SubdivisionType.Loop
+            };
 
-            vertices = new List<Vertex> { new Vertex(-1, 0, 0), new Vertex(1, 0, 0), new Vertex(0, 2, 0), new Vertex(0, 1, 2) };
-            indices = new List<List<int>> { new List<int> { 2, 1, 0 }, new List<int> { 0, 1, 3 }, new List<int> { 1, 2, 3 }, new List<int> { 2, 0, 3 } };
+            var baseMesh = MeshFactory.CreateMesh(vertices, indices);
+            var triangulator = new MeshTriangulator();
+            triangulator.Modify(baseMesh);
+            var triangulatedMesh = triangulator.OutputMesh;
+            _shapeHelpers.Add(new ShapeHelper(new MeshShape(triangulatedMesh.Vertices.ToList(), triangulatedMesh.Indices.ToList(), Color.LightGray, Color.DarkGreen, PrimitiveType.Triangles), new Vector3(-offset, offset, -distance), _program));
+            
+            subdivisionModifier.Modify(triangulatedMesh);
+            var subdividedBaseMesh = subdivisionModifier.OutputMesh;
+            _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedBaseMesh.Vertices.ToList(), subdividedBaseMesh.Indices.ToList(), Color.LightGray, Color.DarkGreen), new Vector3(-offset, -offset, -distance), _program));
 
-            _shapeHelpers.Add(new ShapeHelper(new MeshShape(vertices, indices), new Vector3(-offset, offset, -distance), _program));
-            subdivisionModifier.Iterations = 7;
-            subdivisionModifier.SubdivisionType = HalfEdge.Enumerations.SubdivisionType.Loop;
-
-            var shapeMesh = MeshFactory.CreateMesh(vertices, indices);
-            subdivisionModifier.Modify(shapeMesh);
+            _shapeHelpers.Add(new ShapeHelper(new MeshShape(vertices, indices, Color.LightGray, Color.DarkRed, PrimitiveType.Quads), new Vector3(offset, offset, -distance), _program));
+            
+            subdivisionModifier.SubdivisionType = HalfEdge.Enumerations.SubdivisionType.CatmullClark;
+            subdivisionModifier.Modify(baseMesh);
             var subdividedShapeMesh = subdivisionModifier.OutputMesh;
-            _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedShapeMesh.Vertices.ToList(), subdividedShapeMesh.Indices.ToList()), new Vector3(offset, offset, -distance + 0.0001f), _program));
-            TriangleCount = _shapeHelpers.Sum(sh => sh.TriangleCount);
+            _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedShapeMesh.Vertices.ToList(), subdividedShapeMesh.Indices.ToList(), Color.LightGray, Color.DarkRed, PrimitiveType.Quads), new Vector3(offset, -offset, -distance), _program));
+            
+            PrimitiveCount = _shapeHelpers.Sum(sh => sh.PrimitiveCount);
         }
 
         public void Render(int width, int height)
