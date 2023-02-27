@@ -15,7 +15,7 @@ namespace UI.DemoApp.Render
         private VertexArray _vertexArray;
         private Vector3 _position;
         public WireframeShape Shape => _shape;
-        public int TriangleCount => _shape.Indices.Length / 4;
+        public int PrimitiveCount { get; private set; }
 
         public ShapeHelper(WireframeShape shape, Vector3 position, Program program)
         {
@@ -33,6 +33,12 @@ namespace UI.DemoApp.Render
             _vertexArray.BindAttribute(simpleProgram.InPosition, _shape.VertexBuffer);
             _vertexArray.BindAttribute(simpleProgram.InColor, _shape.ColorBuffer);
             _vertexArray.BindElementBuffer(_shape.IndexBuffer);
+
+            PrimitiveCount = (_shape.DefaultMode) switch {
+                PrimitiveType.Triangles => _shape.Indices.Length / 3,
+                PrimitiveType.Quads => _shape.Indices.Length / 4,
+                _ => throw new System.NotImplementedException()
+            };
         }
 
         public void Render(int width, int height, Camera camera, Vector3 origin)

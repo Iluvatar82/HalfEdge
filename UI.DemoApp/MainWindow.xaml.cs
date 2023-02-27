@@ -20,7 +20,7 @@ namespace UI.DemoApp
             InitializeOpenGL();
 
             _scene = new ExampleScene();
-            Title = $"HalfEdge Demo - displaying {_scene.TriangleCount} Triangles...";
+            Title = $"HalfEdge Demo - displaying {_scene.PrimitiveCount} tringles and quads...";
         }
 
 

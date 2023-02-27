@@ -46,11 +46,13 @@ namespace HalfEdge.MeshModifications
             while (currentIteration++ < Iterations)
             {
                 var subdividedMeshVertices = _outputMesh.Vertices.Select(v => v with { HalfEdges = new List<Models.Base.HalfEdge>() }).ToList();
+                var vertexEdgeMidpoints = _outputMesh.Vertices.Select(v => Vertex.Average(v.VertexNeighbors)).ToList();
                 var existingVerticesCount = subdividedMeshVertices.Count;
                 var subdividedMeshIndices = new List<List<int>>();
                 var existingPolygons = _outputMesh.Polygons.ToList();
                 var existingPolygonCount = existingPolygons.Count;
-                var existingEdges = _outputMesh.Edges.Select(e => (Edge: e, StartIndex: _outputMesh.GetVertexIndex(e.Start), EndIndex: _outputMesh.GetVertexIndex(e.End))).ToList();
+                var existingEdges = _outputMesh.Edges.ToList();
+
                 var polygonIndexInformation = new Dictionary<Polygon, int>();
                 var halfEdgeIndexInformation = new Dictionary<(Vertex Start, Vertex End), int>();
                 for (var idx = 0; idx < existingPolygons.Count; idx++)
@@ -63,18 +65,18 @@ namespace HalfEdge.MeshModifications
                 for (var idx = 0; idx < existingEdges.Count; idx++)
                 {
                     var edge = existingEdges[idx];
-                    halfEdgeIndexInformation.Add((edge.Edge.Start, edge.Edge.End), idx + existingVerticesCount + existingPolygonCount);
-                    halfEdgeIndexInformation.Add((edge.Edge.End, edge.Edge.Start), idx + existingVerticesCount + existingPolygonCount);
-                    if (edge.Edge.IsBorder)
-                        subdividedMeshVertices.Add(Vertex.Average(edge.Edge.Start, edge.Edge.End));
+                    halfEdgeIndexInformation.Add((edge.Start, edge.End), idx + existingVerticesCount + existingPolygonCount);
+                    halfEdgeIndexInformation.Add((edge.End, edge.Start), idx + existingVerticesCount + existingPolygonCount);
+                    if (edge.IsBorder)
+                        subdividedMeshVertices.Add(Vertex.Average(edge.Start, edge.End));
                     else
                     {
-                        edge.Edge.Polygon.NotNull();
-                        edge.Edge.Opposite.NotNull();
-                        edge.Edge.Opposite.Polygon.NotNull();
+                        edge.Polygon.NotNull();
+                        edge.Opposite.NotNull();
+                        edge.Opposite.Polygon.NotNull();
 
-                        var directVertices = new[] { edge.Edge.Start, edge.Edge.End };
-                        var indirectVertices = new[] { subdividedMeshVertices[polygonIndexInformation[edge.Edge.Polygon]], subdividedMeshVertices[polygonIndexInformation[edge.Edge.Opposite.Polygon]] };
+                        var directVertices = new[] { edge.Start, edge.End };
+                        var indirectVertices = new[] { subdividedMeshVertices[polygonIndexInformation[edge.Polygon]], subdividedMeshVertices[polygonIndexInformation[edge.Opposite.Polygon]] };
 
                         subdividedMeshVertices.Add((directVertices[0] + directVertices[1]) * .375 + (indirectVertices[0] + indirectVertices[1]) * .125);
                     };
@@ -96,6 +98,7 @@ namespace HalfEdge.MeshModifications
                 }
 
                 _outputMesh = MeshFactory.CreateMesh(subdividedMeshVertices, subdividedMeshIndices);
+                
                 for (var vIdx = 0; vIdx < existingVerticesCount; vIdx++)
                 {
                     var vertex = _outputMesh.Vertices[vIdx];
@@ -110,9 +113,8 @@ namespace HalfEdge.MeshModifications
                     else
                     {
                         var newPolygonPoints = vertex.Polygons.Select(p => p.Vertices.ElementAt(2)).ToList();
-                        var originalEdgeMidpoints = existingEdges.Where(ee => ee.StartIndex == vIdx || ee.EndIndex == vIdx).Select(ee => (ee.Edge.Start + ee.Edge.End) / 2);
-                        originalEdgeMidpoints.HasElementCount(c => c > 0);
-                        var newVertex = (Vertex.Average(newPolygonPoints) + 2 * Vertex.Average(originalEdgeMidpoints) + vertex * (newPolygonPoints.Count - 3)) / newPolygonPoints.Count;
+                        var originalEdgeMidpoint = vertexEdgeMidpoints[vIdx];
+                        var newVertex = (Vertex.Average(newPolygonPoints) + 2 * originalEdgeMidpoint + vertex * (newPolygonPoints.Count - 3)) / newPolygonPoints.Count;
                         vertex.X = newVertex.X;
                         vertex.Y = newVertex.Y;
                         vertex.Z = newVertex.Z;
