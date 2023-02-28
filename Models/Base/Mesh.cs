@@ -103,6 +103,8 @@ namespace Models.Base
 
         public virtual void RemoveVertices(IEnumerable<Vertex> vertices) => vertices.ForEach(RemoveVertex);
 
+        public virtual Vertex GetVertex(int index) => _vertices[index];
+
         public virtual void AddIndices(List<int> indices) => _indices.Add(indices);
 
         public virtual void AddIndices(List<List<int>> indicesList) => _indices.AddRange(indicesList);
@@ -111,11 +113,13 @@ namespace Models.Base
 
         public virtual void RemoveIndices(List<List<int>> indicesList) => indicesList.ForEach(RemoveIndices);
 
+        public virtual List<int> GetIndices(int index) => _indices[index];
+
         public virtual void AddHalfEdge(HalfEdge halfEdge) => _halfEdges.Add(halfEdge);
 
         public virtual void AddHalfEdges(IEnumerable<HalfEdge> halfEdges) => _halfEdges.AddRange(halfEdges);
 
-        public virtual void RemoveHalfEdge(HalfEdge halfEdge) => _halfEdges.Remove(halfEdge);
+        public virtual void RemoveHalfEdge(HalfEdge halfEdge) => _halfEdges.RemoveAll(h => h.Start == halfEdge.Start && h.End == halfEdge.End);
 
         public virtual void RemoveHalfEdges(IEnumerable<HalfEdge> halfEdges) => halfEdges.ForEach(RemoveHalfEdge);
 
@@ -126,6 +130,8 @@ namespace Models.Base
         public virtual void RemovePolygon(Polygon polygon) => _polygons.Remove(polygon);
 
         public virtual void RemovePolygons(IEnumerable<Polygon> polygons) => polygons.ForEach(RemovePolygon);
+
+        public virtual Polygon GetPolygon(int index) => _polygons[index];
 
         public int GetVertexIndex(Vertex vertex, double epsilon = Constants.Epsilon)
         {

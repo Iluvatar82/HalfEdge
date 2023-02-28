@@ -63,7 +63,7 @@ namespace UI.DemoApp.Models
 
             var subdivisionModifier = new MeshSubdivider()
             {
-                Iterations = 5,
+                Iterations = 8,
                 SubdivisionType = HalfEdge.Enumerations.SubdivisionType.Loop
             };
 
@@ -76,7 +76,7 @@ namespace UI.DemoApp.Models
             subdivisionModifier.Modify(triangulatedMesh);
             var subdividedBaseMesh = subdivisionModifier.OutputMesh;
             _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedBaseMesh.Vertices.ToList(), subdividedBaseMesh.Indices.ToList(), Color.LightGray, Color.DarkGreen), new Vector3(-offset, -offset, -distance), _program));
-
+            
             _shapeHelpers.Add(new ShapeHelper(new MeshShape(vertices, indices, Color.LightGray, Color.DarkRed, PrimitiveType.Quads), new Vector3(offset, offset, -distance), _program));
             
             subdivisionModifier.SubdivisionType = HalfEdge.Enumerations.SubdivisionType.CatmullClark;

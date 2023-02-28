@@ -56,19 +56,17 @@ namespace Models.Base
         public bool IsBorder => Opposite is null;
 
 
-        public HalfEdge()
+        public HalfEdge(Vertex start, Vertex end)
         {
-            _start = new Vertex();
-            _end = new Vertex();
-        }
-
-        public HalfEdge(Vertex start, Vertex end, HalfEdge? opposite = default) : this()
-        {
-            start.NotNull();
-            end.NotNull();
-
             Start = start;
             End = end;
+
+            _start.NotNull();
+            _end.NotNull();
+        }
+
+        public HalfEdge(Vertex start, Vertex end, HalfEdge opposite) : this(start, end)
+        {
             Opposite = opposite;
         }
 

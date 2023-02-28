@@ -25,8 +25,13 @@ namespace HalfEdge
             var pointCount = polygonIndices.Count;
             for (var i = 0; i < pointCount; i++)
             {
-                var startVertex = mesh.Vertices[polygonIndices[i]];
-                var endVertex = mesh.Vertices[polygonIndices[(i + 1) % pointCount]];
+                var startIndex = i;
+                var nextIndex = startIndex + 1;
+                if (nextIndex == pointCount)
+                    nextIndex = 0;
+
+                var startVertex = mesh.GetVertex(polygonIndices[startIndex]);
+                var endVertex = mesh.GetVertex(polygonIndices[nextIndex]);
 
                 mesh.BorderHalfEdgeDictionary.TryGetValue((endVertex, startVertex), out var existingOpposite);
                 if (existingOpposite != null)

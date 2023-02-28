@@ -15,11 +15,16 @@ namespace Models
             init
             {
                 _halfEdges = value;
-                for (var i = 0; i < _halfEdges.Count; i++)
+                var count = _halfEdges.Count;
+                for (var i = 0; i < count; i++)
                 {
-                    _halfEdges[i].Polygon = this;
-                    var next = (i + 1) % _halfEdges.Count;
-                    _halfEdges[i].Next = _halfEdges[next];
+                    var index = i;
+                    var nextIndex = i + 1;
+                    if (nextIndex == count)
+                        nextIndex = 0;
+
+                    _halfEdges[index].Polygon = this;
+                    _halfEdges[index].Next = _halfEdges[nextIndex];
                 }
             }
         }
@@ -39,12 +44,7 @@ namespace Models
         public bool IsBorder => !_halfEdges.Any() || _halfEdges.Any(h => h.IsBorder);
 
 
-        public Polygon()
-        {
-            _halfEdges = new List<HalfEdge>();
-        }
-
-        public Polygon(List<Vertex> vertices) : this()
+        public Polygon(List<Vertex> vertices)
         {
             vertices.NotNullOrEmpty();
             vertices.HasElementCount(e => e > 2);
@@ -63,14 +63,16 @@ namespace Models
 
             halfEdges.Add((halfEdges.Last().End, halfEdges.First().Start));
             HalfEdges = halfEdges;
+            _halfEdges.NotNull();
         }
 
-        public Polygon(IEnumerable<HalfEdge> halfEdges) : this()
+        public Polygon(IEnumerable<HalfEdge> halfEdges)
         {
             halfEdges.NotNullOrEmpty();
             halfEdges.Select(h => (h.Start, h.End)).FormsLoop();
 
-            HalfEdges = new List<HalfEdge>(halfEdges);
+            HalfEdges = halfEdges.ToList();
+            _halfEdges.NotNull();
         }
 
         public void Deconstruct(out IEnumerable<Vertex> vertices, out IEnumerable<HalfEdge> halfEdges)
