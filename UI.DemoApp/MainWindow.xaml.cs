@@ -22,7 +22,7 @@ namespace UI.DemoApp
             _scene = new ExampleScene();
             Title = $"HalfEdge Demo - displaying {_scene.PrimitiveCount} tringles and quads...";
 
-            Close();
+            //Close();
         }
 
 
