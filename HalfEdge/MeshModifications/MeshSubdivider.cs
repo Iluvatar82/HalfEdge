@@ -39,36 +39,51 @@ namespace HalfEdge.MeshModifications
 
         private void CreateCatmullClarkflySubdivision()
         {
-            _inputMesh.PolygonCount.Satisfies(c => c == _inputMesh.Indices.Count);
+            _inputMesh.PolygonCount.Satisfies(c => c == _inputMesh.IndicesCount);
 
             _outputMesh = _inputMesh with { };
             var currentIteration = 0;
             while (currentIteration++ < Iterations)
             {
-                var subdividedMeshVertices = _outputMesh.Vertices.Select(v => v with { HalfEdges = new List<Models.Base.HalfEdge>() }).ToList();
-                var vertexEdgeMidpoints = _outputMesh.Vertices.Select(v => Vertex.Average(v.VertexNeighbors.Select(n => (n + v) / 2))).ToList();
-                var existingVerticesCount = subdividedMeshVertices.Count;
-                var subdividedMeshIndices = new List<List<int>>();
-                var existingPolygons = _outputMesh.Polygons.ToList();
-                var existingPolygonCount = existingPolygons.Count;
+                var existingVertexCount = _outputMesh.VertexCount;
+                var existingPolygonCount = _outputMesh.PolygonCount;
                 var existingEdges = _outputMesh.Edges.ToList();
+                var existingPolygons = _outputMesh.Polygons.ToList();
+                var halfEdgeIndexInformation = new Dictionary<(Vertex Start, Vertex End), int>(existingEdges.Count * 2);
+                var subdividedMeshVertices = new Vertex[_outputMesh.VertexCount + existingEdges.Count + existingPolygons.Count];
+                var subdividedMeshIndices = new List<int>[_outputMesh.HalfEdgeCount];
+                var vertexEdgeMidpoints = _outputMesh.Vertices.Select(v => Vertex.Average(v.VertexNeighbors.Select(n => (n + v) / 2))).ToArray();
 
-                var polygonIndexInformation = new Dictionary<Polygon, int>();
-                var halfEdgeIndexInformation = new Dictionary<(Vertex Start, Vertex End), int>();
+                _outputMesh.Vertices.ForEach((v, i) => subdividedMeshVertices[i] = v with { HalfEdges = new List<Models.Base.HalfEdge>() });
+
+                var polygonIndexInformation = new Dictionary<Polygon, int>(existingPolygons.Count);
+                var newPolygonIndices = _outputMesh.Polygons.Select(p => p.HalfEdges.Count).ToArray();
+
                 for (var idx = 0; idx < existingPolygons.Count; idx++)
                 {
                     var polygon = existingPolygons[idx];
-                    subdividedMeshVertices.Add(Vertex.Average(polygon.Vertices));
-                    polygonIndexInformation.Add(polygon, idx + existingVerticesCount);
+                    polygonIndexInformation.Add(polygon, idx + existingVertexCount);
                 }
 
                 for (var idx = 0; idx < existingEdges.Count; idx++)
                 {
+                    halfEdgeIndexInformation.Add((existingEdges[idx].Start, existingEdges[idx].End), idx + existingVertexCount + existingPolygonCount);
+                    halfEdgeIndexInformation.Add((existingEdges[idx].End, existingEdges[idx].Start), idx + existingVertexCount + existingPolygonCount);
+                }
+
+                //Parallel.For(0, existingPolygons.Count, (idx) =>
+                for (var idx = 0; idx < existingPolygons.Count; idx++)
+                {
+                    subdividedMeshVertices[existingVertexCount + idx] = Vertex.Average(existingPolygons[idx].Vertices);
+                }
+                //);
+
+                //Parallel.For(0, existingEdges.Count, (idx) =>
+                for (var idx = 0; idx < existingEdges.Count; idx++)
+                {
                     var edge = existingEdges[idx];
-                    halfEdgeIndexInformation.Add((edge.Start, edge.End), idx + existingVerticesCount + existingPolygonCount);
-                    halfEdgeIndexInformation.Add((edge.End, edge.Start), idx + existingVerticesCount + existingPolygonCount);
                     if (edge.IsBorder)
-                        subdividedMeshVertices.Add(Vertex.Average(edge.Start, edge.End));
+                        subdividedMeshVertices[existingVertexCount + existingPolygons.Count + idx] = Vertex.Average(edge.Start, edge.End);
                     else
                     {
                         edge.Polygon.NotNull();
@@ -78,28 +93,33 @@ namespace HalfEdge.MeshModifications
                         var directVertices = new[] { edge.Start, edge.End };
                         var indirectVertices = new[] { subdividedMeshVertices[polygonIndexInformation[edge.Polygon]], subdividedMeshVertices[polygonIndexInformation[edge.Opposite.Polygon]] };
 
-                        subdividedMeshVertices.Add((directVertices[0] + directVertices[1]) * .375 + (indirectVertices[0] + indirectVertices[1]) * .125);
-                    };
+                        subdividedMeshVertices[existingVertexCount + existingPolygons.Count + idx] = (directVertices[0] + directVertices[1]) * .375 + (indirectVertices[0] + indirectVertices[1]) * .125;
+                    }
                 }
+                //);
 
-                for (var idx = 0; idx < _outputMesh.PolygonCount; idx++)
+                //Parallel.For(0, existingPolygonCount, (idx) =>
+                for (var idx = 0; idx < existingPolygonCount; idx++)
                 {
+                    var polygonFirstIndex = currentIteration == 1 ? newPolygonIndices[..idx].Sum() : idx * 4;
                     var indices = _outputMesh.GetIndices(idx);
                     var polygon = _outputMesh.GetPolygon(idx);
                     var newPolygonIndex = polygonIndexInformation[polygon];
                     var newEdgeIndices = polygon.HalfEdges.Select(h => halfEdgeIndexInformation[(h.Start, h.End)]).ToList();
 
-                    for(var edgeIndex = 0;  edgeIndex < newEdgeIndices.Count; edgeIndex++)
+                    for (var edgeIndex = 0; edgeIndex < newEdgeIndices.Count; edgeIndex++)
                     {
                         var newEdgeIndexStart = newEdgeIndices[edgeIndex];
                         var newEdgeIndexEnd = newEdgeIndices[(edgeIndex + newEdgeIndices.Count - 1) % newEdgeIndices.Count];
-                        subdividedMeshIndices.Add(new List<int> { indices[edgeIndex], newEdgeIndexStart, newPolygonIndex, newEdgeIndexEnd });
+                        subdividedMeshIndices[polygonFirstIndex + edgeIndex] = new List<int> { indices[edgeIndex], newEdgeIndexStart, newPolygonIndex, newEdgeIndexEnd };
                     }
                 }
+                //);
 
                 _outputMesh = MeshFactory.CreateMesh(subdividedMeshVertices, subdividedMeshIndices);
-                
-                for (var vIdx = 0; vIdx < existingVerticesCount; vIdx++)
+
+                //Parallel.For(0, existingVertexCount, (vIdx) =>
+                for (var vIdx = 0; vIdx < existingVertexCount; vIdx++)
                 {
                     var vertex = _outputMesh.GetVertex(vIdx);
                     if (vertex.IsBorder)
@@ -120,13 +140,14 @@ namespace HalfEdge.MeshModifications
                         vertex.Z = newVertex.Z;
                     }
                 }
+                //);
             }
         }
 
         private void CreateModifiedButterflySubdivision()
         {
             _inputMesh.Indices.ForEach(indices => indices.HasElementCount(c => c == 4));
-            _inputMesh.PolygonCount.Satisfies(c => c == _inputMesh.Indices.Count);
+            _inputMesh.PolygonCount.Satisfies(c => c == _inputMesh.IndicesCount);
 
             _outputMesh = _inputMesh with { };
             var currentIteration = 0;
@@ -139,24 +160,32 @@ namespace HalfEdge.MeshModifications
         private void CreateLoopSubdivision()
         {
             _inputMesh.Indices.ForEach(indices => indices.HasElementCount(c => c == 3));
-            _inputMesh.PolygonCount.Satisfies(c => c == _inputMesh.Indices.Count);
+            _inputMesh.PolygonCount.Satisfies(c => c == _inputMesh.IndicesCount);
 
             _outputMesh = _inputMesh with { };
             var currentIteration = 0;
             while (currentIteration++ < Iterations)
             {
-                var subdividedMeshVertices = _outputMesh.Vertices.Select(v => v with { HalfEdges = new List<Models.Base.HalfEdge>() }).ToList();
-                var existingVerticesCount = subdividedMeshVertices.Count;
-                var subdividedMeshIndices = new List<List<int>>();
+                var existingVertexCount = _outputMesh.VertexCount;
                 var existingEdges = _outputMesh.Edges.ToList();
-                var halfEdgeIndexInformation = new Dictionary<(Vertex Start, Vertex End), int>();
+                var halfEdgeIndexInformation = new Dictionary<(Vertex Start, Vertex End), int>(existingEdges.Count * 2);
+                var subdividedMeshVertices = new Vertex[existingVertexCount + existingEdges.Count];
+                var subdividedMeshIndices = new List<int>[_outputMesh.PolygonCount * 4];
+
+                _outputMesh.Vertices.ForEach((v, i) => subdividedMeshVertices[i] = v with { HalfEdges = new List<Models.Base.HalfEdge>() });
+
+                for (var idx = 0; idx < existingEdges.Count; idx++)
+                {
+                    halfEdgeIndexInformation.Add((existingEdges[idx].Start, existingEdges[idx].End), idx + existingVertexCount);
+                    halfEdgeIndexInformation.Add((existingEdges[idx].End, existingEdges[idx].Start), idx + existingVertexCount);
+                }
+
+                //Parallel.For(0, existingEdges.Count, (idx) =>
                 for (var idx = 0; idx < existingEdges.Count; idx++)
                 {
                     var edge = existingEdges[idx];
-                    halfEdgeIndexInformation.Add((edge.Start, edge.End), idx + existingVerticesCount);
-                    halfEdgeIndexInformation.Add((edge.End, edge.Start), idx + existingVerticesCount);
                     if (edge.IsBorder)
-                        subdividedMeshVertices.Add(Vertex.Average(edge.Start, edge.End));
+                        subdividedMeshVertices[existingVertexCount + idx] = Vertex.Average(edge.Start, edge.End);
                     else
                     {
                         edge.Next.NotNull();
@@ -166,10 +195,12 @@ namespace HalfEdge.MeshModifications
                         var directVertices = new[] { edge.Start, edge.End };
                         var indirectVertices = new[] { edge.Next.End, edge.Opposite.Next.End };
 
-                        subdividedMeshVertices.Add((directVertices[0] + directVertices[1]) * .375 + (indirectVertices[0] + indirectVertices[1]) * .125);
+                        subdividedMeshVertices[existingVertexCount + idx] = (directVertices[0] + directVertices[1]) * .375 + (indirectVertices[0] + indirectVertices[1]) * .125;
                     };
                 }
+                //);
 
+                //Parallel.For(0, _outputMesh.PolygonCount, (idx) =>
                 for (var idx = 0; idx < _outputMesh.PolygonCount; idx++)
                 {
                     var indices = _outputMesh.GetIndices(idx);
@@ -177,21 +208,23 @@ namespace HalfEdge.MeshModifications
                     var newIndices = polygon.HalfEdges.Select(h => halfEdgeIndexInformation[(h.Start, h.End)]).ToList();
 
                     var triangleIndices = new List<int> { indices[0], newIndices[0], newIndices[2] };
-                    subdividedMeshIndices.Add(triangleIndices);
+                    subdividedMeshIndices[idx * 4] = triangleIndices;
 
                     triangleIndices = new List<int> { indices[1], newIndices[1], newIndices[0] };
-                    subdividedMeshIndices.Add(triangleIndices);
+                    subdividedMeshIndices[idx * 4 + 1] = triangleIndices;
 
                     triangleIndices = new List<int> { indices[2], newIndices[2], newIndices[1] };
-                    subdividedMeshIndices.Add(triangleIndices);
+                    subdividedMeshIndices[idx * 4 + 2] = triangleIndices;
 
                     triangleIndices = new List<int> { newIndices[0], newIndices[1], newIndices[2] };
-                    subdividedMeshIndices.Add(triangleIndices);
+                    subdividedMeshIndices[idx * 4 + 3] = triangleIndices;
                 }
+                //);
 
                 _outputMesh = MeshFactory.CreateMesh(subdividedMeshVertices, subdividedMeshIndices);
 
-                for (var vIdx = 0; vIdx < existingVerticesCount; vIdx++)
+                //Parallel.For(0, existingVertexCount, (vIdx) =>
+                for (var vIdx = 0; vIdx < existingVertexCount; vIdx++)
                 {
                     var vertex = _outputMesh.GetVertex(vIdx) with { };
                     var triangles = subdividedMeshIndices.Where(il => il.Any(i => i == vIdx));
@@ -219,6 +252,7 @@ namespace HalfEdge.MeshModifications
                         _outputMesh.UpdateVertex(vertex, vIdx);
                     }
                 }
+                //);
             }
         }
     }
