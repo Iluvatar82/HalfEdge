@@ -66,7 +66,7 @@ namespace HalfEdge
                 if (vertexIndex[i].Index > -1)
                     continue;
 
-                vertexIndex[i] = (vertexIndex[i].Vertex, mesh.Vertices.Count);
+                vertexIndex[i] = (vertexIndex[i].Vertex, mesh.VertexCount);
                 mesh.AddVertex(vertexIndex[i].Vertex);
             }
 

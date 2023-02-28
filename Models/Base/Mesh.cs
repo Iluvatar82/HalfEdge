@@ -49,6 +49,9 @@ namespace Models.Base
             }
         }
         public bool IsOpenMesh => !_halfEdges.Any() || _halfEdges.Any(h => h.Opposite is null);
+        public int VertexCount => _vertices.Count;
+        public int IndicesCount => _indices.Count;
+        public int HalfEdgeCount => _halfEdges.Count;
         public int PolygonCount => _polygons.Count;
         public int EdgeCount => _halfEdges.Count(h => h.Opposite is not null) / 2 + _halfEdges.Count(h => h.Opposite is null);
         public IEnumerable<HalfEdge> Edges
@@ -83,7 +86,7 @@ namespace Models.Base
             _indices = indices;
             _halfEdges = new List<HalfEdge>();
             _borderHalfEdges = new Dictionary<(Vertex Start, Vertex End), HalfEdge>();
-            _polygons = new List<Polygon>();
+            _polygons = new List<Polygon>(indices.Count);
         }
 
 

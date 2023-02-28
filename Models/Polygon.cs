@@ -1,4 +1,5 @@
 ﻿using Models.Base;
+using System;
 using Validation;
 
 namespace Models
@@ -9,25 +10,7 @@ namespace Models
 
 
         public IEnumerable<Vertex> Vertices => _halfEdges.Select(h => h.Start);
-        public List<HalfEdge> HalfEdges
-        {
-            get => _halfEdges;
-            init
-            {
-                _halfEdges = value;
-                var count = _halfEdges.Count;
-                for (var i = 0; i < count; i++)
-                {
-                    var index = i;
-                    var nextIndex = i + 1;
-                    if (nextIndex == count)
-                        nextIndex = 0;
-
-                    _halfEdges[index].Polygon = this;
-                    _halfEdges[index].Next = _halfEdges[nextIndex];
-                }
-            }
-        }
+        public List<HalfEdge> HalfEdges => _halfEdges;
         public IEnumerable<Polygon> Neighbors
         {
             get
@@ -62,23 +45,45 @@ namespace Models
             }
 
             halfEdges.Add((halfEdges.Last().End, halfEdges.First().Start));
-            HalfEdges = halfEdges;
-            _halfEdges.NotNull();
+            _halfEdges = halfEdges;
+
+            for (var idx = 0; idx < _halfEdges.Count; idx++)
+            {
+                var nextIdx = idx + 1;
+                if (nextIdx == _halfEdges.Count)
+                    nextIdx = 0;
+
+                if (_halfEdges[idx].End != _halfEdges[nextIdx].Start)
+                    throw new ArgumentOutOfRangeException(nameof(halfEdges));
+
+                _halfEdges[idx].Polygon = this;
+                _halfEdges[idx].Next = _halfEdges[nextIdx];
+            }
         }
 
-        public Polygon(IEnumerable<HalfEdge> halfEdges)
+        public Polygon(List<HalfEdge> halfEdges)
         {
             halfEdges.NotNullOrEmpty();
-            halfEdges.Select(h => (h.Start, h.End)).FormsLoop();
 
-            HalfEdges = halfEdges.ToList();
-            _halfEdges.NotNull();
+            _halfEdges = halfEdges.ToList();
+            for (var idx = 0; idx < _halfEdges.Count; idx++)
+            {
+                var nextIdx = idx + 1;
+                if (nextIdx == _halfEdges.Count)
+                    nextIdx = 0;
+
+                if (_halfEdges[idx].End != _halfEdges[nextIdx].Start)
+                    throw new ArgumentOutOfRangeException(nameof(halfEdges));
+
+                _halfEdges[idx].Polygon = this;
+                _halfEdges[idx].Next = _halfEdges[nextIdx];
+            }
         }
 
         public void Deconstruct(out IEnumerable<Vertex> vertices, out IEnumerable<HalfEdge> halfEdges)
         {
             vertices = Vertices;
-            halfEdges = HalfEdges;
+            halfEdges = _halfEdges;
         }
 
 
