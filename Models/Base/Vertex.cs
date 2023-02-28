@@ -7,7 +7,7 @@ namespace Models.Base
         private double _x;
         private double _y;
         private double _z;
-        private List<HalfEdge> _halfEdges;
+        private List<HalfEdge> _halfEdges = new List<HalfEdge>();
 
 
         public double X { get => _x; set => _x = value; }
@@ -53,8 +53,6 @@ namespace Models.Base
             _x = default;
             _y = default;
             _z = default;
-
-            _halfEdges = new List<HalfEdge>();
         }
 
         public Vertex(double x, double y, double z) : this()
