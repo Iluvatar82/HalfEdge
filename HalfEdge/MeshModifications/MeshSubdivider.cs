@@ -3,7 +3,6 @@ using HalfEdge.Enumerations;
 using HalfEdge.MeshModifications.Base;
 using Models;
 using Models.Base;
-using System.Linq;
 using Validation;
 
 namespace HalfEdge.MeshModifications
@@ -146,14 +145,106 @@ namespace HalfEdge.MeshModifications
 
         private void CreateModifiedButterflySubdivision()
         {
-            _inputMesh.Indices.ForEach(indices => indices.HasElementCount(c => c == 4));
+            _inputMesh.Indices.ForEach(indices => indices.HasElementCount(c => c == 3));
             _inputMesh.PolygonCount.Satisfies(c => c == _inputMesh.IndicesCount);
 
             _outputMesh = _inputMesh with { };
             var currentIteration = 0;
             while (currentIteration++ < Iterations)
             {
-                //TODO
+                var existingVertexCount = _outputMesh.VertexCount;
+                var existingEdges = _outputMesh.Edges.ToList();
+                var halfEdgeIndexInformation = new Dictionary<(Vertex Start, Vertex End), int>(existingEdges.Count * 2);
+                var subdividedMeshVertices = new Vertex[existingVertexCount + existingEdges.Count];
+                var subdividedMeshIndices = new List<int>[_outputMesh.PolygonCount * 4];
+
+                _outputMesh.Vertices.ForEach((v, i) => subdividedMeshVertices[i] = v with { HalfEdges = new List<Models.Base.HalfEdge>() });
+
+                for (var idx = 0; idx < existingEdges.Count; idx++)
+                {
+                    halfEdgeIndexInformation.Add((existingEdges[idx].Start, existingEdges[idx].End), idx + existingVertexCount);
+                    halfEdgeIndexInformation.Add((existingEdges[idx].End, existingEdges[idx].Start), idx + existingVertexCount);
+                }
+
+                //Parallel.For(0, existingEdges.Count, (idx) =>
+                for (var idx = 0; idx < existingEdges.Count; idx++)
+                {
+                    var edge = existingEdges[idx];
+                    var directNeighbors = new[] { edge.Start, edge.End };
+                    if (edge.IsBorder)
+                    {
+                        var indirectNeighbors = directNeighbors.Select(n => n.BorderNeighbors.First(bn => !directNeighbors.Contains(bn))).ToList();
+                        subdividedMeshVertices[existingVertexCount + idx] = Vertex.Sum(directNeighbors) * .5625 +
+                                                                            Vertex.Sum(indirectNeighbors) * -.0625;
+                    }
+                    else
+                    {
+                        var directWeight = .5;
+                        var butterflyWeight = .0625;
+
+                        var oppositeEdge = edge.Opposite;
+                        oppositeEdge.NotNull();
+                        edge.Next.NotNull();
+                        edge.Previous.NotNull();
+                        oppositeEdge.Next.NotNull();
+                        oppositeEdge.Previous.NotNull();
+
+                        var indirectNeighbors = new[] { edge.Next.End, oppositeEdge.Next.End };
+
+                        subdividedMeshVertices[existingVertexCount + idx] = Vertex.Sum(directNeighbors) * directWeight;
+                        if (!edge.Next.IsBorder)
+                        {
+                            edge.Next.Opposite.NotNull();
+                            edge.Next.Opposite.Next.NotNull();
+                            subdividedMeshVertices[existingVertexCount + idx] += indirectNeighbors[0] * butterflyWeight - edge.Next.Opposite.Next.End * butterflyWeight;
+                        }
+
+                        if (!edge.Previous.IsBorder)
+                        {
+                            edge.Previous.Opposite.NotNull();
+                            edge.Previous.Opposite.Next.NotNull();
+                            subdividedMeshVertices[existingVertexCount + idx] += indirectNeighbors[0] * butterflyWeight - edge.Previous.Opposite.Next.End * butterflyWeight;
+                        }
+
+                        if (!oppositeEdge.Next.IsBorder)
+                        {
+                            oppositeEdge.Next.Opposite.NotNull();
+                            oppositeEdge.Next.Opposite.Next.NotNull();
+                            subdividedMeshVertices[existingVertexCount + idx] += indirectNeighbors[1] * butterflyWeight - oppositeEdge.Next.Opposite.Next.End * butterflyWeight;
+                        }
+
+                        if (!oppositeEdge.Previous.IsBorder)
+                        {
+                            oppositeEdge.Previous.Opposite.NotNull();
+                            oppositeEdge.Previous.Opposite.Next.NotNull();
+                            subdividedMeshVertices[existingVertexCount + idx] += indirectNeighbors[1] * butterflyWeight - oppositeEdge.Previous.Opposite.Next.End * butterflyWeight;
+                        }
+                    }
+                }
+                //);
+
+                //Parallel.For(0, _outputMesh.PolygonCount, (idx) =>
+                for (var idx = 0; idx < _outputMesh.PolygonCount; idx++)
+                {
+                    var indices = _outputMesh.GetIndices(idx);
+                    var polygon = _outputMesh.GetPolygon(idx);
+                    var newIndices = polygon.HalfEdges.Select(h => halfEdgeIndexInformation[(h.Start, h.End)]).ToList();
+
+                    var triangleIndices = new List<int> { indices[0], newIndices[0], newIndices[2] };
+                    subdividedMeshIndices[idx * 4] = triangleIndices;
+
+                    triangleIndices = new List<int> { indices[1], newIndices[1], newIndices[0] };
+                    subdividedMeshIndices[idx * 4 + 1] = triangleIndices;
+
+                    triangleIndices = new List<int> { indices[2], newIndices[2], newIndices[1] };
+                    subdividedMeshIndices[idx * 4 + 2] = triangleIndices;
+
+                    triangleIndices = new List<int> { newIndices[0], newIndices[1], newIndices[2] };
+                    subdividedMeshIndices[idx * 4 + 3] = triangleIndices;
+                }
+                //);
+
+                _outputMesh = MeshFactory.CreateMesh(subdividedMeshVertices, subdividedMeshIndices);
             }
         }
 

@@ -14,6 +14,8 @@ namespace Models.Base
         public double Y { get => _y; set => _y = value; }
         public double Z { get => _z; set => _z = value; }
         public List<HalfEdge> HalfEdges { get => _halfEdges; init => _halfEdges = value; }
+        public IEnumerable<HalfEdge> IncomingHalfEdges => VertexNeighbors.Where(v => v.HalfEdges.Any(h => h.End == this)).Select(v => v.HalfEdges.First(h => h.End == this));
+        public IEnumerable<Vertex> BorderNeighbors => VertexNeighbors.Where(n => _halfEdges.Any(h => h.End == n && h.IsBorder) || n.HalfEdges.Any(h => h.End == this && h.IsBorder));
         public IEnumerable<Polygon> Polygons
         {
             get
