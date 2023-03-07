@@ -29,7 +29,8 @@ namespace UI.DemoApp.Models
         {
             PrimitiveCount = 0;
             var distance = 8f;
-            var offset = 1.25f;
+            var xOffset = 3f;
+            var yOffset = 1.5f;
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -60,10 +61,16 @@ namespace UI.DemoApp.Models
                 new List<int> { 0, 1, 5, 4 }, new List<int> { 1, 2, 6, 5 }, new List<int> { 2, 3, 7, 6 }, new List<int> { 3, 0, 4, 7 },
                 new List<int> { 4, 5, 6, 7 }
             };
+            /*var vertices = new List<Vertex> {
+                new Vertex(-1, -1, 0), new Vertex( 1, -1, 0), new Vertex( 1,  1, 0), new Vertex(-1,  1, 0),
+            };
+            var indices = new List<List<int>> {
+                new List<int> { 0, 1, 2, 3 },
+            };*/
 
             var subdivisionModifier = new MeshSubdivider()
             {
-                Iterations = 8,
+                Iterations = 6,
                 SubdivisionType = HalfEdge.Enumerations.SubdivisionType.Loop
             };
 
@@ -71,18 +78,26 @@ namespace UI.DemoApp.Models
             var triangulator = new MeshTriangulator();
             triangulator.Modify(baseMesh);
             var triangulatedMesh = triangulator.OutputMesh;
-            _shapeHelpers.Add(new ShapeHelper(new MeshShape(triangulatedMesh.Vertices.ToList(), triangulatedMesh.Indices.ToList(), Color.LightGray, Color.DarkGreen, PrimitiveType.Triangles), new Vector3(-offset, offset, -distance), _program));
+            _shapeHelpers.Add(new ShapeHelper(new MeshShape(triangulatedMesh.Vertices.ToList(), triangulatedMesh.Indices.ToList(), Color.LightGray, Color.DarkGreen), new Vector3(-xOffset, yOffset, -distance), _program));
             
             subdivisionModifier.Modify(triangulatedMesh);
             var subdividedBaseMesh = subdivisionModifier.OutputMesh;
-            _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedBaseMesh.Vertices.ToList(), subdividedBaseMesh.Indices.ToList(), Color.LightGray, Color.DarkGreen), new Vector3(-offset, -offset, -distance), _program));
-            
-            _shapeHelpers.Add(new ShapeHelper(new MeshShape(vertices, indices, Color.LightGray, Color.DarkRed, PrimitiveType.Quads), new Vector3(offset, offset, -distance), _program));
-            
+            _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedBaseMesh.Vertices.ToList(), subdividedBaseMesh.Indices.ToList(), Color.LightGray, Color.DarkGreen), new Vector3(-xOffset, -yOffset, -distance), _program));
+
+            _shapeHelpers.Add(new ShapeHelper(new MeshShape(baseMesh.Vertices.ToList(), baseMesh.Indices.ToList(), Color.LightGray, Color.DarkRed, PrimitiveType.Quads), new Vector3(0, yOffset, -distance), _program));
+
             subdivisionModifier.SubdivisionType = HalfEdge.Enumerations.SubdivisionType.CatmullClark;
             subdivisionModifier.Modify(baseMesh);
             var subdividedShapeMesh = subdivisionModifier.OutputMesh;
-            _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedShapeMesh.Vertices.ToList(), subdividedShapeMesh.Indices.ToList(), Color.LightGray, Color.DarkRed, PrimitiveType.Quads), new Vector3(offset, -offset, -distance), _program));
+            _shapeHelpers.Add(new ShapeHelper(new MeshShape(subdividedShapeMesh.Vertices.ToList(), subdividedShapeMesh.Indices.ToList(), Color.LightGray, Color.DarkRed, PrimitiveType.Quads), new Vector3(0, -yOffset, -distance), _program));
+
+
+            _shapeHelpers.Add(new ShapeHelper(new MeshShape(triangulatedMesh.Vertices.ToList(), triangulatedMesh.Indices.ToList(), Color.LightGray, Color.DarkRed), new Vector3(xOffset, yOffset, -distance), _program));
+            
+            subdivisionModifier.SubdivisionType = HalfEdge.Enumerations.SubdivisionType.ModifiedButterfly;
+            subdivisionModifier.Modify(triangulatedMesh);
+            var otherSubdividedShapeMesh = subdivisionModifier.OutputMesh;
+            _shapeHelpers.Add(new ShapeHelper(new MeshShape(otherSubdividedShapeMesh.Vertices.ToList(), otherSubdividedShapeMesh.Indices.ToList(), Color.LightGray, Color.DarkRed), new Vector3(xOffset, -yOffset, -distance), _program));
             
             PrimitiveCount = _shapeHelpers.Sum(sh => sh.PrimitiveCount);
         }
