@@ -174,8 +174,7 @@ namespace HalfEdge.MeshModifications
                     if (edge.IsBorder)
                     {
                         var indirectNeighbors = directNeighbors.Select(n => n.BorderNeighbors.First(bn => !directNeighbors.Contains(bn))).ToList();
-                        subdividedMeshVertices[existingVertexCount + idx] = Vertex.Sum(directNeighbors) * .5625 +
-                                                                            Vertex.Sum(indirectNeighbors) * -.0625;
+                        subdividedMeshVertices[existingVertexCount + idx] = Vertex.Sum(directNeighbors) * .5625 + Vertex.Sum(indirectNeighbors) * -.0625;
                     }
                     else
                     {

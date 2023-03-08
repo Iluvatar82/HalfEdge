@@ -95,13 +95,13 @@ Of course the Mesh is not restricted to only consist of triangles (this is where
 - [x] More convenient Way of adding/removing Polygons (without the need to add the Vertices and HalfEdges beforehand)
 - [ ] HalfEdge Subdivision(s)
     - [x] Loop
-    - [ ] Modified Butterfly
-    - [ ] Catmull-Clark
+    - [x] Modified Butterfly
+    - [x] Catmull-Clark
 - [ ] Texture-Coordinates
 - [ ] Normals
     - [ ] Per Polygon
     - [ ] Per Vertex
-- [ ] Curvature Calculations and related:
+- [ ] Curvature Calculations and related
 - [ ] Mesh Optimization (reduce Triangles where possible!)
 - [ ] Mesh-Cutoffs (via Plane)
 - [ ] Boolean Operations for two Meshes
